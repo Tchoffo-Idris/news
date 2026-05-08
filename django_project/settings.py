@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     # 3rd Party
     "crispy_forms",
     "crispy_bootstrap5",
+    "ckeditor",
     # Default apps
     "django.contrib.admin",
     "django.contrib.auth",
@@ -153,3 +154,34 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 TIME_ZONE = "Africa/Douala"
 
 CSRF_TRUSTED_ORIGINS = ["https://*.herokuapp.com"]
+
+# Media files (pictures uploaded by users)
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
+# ─── CKEditor configuration ───────────────────────────────────────────────────
+CKEDITOR_CONFIGS = {
+    "default": {
+        "toolbar": "custom",
+        "toolbar_custom": [
+            ["Bold", "Italic", "Underline", "Strike"],
+            ["NumberedList", "BulletedList", "-", "Blockquote"],
+            ["JustifyLeft", "JustifyCenter", "JustifyRight", "JustifyBlock"],
+            ["Link", "Unlink"],
+            ["Undo", "Redo"],
+            ["RemoveFormat", "Source"],
+        ],
+        "height": 400,
+        "width": "100%",
+        # Limit paste to plain text to avoid messy external styles
+        "forcePasteAsPlainText": True,
+        # Allow only safe tags — keeps content clean
+        "allowedContent": (
+            "p h1 h2 h3 h4 blockquote strong em u s;"
+            "ol ul li;"
+            "a[!href];"
+        ),
+        "removePlugins": "stylesheetparser",
+        "extraPlugins": "",
+    }
+}

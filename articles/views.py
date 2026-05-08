@@ -4,15 +4,16 @@ from django.views.generic import ListView, DetailView, FormView
 from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.edit import UpdateView, DeleteView, CreateView
 from django.urls import reverse_lazy, reverse
-
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
 
 from .models import Article
 from .forms import CommentForm
 
-
 # Create your views here.
 
 
+@method_decorator(never_cache, name="dispatch")
 class ArticleListView(LoginRequiredMixin, ListView):
     model = Article
     template_name = "article_list.html"
@@ -61,10 +62,7 @@ class ArticleDetailView(LoginRequiredMixin, View):
 
 class ArticleUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Article
-    fields = (
-        "title",
-        "body",
-    )
+    fields = ("title", "body", "image")  # ← added image
     template_name = "article_edit.html"
 
     def test_func(self):
@@ -85,11 +83,8 @@ class ArticleDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 class ArticleCreateView(LoginRequiredMixin, CreateView):
     model = Article
     template_name = "article_new.html"
-    fields = (
-        "title",
-        "body",
-    )
+    fields = ("title", "body", "image")  # ← added image
 
     def form_valid(self, form):
-        form.instance.author == self.request.user
+        form.instance.author = self.request.user  # ← also fixed: was == instead of =
         return super().form_valid(form)

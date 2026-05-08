@@ -3,31 +3,386 @@
 
 
 {% block content %}
-<div class="article-entry">
-    <h2>{{ object.title }}</h2>
-    <p>by {{ object.author }} | {{ object.date }}</p>
-    <p>{{ object.body }}</p>
-</div>
 
-<hr>
-<h4>Comments</h4>
-{% for comment in article.comment_set.all %}
-<p>{{ comment.author }} &middot; {{ comment }}</p>
-{% endfor %}
-<hr>
+<style>
+    .detail-wrapper {
+        max-width: 720px;
+        margin: 2.5rem auto 4rem;
+        width: 100%;
+        overflow: hidden;
+    }
 
-<h4>Add a comment</h4>
-<form action="" method="post">{% csrf_token %}
-    {{ form|crispy }}
-    <button class="btn btn-success ms-2" type="submit">Save</button>
-</form>
+    .back-link {
+        font-family: var(--font-mono);
+        font-size: 0.62rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+        text-decoration: none;
+        display: inline-block;
+        margin-bottom: 1.6rem;
+        transition: color 0.15s;
+    }
 
-<div>
-    {% if article.author.pk == request.user.pk %}
-    <p><a href="{% url 'article_edit' article.pk %}">Edit</a>
-        <a href="{% url 'article_delete' article.pk %}">Delete</a>
-    </p>
+    .back-link:hover { color: var(--ink); }
+
+    .detail-kicker {
+        font-family: var(--font-mono);
+        font-size: 0.62rem;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+
+    .detail-heading {
+        font-family: var(--font-display);
+        font-size: 2.4rem;
+        font-weight: 900;
+        color: var(--ink);
+        letter-spacing: -0.03em;
+        line-height: 1.1;
+        margin-bottom: 0.6rem;
+        word-break: break-word;
+    }
+
+    .detail-rule {
+        border: none;
+        border-top: 3px double var(--ink);
+        margin: 1rem 0 0.8rem;
+    }
+
+    .detail-meta {
+        font-family: var(--font-mono);
+        font-size: 0.65rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+        margin-bottom: 1.6rem;
+    }
+
+    .detail-image {
+        width: 100%;
+        max-height: 480px;
+        object-fit: cover;
+        object-position: center;
+        display: block;
+        border: 1px solid var(--rule);
+        margin-bottom: 0.5rem;
+        filter: grayscale(15%) contrast(1.04);
+    }
+
+    .detail-image-caption {
+        font-family: var(--font-mono);
+        font-size: 0.58rem;
+        letter-spacing: 0.12em;
+        color: var(--ink-faint);
+        text-transform: uppercase;
+        margin-bottom: 1.6rem;
+        display: block;
+    }
+
+    /* ── Rich text body ── */
+    .detail-body {
+        font-family: var(--font-body);
+        font-size: 1.1rem;
+        color: var(--ink-mid);
+        line-height: 1.85;
+        margin-bottom: 2rem;
+        /* Critical overflow fixes */
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-word;
+        overflow: hidden;
+        max-width: 100%;
+    }
+
+    .detail-body > p:first-child::first-letter {
+        font-family: var(--font-display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        float: left;
+        line-height: 0.78;
+        margin-right: 0.12em;
+        margin-top: 0.08em;
+        color: var(--ink);
+    }
+
+    .detail-body p {
+        margin-bottom: 1.2rem;
+        font-family: var(--font-body);
+        font-size: 1.1rem;
+        color: var(--ink-mid);
+        line-height: 1.85;
+        overflow-wrap: break-word;
+        word-break: break-word;
+        max-width: 100%;
+    }
+
+    .detail-body h1,
+    .detail-body h2,
+    .detail-body h3,
+    .detail-body h4 {
+        font-family: var(--font-display);
+        color: var(--ink);
+        margin-top: 1.8rem;
+        margin-bottom: 0.6rem;
+        letter-spacing: -0.02em;
+        word-break: break-word;
+    }
+
+    .detail-body h1 { font-size: 1.9rem; }
+    .detail-body h2 { font-size: 1.55rem; }
+    .detail-body h3 { font-size: 1.25rem; }
+    .detail-body h4 { font-size: 1.05rem; }
+
+    .detail-body strong { color: var(--ink); font-weight: 700; }
+    .detail-body em { font-style: italic; }
+
+    .detail-body ul,
+    .detail-body ol {
+        padding-left: 1.6rem;
+        margin-bottom: 1.2rem;
+        font-family: var(--font-body);
+        color: var(--ink-mid);
+        font-size: 1.05rem;
+        line-height: 1.8;
+    }
+
+    .detail-body li { margin-bottom: 0.3rem; }
+
+    .detail-body blockquote {
+        border-left: 3px solid var(--ink);
+        margin: 1.5rem 0;
+        padding: 0.5rem 0 0.5rem 1.4rem;
+        font-family: var(--font-display);
+        font-style: italic;
+        font-size: 1.15rem;
+        color: var(--ink);
+        line-height: 1.6;
+    }
+
+    .detail-body a {
+        color: var(--red-ink);
+        text-underline-offset: 3px;
+        word-break: break-all;
+    }
+
+    .detail-body a:hover { color: var(--ink); }
+
+    /* Make any image inside body responsive */
+    .detail-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    /* Make any table inside body scrollable */
+    .detail-body table {
+        max-width: 100%;
+        overflow-x: auto;
+        display: block;
+        border-collapse: collapse;
+        font-size: 0.95rem;
+    }
+
+    /* Owner actions */
+    .detail-owner-actions {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        padding: 0.8rem 0;
+        border-top: 1px solid var(--rule);
+        border-bottom: 1px solid var(--rule);
+        margin-bottom: 2.5rem;
+    }
+
+    .action-link {
+        font-family: var(--font-mono);
+        font-size: 0.62rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink-mid);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+        text-decoration-color: var(--rule);
+        transition: color 0.15s;
+    }
+
+    .action-link:hover { color: var(--red-ink); text-decoration-color: var(--red-ink); }
+    .action-link-delete { color: var(--red-ink); text-decoration-color: rgba(139,26,26,0.3); }
+
+    .section-kicker {
+        font-family: var(--font-mono);
+        font-size: 0.62rem;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+        display: block;
+        margin-bottom: 0.4rem;
+    }
+
+    .section-heading {
+        font-family: var(--font-display);
+        font-size: 1.35rem;
+        font-weight: 700;
+        color: var(--ink);
+        letter-spacing: -0.02em;
+        margin-bottom: 0;
+    }
+
+    .section-rule {
+        border: none;
+        border-top: 1px solid var(--rule-heavy);
+        margin: 0.7rem 0 1.2rem;
+    }
+
+    .comment-entry {
+        padding: 0.8rem 0;
+        border-bottom: 1px solid var(--rule);
+    }
+
+    .comment-author-tag {
+        font-family: var(--font-mono);
+        font-size: 0.62rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+        margin-bottom: 0.2rem;
+        display: block;
+    }
+
+    .comment-text {
+        font-family: var(--font-body);
+        font-size: 0.98rem;
+        color: var(--ink-mid);
+        line-height: 1.65;
+        margin: 0;
+    }
+
+    .no-comments {
+        font-family: var(--font-body);
+        font-size: 0.9rem;
+        color: var(--ink-faint);
+        font-style: italic;
+        padding: 0.5rem 0 1rem;
+    }
+
+    .comment-form-wrap { margin-top: 2.2rem; }
+
+    .comment-form-wrap .form-label,
+    .comment-form-wrap label {
+        font-family: var(--font-mono);
+        font-size: 0.65rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--ink-mid);
+        margin-bottom: 5px;
+    }
+
+    .comment-form-wrap .form-control {
+        background: var(--cream-dark);
+        border: 1px solid var(--rule-heavy);
+        border-radius: 0;
+        color: var(--ink);
+        font-family: var(--font-body);
+        font-size: 1rem;
+        padding: 9px 12px;
+        box-shadow: none;
+        transition: border-color 0.15s;
+    }
+
+    .comment-form-wrap .form-control:focus {
+        background: #fff;
+        border-color: var(--ink);
+        outline: none;
+        box-shadow: none;
+    }
+
+    .btn-submit {
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--cream);
+        background: var(--ink);
+        border: 1.5px solid var(--ink);
+        border-radius: 0;
+        padding: 9px 24px;
+        cursor: pointer;
+        margin-top: 0.5rem;
+        transition: background 0.15s, border-color 0.15s;
+    }
+
+    .btn-submit:hover {
+        background: var(--red-ink);
+        border-color: var(--red-ink);
+    }
+
+    @media (max-width: 768px) {
+        .detail-heading { font-size: 1.8rem; }
+        .detail-body > p:first-child::first-letter { font-size: 2.5rem; }
+        .detail-body { font-size: 1rem; }
+        .detail-wrapper { padding: 0 0.5rem; }
+    }
+</style>
+
+<div class="detail-wrapper">
+
+    <a href="{% url 'article_list' %}" class="back-link">&larr; All Articles</a>
+
+    <span class="detail-kicker">Feature</span>
+    <h2 class="detail-heading">{{ object.title }}</h2>
+    <hr class="detail-rule">
+    <p class="detail-meta">By {{ object.author }}&nbsp;&nbsp;&middot;&nbsp;&nbsp;{{ object.date|date:"l, N j, Y" }}</p>
+
+    {% if object.image %}
+    <img src="{{ object.image.url }}" alt="{{ object.title }}" class="detail-image">
+    <span class="detail-image-caption">Photograph &middot; {{ object.title }}</span>
     {% endif %}
-    <p>Back to <a href="{% url 'article_list' %}">All Articles</a>.</p>
+
+    <div class="detail-body">{{ object.body|safe }}</div>
+
+    {% if article.author.pk == request.user.pk %}
+    <div class="detail-owner-actions">
+        <a href="{% url 'article_edit' article.pk %}" class="action-link">Edit Article &rarr;</a>
+        <a href="{% url 'article_delete' article.pk %}" class="action-link action-link-delete">Delete</a>
+    </div>
+    {% endif %}
+
+    <span class="section-kicker">Correspondence</span>
+    <h4 class="section-heading">Comments</h4>
+    <hr class="section-rule">
+
+    {% for comment in article.comment_set.all %}
+    <div class="comment-entry">
+        <span class="comment-author-tag">{{ comment.author }}</span>
+        <p class="comment-text">{{ comment }}</p>
+    </div>
+    {% empty %}
+    <p class="no-comments">No correspondence yet. Be the first to respond.</p>
+    {% endfor %}
+
+    <div class="comment-form-wrap">
+        <span class="section-kicker" style="margin-top:1.8rem; display:block;">Add a Response</span>
+        <h4 class="section-heading">Write a Comment</h4>
+        <hr class="section-rule">
+        <form action="" method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button class="btn-submit" type="submit">Submit &rarr;</button>
+        </form>
+    </div>
+
 </div>
+
+<script>
+    // Replace the edit page in browser history with article list
+    // so the back button goes to the list instead of the edit form
+    if (document.referrer.includes('/edit/')) {
+        history.replaceState(null, '', "{% url 'article_list' %}");
+    }
+</script>
+
 {% endblock content %}

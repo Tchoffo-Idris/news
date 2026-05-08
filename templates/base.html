@@ -4,24 +4,17 @@
 
 <head>
 
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon-32x32.png' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/apple-touch-icon.png' %}">  
+     
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}Newspaper App{% endblock title %}</title>
 
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-
-    <!-- PASTE THE NEW ICON LINKS HERE -->
-    <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon-32x32.png' %}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/apple-touch-icon.png' %}">
-    <link rel="manifest" href="{% static 'img/site.webmanifest' %}">
-
-    <!-- Google Fonts: Playfair Display + EB Garamond for editorial depth -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
 
-    <!-- Bootstrap 5 (structural grid only) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
     rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
     crossorigin="anonymous">
@@ -46,18 +39,12 @@
             --font-mono:    'Courier Prime', 'Courier New', monospace;
         }
 
-        /* ─────────────────────────────────────────
-           RESET & BASE
-        ───────────────────────────────────────── */
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        html {
-            font-size: 18px;
-            -webkit-font-smoothing: antialiased;
-        }
+        html { font-size: 18px; -webkit-font-smoothing: antialiased; }
 
         /* ─────────────────────────────────────────
-           BODY — NEWSPRINT PAPER BACKGROUND
+           BODY — NEWSPRINT BACKGROUND
         ───────────────────────────────────────── */
         body {
             background-color: var(--cream);
@@ -67,11 +54,7 @@
             line-height: 1.75;
             letter-spacing: 0.01em;
             min-height: 100vh;
-            perspective: 1500px;
-
-            /* Layered newsprint texture: grain noise + subtle horizontal press lines */
             background-image:
-                /* grain noise via tiny repeating gradient */
                 repeating-linear-gradient(
                     0deg,
                     transparent,
@@ -86,11 +69,9 @@
                     rgba(150, 130, 100, 0.02) 3px,
                     rgba(150, 130, 100, 0.02) 6px
                 ),
-                /* warm vignette toward edges */
                 radial-gradient(ellipse at center, var(--cream) 60%, #EDE5CC 100%);
         }
 
-        /* Grain pseudo-overlay */
         body::before {
             content: '';
             position: fixed;
@@ -104,22 +85,12 @@
         }
 
         /* ─────────────────────────────────────────
-           PAGE WRAPPER — THE 3D TILT
+           PAGE WRAPPER — NO TILT
         ───────────────────────────────────────── */
         .page-sheet {
             position: relative;
             z-index: 1;
-            transform: rotateY(-2deg) rotateX(1deg);
-            transform-origin: center top;
-            transform-style: preserve-3d;
-
-            /* Paper shadow to sell the 3D lift */
-            box-shadow:
-                -6px 8px 40px rgba(60, 40, 10, 0.14),
-                -2px 4px 16px rgba(60, 40, 10, 0.08);
-
             background-color: var(--cream);
-            border-left: 1px solid rgba(180, 160, 120, 0.25);
             min-height: 100vh;
         }
 
@@ -132,7 +103,6 @@
             padding: 0;
         }
 
-        /* Date / edition ribbon */
         .navbar::before {
             content: 'EST. MMXXV  ·  INDEPENDENT PRESS  ·  PRINTED DAILY';
             display: block;
@@ -152,7 +122,6 @@
             border-bottom: 1px solid var(--rule);
         }
 
-        /* Brand / Masthead title */
         .navbar-brand {
             font-family: var(--font-display);
             font-size: 2.6rem;
@@ -166,7 +135,6 @@
         }
 
         .navbar-brand::after {
-            /* Hairline underscore rule */
             content: '';
             display: block;
             height: 2px;
@@ -174,7 +142,6 @@
             margin-top: 3px;
         }
 
-        /* Nav links */
         .navbar-nav .nav-link,
         .navbar-nav .nav-link.active {
             font-family: var(--font-mono);
@@ -193,7 +160,6 @@
             border-bottom-color: var(--ink);
         }
 
-        /* [+] New article link — ink-stamp style */
         .nav-link-new {
             font-family: var(--font-mono);
             font-size: 0.72rem;
@@ -213,9 +179,6 @@
             color: var(--cream) !important;
         }
 
-        /* ─────────────────────────────────────────
-           USER DROPDOWN
-        ───────────────────────────────────────── */
         .dropdown-toggle {
             font-family: var(--font-mono);
             font-size: 0.72rem;
@@ -243,17 +206,10 @@
             transition: background 0.12s;
         }
 
-        .dropdown-item:hover {
-            background: var(--cream-dark);
-            color: var(--ink);
-        }
+        .dropdown-item:hover { background: var(--cream-dark); color: var(--ink); }
 
-        .dropdown-divider {
-            border-color: var(--rule);
-            margin: 2px 0;
-        }
+        .dropdown-divider { border-color: var(--rule); margin: 2px 0; }
 
-        /* Logout button styled as plain link */
         .btn-logout {
             font-family: var(--font-mono);
             font-size: 0.7rem;
@@ -271,13 +227,8 @@
             line-height: 1.5;
         }
 
-        .btn-logout:hover {
-            background: var(--cream-dark);
-        }
+        .btn-logout:hover { background: var(--cream-dark); }
 
-        /* ─────────────────────────────────────────
-           AUTH BUTTONS — INK-STAMP STYLE
-        ───────────────────────────────────────── */
         .btn-ink-outline {
             font-family: var(--font-mono);
             font-size: 0.7rem;
@@ -322,42 +273,19 @@
             color: var(--cream);
         }
 
-        .auth-actions {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
+        .auth-actions { display: flex; gap: 10px; align-items: center; }
 
         /* ─────────────────────────────────────────
-           MAIN CONTENT AREA
+           MAIN CONTENT
         ───────────────────────────────────────── */
-        main {
-            position: relative;
-            z-index: 1;
-        }
+        main { position: relative; z-index: 1; }
 
         main .container {
             padding-top: 2.5rem;
             padding-bottom: 4rem;
-            max-width: 1080px;
+            max-width: 1180px;
         }
 
-        /* Section hairline dividers */
-        .section-rule {
-            border: none;
-            border-top: 1px solid var(--rule);
-            margin: 2rem 0;
-        }
-
-        .section-rule-heavy {
-            border: none;
-            border-top: 2px solid var(--ink);
-            margin: 2rem 0;
-        }
-
-        /* ─────────────────────────────────────────
-           TYPOGRAPHY GLOBALS
-        ───────────────────────────────────────── */
         h1, h2, h3, h4, h5, h6 {
             font-family: var(--font-display);
             color: var(--ink);
@@ -366,24 +294,11 @@
             font-weight: 700;
         }
 
-        p {
-            font-family: var(--font-body);
-            color: var(--ink-mid);
-            line-height: 1.8;
-        }
+        p { font-family: var(--font-body); color: var(--ink-mid); line-height: 1.8; }
 
-        a {
-            color: var(--ink);
-            text-underline-offset: 3px;
-        }
+        a { color: var(--ink); text-underline-offset: 3px; }
+        a:hover { color: var(--red-ink); }
 
-        a:hover {
-            color: var(--red-ink);
-        }
-
-        /* ─────────────────────────────────────────
-           NAVBAR TOGGLER (mobile)
-        ───────────────────────────────────────── */
         .navbar-toggler {
             border: 1.5px solid var(--rule-heavy);
             border-radius: 0;
@@ -396,32 +311,14 @@
             background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%231A1A1A' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
         }
 
-        /* ─────────────────────────────────────────
-           RESPONSIVE — FLATTEN TILT ON MOBILE
-        ───────────────────────────────────────── */
         @media (max-width: 768px) {
-            .page-sheet {
-                transform: none;
-                box-shadow: none;
-            }
-
-            body {
-                perspective: none;
-            }
-
-            .navbar-brand {
-                font-size: 1.9rem;
-            }
-
-            main .container {
-                padding-top: 1.5rem;
-            }
+            .navbar-brand { font-size: 1.9rem; }
+            main .container { padding-top: 1.5rem; }
         }
     </style>
 </head>
 
 <body>
-    <!-- 3D tilted page sheet wrapper -->
     <div class="page-sheet">
 
         <nav class="navbar navbar-expand-lg">
@@ -438,7 +335,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-lg-center">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Home</a>
+                            <a class="nav-link active" aria-current="page" href="{% url 'article_list' %}">Home</a>
                         </li>
                         {% if user.is_authenticated %}
                         <li class="nav-item">
@@ -463,12 +360,9 @@
                                     </li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li>
-                                        <form method="post" action="{% url 'logout' %}">
-                                            {% csrf_token %}
-                                            <button type="submit" class="btn-logout">
-                                                Logout &rarr;
-                                            </button>
-                                        </form>
+                                        <a class="dropdown-item btn-logout" href="{% url 'logout' %}">
+                                            Log Out &rarr;
+                                        </a>
                                     </li>
                                 </ul>
                             </li>
@@ -493,12 +387,20 @@
             </div>
         </main>
 
-    </div><!-- /.page-sheet -->
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
     crossorigin="anonymous">
     </script>
+    <script>
+    // Force a reload if the page is loaded from the Back/Forward cache
+    window.addEventListener('pageshow', function(event) {
+        if (event.persisted) {
+            window.location.reload();
+        }
+    });
+</script>
 </body>
 
 </html>

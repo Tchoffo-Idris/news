@@ -3,34 +3,615 @@
 {% block title %}Articles{% endblock title %}
 
 {% block content %}
-{% for article in article_list %}
-<div class="card">
-    <div class="card-header">
-        <span class="fw-bold">
-            <a href="{{ article.get_absolute_url }}">{{ article.title }}</a>
-        </span> &middot;
-        <span class="text-muted">by {{ article.author }} |
-            {{ article.date }}</span>
+
+<style>
+    /* ─────────────────────────────────────────
+       PAGE HEADER
+    ───────────────────────────────────────── */
+    .page-masthead {
+        padding: 2rem 0 0;
+        margin-bottom: 0;
+        text-align: center;
+    }
+
+    .page-kicker {
+        font-family: var(--font-mono);
+        font-size: 0.6rem;
+        letter-spacing: 0.35em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+
+    .page-heading {
+        font-family: var(--font-display);
+        font-size: 3.5rem;
+        font-weight: 900;
+        color: var(--ink);
+        letter-spacing: -0.04em;
+        line-height: 1;
+        margin-bottom: 0;
+    }
+
+    .masthead-rule-wrap {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin: 1rem 0 2rem;
+    }
+
+    .masthead-rule-heavy {
+        flex: 1;
+        border: none;
+        border-top: 3px double var(--ink);
+        margin: 0;
+    }
+
+    .masthead-date {
+        font-family: var(--font-mono);
+        font-size: 0.6rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+        white-space: nowrap;
+    }
+
+    /* ─────────────────────────────────────────
+       BROADSHEET GRID
+    ───────────────────────────────────────── */
+    .broadsheet {
+        border: 1px solid var(--rule);
+    }
+
+    /* ── HERO ── */
+    .article-hero {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        border-bottom: 3px double var(--ink);
+    }
+
+    .article-hero.no-image {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-image-wrap {
+        overflow: hidden;
+        border-right: 1px solid var(--rule);
+        max-height: 420px;
+        min-height: 300px;
+    }
+
+    .hero-image-wrap .card-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        filter: grayscale(20%) contrast(1.05);
+        transition: filter 0.4s;
+    }
+
+    .article-hero:hover .hero-image-wrap .card-image {
+        filter: grayscale(0%) contrast(1);
+    }
+
+    .no-photo-hero {
+        background: var(--cream-dark);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-right: 1px solid var(--rule);
+        min-height: 300px;
+    }
+
+    .no-photo-label {
+        font-family: var(--font-mono);
+        font-size: 0.58rem;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        color: var(--rule-heavy);
+    }
+
+    .hero-content {
+        padding: 2.2rem 2rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background: var(--cream);
+    }
+
+    .hero-footer {
+        grid-column: 1 / -1;
+        padding: 0.7rem 2rem;
+        border-top: 1px solid var(--rule);
+        background: var(--cream-dark);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .hero-comments {
+        grid-column: 1 / -1;
+        padding: 0.8rem 2rem 1rem;
+        border-top: 1px solid var(--rule);
+    }
+
+    /* ── MEDIUM ROW ── */
+    .medium-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        border-bottom: 1px solid var(--rule);
+    }
+
+    .article-medium {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .article-medium:first-child {
+        border-right: 1px solid var(--rule);
+    }
+
+    .medium-image-wrap {
+        overflow: hidden;
+        height: 210px;
+        border-bottom: 1px solid var(--rule);
+        position: relative;
+    }
+
+    .medium-image-wrap .card-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        filter: grayscale(25%) contrast(1.03);
+        transition: filter 0.3s, transform 0.4s;
+    }
+
+    .article-medium:hover .medium-image-wrap .card-image {
+        filter: grayscale(0%);
+        transform: scale(1.03);
+    }
+
+    .no-photo-medium {
+        height: 210px;
+        background: var(--cream-dark);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-bottom: 1px solid var(--rule);
+    }
+
+    .medium-content {
+        padding: 1.4rem 1.5rem;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .medium-footer {
+        padding: 0.6rem 1.5rem;
+        border-top: 1px solid var(--rule);
+        background: var(--cream-dark);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.8rem;
+        flex-wrap: wrap;
+    }
+
+    .medium-comments {
+        padding: 0.7rem 1.5rem 0.9rem;
+        border-top: 1px solid var(--rule);
+    }
+
+    /* ── SMALL GRID ── */
+    .small-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .article-small {
+        border-right: 1px solid var(--rule);
+        display: flex;
+        flex-direction: column;
+        transition: background 0.15s;
+    }
+
+    .article-small:last-child { border-right: none; }
+    .article-small:hover { background: var(--cream-dark); }
+
+    .small-image-wrap {
+        overflow: hidden;
+        height: 150px;
+        border-bottom: 1px solid var(--rule);
+    }
+
+    .small-image-wrap .card-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        filter: grayscale(30%);
+        transition: filter 0.3s, transform 0.4s;
+    }
+
+    .article-small:hover .small-image-wrap .card-image {
+        filter: grayscale(0%);
+        transform: scale(1.05);
+    }
+
+    .no-photo-small {
+        height: 150px;
+        background: var(--cream-dark);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-bottom: 1px solid var(--rule);
+    }
+
+    .small-content {
+        padding: 1rem 1.2rem;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+    }
+
+    .small-footer {
+        padding: 0.5rem 1.2rem;
+        border-top: 1px solid var(--rule);
+        background: var(--cream-dark);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    /* ─────────────────────────────────────────
+       SHARED TYPOGRAPHY
+    ───────────────────────────────────────── */
+    .card-kicker {
+        font-family: var(--font-mono);
+        font-size: 0.58rem;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        color: var(--red-ink);
+        display: block;
+        margin-bottom: 0.35rem;
+    }
+
+    .card-title {
+        font-family: var(--font-display);
+        color: var(--ink);
+        text-decoration: none;
+        letter-spacing: -0.02em;
+        line-height: 1.2;
+        display: block;
+        transition: color 0.15s;
+        margin-bottom: 0.4rem;
+    }
+
+    .card-title:hover { color: var(--red-ink); }
+
+    .hero-content .card-title   { font-size: 2.4rem; font-weight: 900; }
+    .medium-content .card-title { font-size: 1.35rem; font-weight: 700; }
+    .small-content .card-title  { font-size: 1rem; font-weight: 700; }
+
+    .card-meta {
+        font-family: var(--font-mono);
+        font-size: 0.58rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+
+    .card-excerpt {
+        font-family: var(--font-body);
+        color: var(--ink-mid);
+        line-height: 1.7;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        margin-top: auto;
+    }
+
+    .hero-content .card-excerpt   { font-size: 1.05rem; -webkit-line-clamp: 4; }
+    .medium-content .card-excerpt { font-size: 0.95rem; -webkit-line-clamp: 3; }
+
+    /* ─────────────────────────────────────────
+       SHARED ACTION LINKS
+    ───────────────────────────────────────── */
+    .footer-actions { display: flex; gap: 0.7rem; align-items: center; }
+
+    .action-link {
+        font-family: var(--font-mono);
+        font-size: 0.58rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink-mid);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+        text-decoration-color: var(--rule);
+        transition: color 0.15s;
+    }
+
+    .action-link:hover { color: var(--red-ink); text-decoration-color: var(--red-ink); }
+    .action-link-delete { color: var(--red-ink); text-decoration-color: rgba(139,26,26,0.25); }
+
+    .read-link {
+        font-family: var(--font-mono);
+        font-size: 0.58rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink);
+        text-decoration: none;
+        font-weight: 700;
+        transition: color 0.15s;
+    }
+
+    .read-link:hover { color: var(--red-ink); }
+
+    /* ─────────────────────────────────────────
+       COMMENTS
+    ───────────────────────────────────────── */
+    .comments-label {
+        font-family: var(--font-mono);
+        font-size: 0.56rem;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+        display: block;
+        margin-bottom: 0.4rem;
+    }
+
+    .comment-line {
+        font-family: var(--font-body);
+        font-size: 0.85rem;
+        color: var(--ink-mid);
+        border-top: 1px solid var(--rule);
+        padding-top: 0.3rem;
+        margin-top: 0.3rem;
+        line-height: 1.5;
+    }
+
+    .comment-author {
+        font-family: var(--font-mono);
+        font-size: 0.56rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+        margin-right: 0.4rem;
+    }
+
+    /* ─────────────────────────────────────────
+       EMPTY STATE
+    ───────────────────────────────────────── */
+    .empty-state {
+        text-align: center;
+        padding: 5rem 2rem;
+        border: 1px solid var(--rule);
+    }
+
+    .empty-heading {
+        font-family: var(--font-display);
+        font-size: 1.6rem;
+        color: var(--ink-faint);
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+
+    .empty-sub {
+        font-family: var(--font-body);
+        font-size: 0.95rem;
+        color: var(--ink-faint);
+        font-style: italic;
+    }
+
+    /* ─────────────────────────────────────────
+       RESPONSIVE
+    ───────────────────────────────────────── */
+    @media (max-width: 900px) {
+        .article-hero { grid-template-columns: 1fr; }
+        .hero-image-wrap, .no-photo-hero { max-height: 260px; min-height: 200px; border-right: none; border-bottom: 1px solid var(--rule); }
+        .hero-content .card-title { font-size: 1.8rem; }
+        .small-grid { grid-template-columns: 1fr 1fr; }
+        .page-heading { font-size: 2.5rem; }
+    }
+
+    @media (max-width: 600px) {
+        .medium-row { grid-template-columns: 1fr; }
+        .article-medium:first-child { border-right: none; border-bottom: 1px solid var(--rule); }
+        .small-grid { grid-template-columns: 1fr; }
+        .article-small { border-right: none; border-bottom: 1px solid var(--rule); }
+        .page-heading { font-size: 2rem; }
+    }
+</style>
+
+<div class="page-masthead">
+    <span class="page-kicker">The Daily Record</span>
+    <h1 class="page-heading">All Articles</h1>
+</div>
+
+<div class="masthead-rule-wrap">
+    <hr class="masthead-rule-heavy">
+    <span class="masthead-date">Latest Dispatches</span>
+    <hr class="masthead-rule-heavy">
+</div>
+
+{% if article_list %}
+<div class="broadsheet">
+
+    {% for article in article_list %}
+
+    {% if forloop.counter == 1 %}
+    <!-- ══ HERO ══ -->
+    <div class="article-hero {% if not article.image %}no-image{% endif %}">
+        {% if article.image %}
+        <div class="hero-image-wrap">
+            <img src="{{ article.image.url }}" alt="{{ article.title }}" class="card-image">
         </div>
-        <div class="card-body">
-            {{ article.body }}
-            {% if article.author.pk == request.user.pk %}
-            <a href="{% url 'article_edit' article.pk %}">Edit</a>
-            <a href="{% url 'article_delete' article.pk %}">Delete</a>
-            {% endif %}
-            <a href="{{ article.get_absolute_url }}">New Comment</a>
+        {% else %}
+        <div class="no-photo-hero">
+            <span class="no-photo-label">No Photograph</span>
         </div>
-        <div class="card-footer">
+        {% endif %}
+
+        <div class="hero-content">
+            <span class="card-kicker">Feature</span>
+            <a href="{{ article.get_absolute_url }}" class="card-title">{{ article.title }}</a>
+            <span class="card-meta">By {{ article.author }}&nbsp;&middot;&nbsp;{{ article.date|date:"N j, Y" }}</span>
+            <p class="card-excerpt">{{ article.body }}</p>
+        </div>
+
+        <div class="hero-footer">
+            <div class="footer-actions">
+                {% if article.author.pk == request.user.pk %}
+                <a href="{% url 'article_edit' article.pk %}" class="action-link">Edit &rarr;</a>
+                <a href="{% url 'article_delete' article.pk %}" class="action-link action-link-delete">Delete</a>
+                {% endif %}
+            </div>
+            <a href="{{ article.get_absolute_url }}" class="read-link">Read &amp; Comment &rarr;</a>
+        </div>
+
+        {% if article.comment_set.all %}
+        <div class="hero-comments">
+            <span class="comments-label">Correspondence</span>
             {% for comment in article.comment_set.all %}
-            <p>
-                <span class="fw-bold">
-                    {{ comment.author }} &middot;
-                </span>
-                {{ comment }}
-            </p>
+            <div class="comment-line">
+                <span class="comment-author">{{ comment.author }}</span>{{ comment }}
+            </div>
             {% endfor %}
         </div>
+        {% endif %}
+    </div>
+
+    {% elif forloop.counter == 2 %}
+    <!-- ══ MEDIUM ROW ══ -->
+    <div class="medium-row">
+        <div class="article-medium">
+            {% if article.image %}
+            <div class="medium-image-wrap">
+                <img src="{{ article.image.url }}" alt="{{ article.title }}" class="card-image">
+            </div>
+            {% else %}
+            <div class="no-photo-medium">
+                <span class="no-photo-label">No Photograph</span>
+            </div>
+            {% endif %}
+            <div class="medium-content">
+                <span class="card-kicker">Report</span>
+                <a href="{{ article.get_absolute_url }}" class="card-title">{{ article.title }}</a>
+                <span class="card-meta">By {{ article.author }} &middot; {{ article.date|date:"N j, Y" }}</span>
+                <p class="card-excerpt">{{ article.body }}</p>
+            </div>
+            <div class="medium-footer">
+                <div class="footer-actions">
+                    {% if article.author.pk == request.user.pk %}
+                    <a href="{% url 'article_edit' article.pk %}" class="action-link">Edit &rarr;</a>
+                    <a href="{% url 'article_delete' article.pk %}" class="action-link action-link-delete">Delete</a>
+                    {% endif %}
+                </div>
+                <a href="{{ article.get_absolute_url }}" class="read-link">Read &rarr;</a>
+            </div>
+            {% if article.comment_set.all %}
+            <div class="medium-comments">
+                <span class="comments-label">Correspondence</span>
+                {% for comment in article.comment_set.all %}
+                <div class="comment-line">
+                    <span class="comment-author">{{ comment.author }}</span>{{ comment }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+    {% elif forloop.counter == 3 %}
+        <div class="article-medium">
+            {% if article.image %}
+            <div class="medium-image-wrap">
+                <img src="{{ article.image.url }}" alt="{{ article.title }}" class="card-image">
+            </div>
+            {% else %}
+            <div class="no-photo-medium">
+                <span class="no-photo-label">No Photograph</span>
+            </div>
+            {% endif %}
+            <div class="medium-content">
+                <span class="card-kicker">Report</span>
+                <a href="{{ article.get_absolute_url }}" class="card-title">{{ article.title }}</a>
+                <span class="card-meta">By {{ article.author }} &middot; {{ article.date|date:"N j, Y" }}</span>
+                <p class="card-excerpt">{{ article.body }}</p>
+            </div>
+            <div class="medium-footer">
+                <div class="footer-actions">
+                    {% if article.author.pk == request.user.pk %}
+                    <a href="{% url 'article_edit' article.pk %}" class="action-link">Edit &rarr;</a>
+                    <a href="{% url 'article_delete' article.pk %}" class="action-link action-link-delete">Delete</a>
+                    {% endif %}
+                </div>
+                <a href="{{ article.get_absolute_url }}" class="read-link">Read &rarr;</a>
+            </div>
+            {% if article.comment_set.all %}
+            <div class="medium-comments">
+                <span class="comments-label">Correspondence</span>
+                {% for comment in article.comment_set.all %}
+                <div class="comment-line">
+                    <span class="comment-author">{{ comment.author }}</span>{{ comment }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div><!-- /.medium-row -->
+
+    {% else %}
+    <!-- ══ SMALL GRID ══ -->
+    {% if forloop.counter == 4 %}<div class="small-grid">{% endif %}
+
+        <div class="article-small">
+            {% if article.image %}
+            <div class="small-image-wrap">
+                <img src="{{ article.image.url }}" alt="{{ article.title }}" class="card-image">
+            </div>
+            {% else %}
+            <div class="no-photo-small">
+                <span class="no-photo-label">No Photograph</span>
+            </div>
+            {% endif %}
+            <div class="small-content">
+                <span class="card-kicker">Dispatch</span>
+                <a href="{{ article.get_absolute_url }}" class="card-title">{{ article.title }}</a>
+                <span class="card-meta">{{ article.author }} &middot; {{ article.date|date:"N j, Y" }}</span>
+            </div>
+            <div class="small-footer">
+                <div class="footer-actions">
+                    {% if article.author.pk == request.user.pk %}
+                    <a href="{% url 'article_edit' article.pk %}" class="action-link">Edit</a>
+                    <a href="{% url 'article_delete' article.pk %}" class="action-link action-link-delete">Delete</a>
+                    {% endif %}
+                </div>
+                <a href="{{ article.get_absolute_url }}" class="read-link">Read &rarr;</a>
+            </div>
+        </div>
+
+    {% if forloop.last %}</div>{% endif %}<!-- /.small-grid -->
+
+    {% endif %}
+    {% endfor %}
+
+</div><!-- /.broadsheet -->
+
+{% else %}
+<div class="empty-state">
+    <p class="empty-heading">No Articles Yet</p>
+    <p class="empty-sub">The press is quiet. Be the first to publish.</p>
 </div>
-<br/>
-{% endfor %}
+{% endif %}
+
 {% endblock content %}

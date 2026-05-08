@@ -26,8 +26,8 @@
         position: absolute;
         top: -3px; left: -3px;
         width: 22px; height: 22px;
-        border-top: 3px solid var(--red-ink);
-        border-left: 3px solid var(--red-ink);
+        border-top: 3px solid var(--ink);
+        border-left: 3px solid var(--ink);
     }
 
     .notice-card::after {
@@ -35,17 +35,8 @@
         position: absolute;
         bottom: -3px; right: -3px;
         width: 22px; height: 22px;
-        border-bottom: 3px solid var(--red-ink);
-        border-right: 3px solid var(--red-ink);
-    }
-
-    .notice-glyph {
-        font-family: var(--font-mono);
-        font-size: 1.8rem;
-        color: var(--red-ink);
-        display: block;
-        margin-bottom: 1rem;
-        opacity: 0.7;
+        border-bottom: 3px solid var(--ink);
+        border-right: 3px solid var(--ink);
     }
 
     .notice-kicker {
@@ -53,10 +44,9 @@
         font-size: 0.62rem;
         letter-spacing: 0.28em;
         text-transform: uppercase;
-        color: var(--red-ink);
+        color: var(--ink-faint);
         display: block;
         margin-bottom: 0.5rem;
-        opacity: 0.75;
     }
 
     .notice-heading {
@@ -82,13 +72,6 @@
         color: var(--ink-mid);
         line-height: 1.75;
         margin-bottom: 1.8rem;
-        font-style: italic;
-    }
-
-    .notice-body strong {
-        font-style: normal;
-        color: var(--ink);
-        font-weight: 600;
     }
 
     .notice-actions {
@@ -96,6 +79,28 @@
         gap: 1rem;
         justify-content: center;
         flex-wrap: wrap;
+    }
+
+    .btn-ink-outline {
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--ink-mid);
+        background: transparent;
+        border: 1.5px solid var(--rule-heavy);
+        border-radius: 0;
+        padding: 10px 24px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        line-height: 1.6;
+        transition: background 0.15s, color 0.15s;
+    }
+
+    .btn-ink-outline:hover {
+        background: var(--ink-mid);
+        color: var(--cream);
     }
 
     .btn-ink-danger {
@@ -121,27 +126,6 @@
         color: var(--cream);
     }
 
-    .btn-ink-outline {
-        font-family: var(--font-mono);
-        font-size: 0.7rem;
-        letter-spacing: 0.16em;
-        text-transform: uppercase;
-        color: var(--ink-mid);
-        background: transparent;
-        border: 1.5px solid var(--rule-heavy);
-        border-radius: 0;
-        padding: 10px 24px;
-        text-decoration: none;
-        display: inline-block;
-        line-height: 1.6;
-        transition: background 0.15s, color 0.15s;
-    }
-
-    .btn-ink-outline:hover {
-        background: var(--ink-mid);
-        color: var(--cream);
-    }
-
     @media (max-width: 768px) {
         .notice-card { padding: 2rem 1.4rem; }
         .notice-heading { font-size: 1.6rem; }
@@ -150,21 +134,18 @@
 
 <div class="notice-wrapper">
     <div class="notice-card">
-        <span class="notice-glyph">&#9888;</span>
-        <span class="notice-kicker">Irreversible Action</span>
-        <h1 class="notice-heading">Delete Article</h1>
+        <span class="notice-kicker">Account</span>
+        <h1 class="notice-heading">Log Out?</h1>
         <hr class="notice-rule">
         <p class="notice-body">
-            Are you sure you want to permanently delete<br>
-            <strong>&ldquo;{{ article.title }}&rdquo;</strong>?<br>
-            This cannot be undone.
+            Are you sure you want to log out?
         </p>
 
         <div class="notice-actions">
-            <a href="{% url 'article_list' %}" class="btn-ink-outline">&larr; Cancel</a>
-            <form action="" method="post" style="display:inline;">
+            <a href="#" onclick="history.back(); return false;" class="btn-ink-outline">Cancel</a>
+            <form method="post" style="display:inline;">
                 {% csrf_token %}
-                <button class="btn-ink-danger" type="submit">Delete &rarr;</button>
+                <button type="submit" class="btn-ink-danger">Yes, Log Out &rarr;</button>
             </form>
         </div>
     </div>
