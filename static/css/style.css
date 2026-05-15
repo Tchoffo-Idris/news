@@ -1,0 +1,82 @@
+/* ─────────────────────────────────────────
+   DARK MODE — Night Edition
+───────────────────────────────────────── */
+html[data-theme="dark"] {
+    --cream:        #0D0D0B;
+    --cream-dark:   #161612;
+    --ink:          #E8E0CC;
+    --ink-mid:      #C4BAA6;
+    --ink-faint:    #7A7060;
+    --rule:         #2A2820;
+    --rule-heavy:   #4A4438;
+    --red-ink:      #C0392B;
+}
+
+html[data-theme="dark"] body {
+    background-color: var(--cream);
+    background-image:
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(255, 240, 200, 0.015) 2px,
+            rgba(255, 240, 200, 0.015) 4px
+        ),
+        radial-gradient(ellipse at center, #0D0D0B 60%, #080806 100%);
+}
+
+html[data-theme="dark"] body::before {
+    opacity: 0.25;
+}
+
+html[data-theme="dark"] .page-sheet {
+    background-color: var(--cream);
+}
+
+html[data-theme="dark"] .navbar {
+    background: var(--cream) !important;
+}
+
+html[data-theme="dark"] .dropdown-menu {
+    background: #161612;
+}
+
+html[data-theme="dark"] .dropdown-item:hover {
+    background: #2A2820;
+}
+
+html[data-theme="dark"] .navbar-search-input {
+    background: #161612;
+    color: var(--ink);
+}
+
+html[data-theme="dark"] .navbar-search-input:focus {
+    background: #1e1e1a;
+}
+
+/* ── Dark mode toggle button ── */
+.dark-mode-toggle {
+    background: none;
+    border: 1px solid var(--rule-heavy);
+    color: var(--ink-mid);
+    cursor: pointer;
+    padding: 4px 9px;
+    font-size: 0.8rem;
+    line-height: 1;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dark-mode-toggle:hover {
+    background: var(--ink);
+    color: var(--cream);
+    border-color: var(--ink);
+}
+
+.dark-mode-toggle .icon-sun  { display: none; }
+.dark-mode-toggle .icon-moon { display: block; }
+
+html[data-theme="dark"] .dark-mode-toggle .icon-sun  { display: block; }
+html[data-theme="dark"] .dark-mode-toggle .icon-moon { display: none; }
