@@ -36,6 +36,22 @@
         margin-bottom: 0.5rem;
     }
 
+    .detail-category {
+        font-family: var(--font-mono);
+        font-size: 0.62rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--cream);
+        background: var(--ink-mid);
+        padding: 3px 10px;
+        display: inline-block;
+        margin-bottom: 0.7rem;
+        text-decoration: none;
+        transition: background 0.15s;
+    }
+
+    .detail-category:hover { background: var(--red-ink); color: var(--cream); }
+
     .detail-heading {
         font-family: var(--font-display);
         font-size: 2.4rem;
@@ -83,14 +99,12 @@
         display: block;
     }
 
-    /* ── Rich text body ── */
     .detail-body {
         font-family: var(--font-body);
         font-size: 1.1rem;
         color: var(--ink-mid);
         line-height: 1.85;
         margin-bottom: 2rem;
-        /* Critical overflow fixes */
         overflow-wrap: break-word;
         word-wrap: break-word;
         word-break: break-word;
@@ -171,14 +185,12 @@
 
     .detail-body a:hover { color: var(--ink); }
 
-    /* Make any image inside body responsive */
     .detail-body img {
         max-width: 100%;
         height: auto;
         display: block;
     }
 
-    /* Make any table inside body scrollable */
     .detail-body table {
         max-width: 100%;
         overflow-x: auto;
@@ -187,7 +199,6 @@
         font-size: 0.95rem;
     }
 
-    /* Owner actions */
     .detail-owner-actions {
         display: flex;
         gap: 1rem;
@@ -332,7 +343,12 @@
 
     <a href="{% url 'article_list' %}" class="back-link">&larr; All Articles</a>
 
+    {% if object.category %}
+    <a href="{{ object.category.get_absolute_url }}" class="detail-category">{{ object.category.name }}</a>
+    {% else %}
     <span class="detail-kicker">Feature</span>
+    {% endif %}
+
     <h2 class="detail-heading">{{ object.title }}</h2>
     <hr class="detail-rule">
     <p class="detail-meta">By {{ object.author }}&nbsp;&nbsp;&middot;&nbsp;&nbsp;{{ object.date|date:"l, N j, Y" }}</p>
@@ -378,8 +394,6 @@
 </div>
 
 <script>
-    // Replace the edit page in browser history with article list
-    // so the back button goes to the list instead of the edit form
     if (document.referrer.includes('/edit/')) {
         history.replaceState(null, '', "{% url 'article_list' %}");
     }

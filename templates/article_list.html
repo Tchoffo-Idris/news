@@ -6,399 +6,411 @@
 
 <style>
     /* ─────────────────────────────────────────
-       PAGE HEADER
+       NYT-STYLE RESET & BASE
     ───────────────────────────────────────── */
-    .page-masthead {
-        padding: 2rem 0 0;
-        margin-bottom: 0;
-        text-align: center;
-    }
-
-    .page-kicker {
-        font-family: var(--font-mono);
-        font-size: 0.6rem;
-        letter-spacing: 0.35em;
-        text-transform: uppercase;
-        color: var(--ink-faint);
-        display: block;
-        margin-bottom: 0.5rem;
-    }
-
-    .page-heading {
-        font-family: var(--font-display);
-        font-size: 3.5rem;
-        font-weight: 900;
+    .nyt-page {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0;
+        font-family: var(--font-body);
         color: var(--ink);
-        letter-spacing: -0.04em;
-        line-height: 1;
-        margin-bottom: 0;
     }
 
-    .masthead-rule-wrap {
+    /* ─────────────────────────────────────────
+       MASTHEAD
+    ───────────────────────────────────────── */
+    .nyt-masthead {
+        border-top: 3px solid var(--ink);
+        border-bottom: 1px solid var(--rule);
+        padding: 1rem 0 0.8rem;
+        margin-bottom: 0;
         display: flex;
         align-items: center;
-        gap: 1rem;
-        margin: 1rem 0 2rem;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 0.8rem;
     }
 
-    .masthead-rule-heavy {
-        flex: 1;
-        border: none;
-        border-top: 3px double var(--ink);
-        margin: 0;
+    .nyt-masthead-title {
+        font-family: var(--font-display);
+        font-size: 1.9rem;
+        font-weight: 900;
+        color: var(--ink);
+        letter-spacing: -0.03em;
+        line-height: 1;
     }
 
-    .masthead-date {
+    .nyt-masthead-date {
+        font-family: var(--font-mono);
+        font-size: 0.58rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+    }
+
+    /* ─────────────────────────────────────────
+       CATEGORY NAV BAR
+    ───────────────────────────────────────── */
+    .nyt-sections {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0;
+        border-bottom: 1px solid var(--rule);
+        margin-bottom: 1.5rem;
+        overflow-x: auto;
+    }
+
+    .nyt-section-link {
+        font-family: var(--font-mono);
+        font-size: 0.62rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink-mid);
+        text-decoration: none;
+        padding: 0.6rem 1rem;
+        border-bottom: 3px solid transparent;
+        white-space: nowrap;
+        transition: color 0.15s, border-color 0.15s;
+    }
+
+    .nyt-section-link:hover {
+        color: var(--ink);
+        border-bottom-color: var(--ink);
+    }
+
+    .nyt-section-link.active {
+        color: var(--ink);
+        border-bottom-color: var(--ink);
+        font-weight: 700;
+    }
+
+    /* ─────────────────────────────────────────
+       MAIN GRID LAYOUT
+    ───────────────────────────────────────── */
+    .nyt-grid {
+        display: grid;
+        grid-template-columns: 1fr 1px 300px;
+        gap: 0;
+        border-bottom: 1px solid var(--rule);
+        padding-bottom: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .nyt-main { padding-right: 1.8rem; }
+    .nyt-divider { background: var(--rule); margin: 0 0; }
+    .nyt-sidebar { padding-left: 1.8rem; }
+
+    /* ─────────────────────────────────────────
+       HERO ARTICLE (first article)
+    ───────────────────────────────────────── */
+    .nyt-hero {
+        padding-bottom: 1.2rem;
+        margin-bottom: 1.2rem;
+        border-bottom: 1px solid var(--rule);
+    }
+
+    .nyt-hero-image {
+        width: 100%;
+        height: 380px;
+        object-fit: cover;
+        object-position: center;
+        display: block;
+        margin-bottom: 0.7rem;
+        filter: grayscale(10%);
+    }
+
+    .nyt-hero-no-image {
+        width: 100%;
+        height: 200px;
+        background: var(--cream-dark);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 0.7rem;
+        border: 1px solid var(--rule);
+    }
+
+    .nyt-hero-category {
         font-family: var(--font-mono);
         font-size: 0.6rem;
         letter-spacing: 0.2em;
         text-transform: uppercase;
+        color: var(--red-ink);
+        text-decoration: none;
+        display: block;
+        margin-bottom: 0.4rem;
+        font-weight: 700;
+    }
+
+    .nyt-hero-title {
+        font-family: var(--font-display);
+        font-size: 2.2rem;
+        font-weight: 900;
+        color: var(--ink);
+        letter-spacing: -0.03em;
+        line-height: 1.1;
+        margin-bottom: 0.5rem;
+        text-decoration: none;
+        display: block;
+        transition: color 0.15s;
+    }
+
+    .nyt-hero-title:hover { color: var(--ink-mid); }
+
+    .nyt-hero-excerpt {
+        font-family: var(--font-body);
+        font-size: 1rem;
+        color: var(--ink-mid);
+        line-height: 1.6;
+        margin-bottom: 0.5rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .nyt-hero-meta {
+        font-family: var(--font-mono);
+        font-size: 0.58rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
         color: var(--ink-faint);
-        white-space: nowrap;
     }
 
     /* ─────────────────────────────────────────
-       BROADSHEET GRID
+       SECONDARY ARTICLES (articles 2-4, below hero)
     ───────────────────────────────────────── */
-    .broadsheet {
+    .nyt-secondary-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0;
+    }
+
+    .nyt-secondary-item {
+        padding-right: 1.2rem;
+        border-right: 1px solid var(--rule);
+        padding-bottom: 0.5rem;
+    }
+
+    .nyt-secondary-item:last-child {
+        border-right: none;
+        padding-right: 0;
+    }
+
+    .nyt-secondary-item:not(:first-child) {
+        padding-left: 1.2rem;
+    }
+
+    .nyt-secondary-image {
+        width: 100%;
+        height: 130px;
+        object-fit: cover;
+        display: block;
+        margin-bottom: 0.5rem;
+        filter: grayscale(15%);
+    }
+
+    .nyt-secondary-no-image {
+        width: 100%;
+        height: 90px;
+        background: var(--cream-dark);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 0.5rem;
         border: 1px solid var(--rule);
     }
 
-    /* ── HERO ── */
-    .article-hero {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        border-bottom: 3px double var(--ink);
-    }
-
-    .article-hero.no-image {
-        grid-template-columns: 1fr;
-    }
-
-    .hero-image-wrap {
-        overflow: hidden;
-        border-right: 1px solid var(--rule);
-        max-height: 420px;
-        min-height: 300px;
-    }
-
-    .hero-image-wrap .card-image {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-        filter: grayscale(20%) contrast(1.05);
-        transition: filter 0.4s;
-    }
-
-    .article-hero:hover .hero-image-wrap .card-image {
-        filter: grayscale(0%) contrast(1);
-    }
-
-    .no-photo-hero {
-        background: var(--cream-dark);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-right: 1px solid var(--rule);
-        min-height: 300px;
-    }
-
-    .no-photo-label {
+    .nyt-secondary-category {
         font-family: var(--font-mono);
-        font-size: 0.58rem;
-        letter-spacing: 0.24em;
-        text-transform: uppercase;
-        color: var(--rule-heavy);
-    }
-
-    .hero-content {
-        padding: 2.2rem 2rem;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        background: var(--cream);
-    }
-
-    .hero-footer {
-        grid-column: 1 / -1;
-        padding: 0.7rem 2rem;
-        border-top: 1px solid var(--rule);
-        background: var(--cream-dark);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 1rem;
-        flex-wrap: wrap;
-    }
-
-    .hero-comments {
-        grid-column: 1 / -1;
-        padding: 0.8rem 2rem 1rem;
-        border-top: 1px solid var(--rule);
-    }
-
-    /* ── MEDIUM ROW ── */
-    .medium-row {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        border-bottom: 1px solid var(--rule);
-    }
-
-    .article-medium {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .article-medium:first-child {
-        border-right: 1px solid var(--rule);
-    }
-
-    .medium-image-wrap {
-        overflow: hidden;
-        height: 210px;
-        border-bottom: 1px solid var(--rule);
-        position: relative;
-    }
-
-    .medium-image-wrap .card-image {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-        filter: grayscale(25%) contrast(1.03);
-        transition: filter 0.3s, transform 0.4s;
-    }
-
-    .article-medium:hover .medium-image-wrap .card-image {
-        filter: grayscale(0%);
-        transform: scale(1.03);
-    }
-
-    .no-photo-medium {
-        height: 210px;
-        background: var(--cream-dark);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-bottom: 1px solid var(--rule);
-    }
-
-    .medium-content {
-        padding: 1.4rem 1.5rem;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .medium-footer {
-        padding: 0.6rem 1.5rem;
-        border-top: 1px solid var(--rule);
-        background: var(--cream-dark);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 0.8rem;
-        flex-wrap: wrap;
-    }
-
-    .medium-comments {
-        padding: 0.7rem 1.5rem 0.9rem;
-        border-top: 1px solid var(--rule);
-    }
-
-    /* ── SMALL GRID ── */
-    .small-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-    }
-
-    .article-small {
-        border-right: 1px solid var(--rule);
-        display: flex;
-        flex-direction: column;
-        transition: background 0.15s;
-    }
-
-    .article-small:last-child { border-right: none; }
-    .article-small:hover { background: var(--cream-dark); }
-
-    .small-image-wrap {
-        overflow: hidden;
-        height: 150px;
-        border-bottom: 1px solid var(--rule);
-    }
-
-    .small-image-wrap .card-image {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-        filter: grayscale(30%);
-        transition: filter 0.3s, transform 0.4s;
-    }
-
-    .article-small:hover .small-image-wrap .card-image {
-        filter: grayscale(0%);
-        transform: scale(1.05);
-    }
-
-    .no-photo-small {
-        height: 150px;
-        background: var(--cream-dark);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-bottom: 1px solid var(--rule);
-    }
-
-    .small-content {
-        padding: 1rem 1.2rem;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        gap: 0.3rem;
-    }
-
-    .small-footer {
-        padding: 0.5rem 1.2rem;
-        border-top: 1px solid var(--rule);
-        background: var(--cream-dark);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 0.5rem;
-        flex-wrap: wrap;
-    }
-
-    /* ─────────────────────────────────────────
-       SHARED TYPOGRAPHY
-    ───────────────────────────────────────── */
-    .card-kicker {
-        font-family: var(--font-mono);
-        font-size: 0.58rem;
-        letter-spacing: 0.24em;
+        font-size: 0.56rem;
+        letter-spacing: 0.18em;
         text-transform: uppercase;
         color: var(--red-ink);
+        text-decoration: none;
         display: block;
-        margin-bottom: 0.35rem;
+        margin-bottom: 0.3rem;
+        font-weight: 700;
     }
 
-    .card-title {
+    .nyt-secondary-title {
         font-family: var(--font-display);
+        font-size: 1.05rem;
+        font-weight: 700;
         color: var(--ink);
-        text-decoration: none;
         letter-spacing: -0.02em;
         line-height: 1.2;
+        margin-bottom: 0.3rem;
+        text-decoration: none;
         display: block;
         transition: color 0.15s;
-        margin-bottom: 0.4rem;
     }
 
-    .card-title:hover { color: var(--red-ink); }
+    .nyt-secondary-title:hover { color: var(--ink-mid); }
 
-    .hero-content .card-title   { font-size: 2.4rem; font-weight: 900; }
-    .medium-content .card-title { font-size: 1.35rem; font-weight: 700; }
-    .small-content .card-title  { font-size: 1rem; font-weight: 700; }
-
-    .card-meta {
-        font-family: var(--font-mono);
-        font-size: 0.58rem;
-        letter-spacing: 0.14em;
-        text-transform: uppercase;
-        color: var(--ink-faint);
-        display: block;
-        margin-bottom: 0.5rem;
-    }
-
-    .card-excerpt {
+    .nyt-secondary-excerpt {
         font-family: var(--font-body);
+        font-size: 0.85rem;
         color: var(--ink-mid);
-        line-height: 1.7;
+        line-height: 1.55;
         display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
-        margin-top: auto;
+        margin-bottom: 0.3rem;
     }
 
-    .hero-content .card-excerpt   { font-size: 1.05rem; -webkit-line-clamp: 4; }
-    .medium-content .card-excerpt { font-size: 0.95rem; -webkit-line-clamp: 3; }
+    .nyt-secondary-meta {
+        font-family: var(--font-mono);
+        font-size: 0.54rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+    }
 
     /* ─────────────────────────────────────────
-       SHARED ACTION LINKS
+       SIDEBAR ARTICLES (articles 5+)
     ───────────────────────────────────────── */
-    .footer-actions { display: flex; gap: 0.7rem; align-items: center; }
-
-    .action-link {
+    .nyt-sidebar-label {
         font-family: var(--font-mono);
         font-size: 0.58rem;
-        letter-spacing: 0.14em;
+        letter-spacing: 0.22em;
         text-transform: uppercase;
-        color: var(--ink-mid);
+        color: var(--ink);
+        font-weight: 700;
+        border-bottom: 2px solid var(--ink);
+        padding-bottom: 0.4rem;
+        margin-bottom: 0.8rem;
+        display: block;
+    }
+
+    .nyt-sidebar-item {
+        display: flex;
+        gap: 0.8rem;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid var(--rule);
+        align-items: flex-start;
+    }
+
+    .nyt-sidebar-item:last-child { border-bottom: none; }
+
+    .nyt-sidebar-image {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        flex-shrink: 0;
+        filter: grayscale(20%);
+    }
+
+    .nyt-sidebar-no-image {
+        width: 80px;
+        height: 80px;
+        background: var(--cream-dark);
+        flex-shrink: 0;
+        border: 1px solid var(--rule);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .nyt-sidebar-content { flex: 1; min-width: 0; }
+
+    .nyt-sidebar-category {
+        font-family: var(--font-mono);
+        font-size: 0.54rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--red-ink);
+        text-decoration: none;
+        display: block;
+        margin-bottom: 0.2rem;
+        font-weight: 700;
+    }
+
+    .nyt-sidebar-title {
+        font-family: var(--font-display);
+        font-size: 0.92rem;
+        font-weight: 700;
+        color: var(--ink);
+        letter-spacing: -0.01em;
+        line-height: 1.25;
+        text-decoration: none;
+        display: block;
+        transition: color 0.15s;
+        margin-bottom: 0.2rem;
+    }
+
+    .nyt-sidebar-title:hover { color: var(--ink-mid); }
+
+    .nyt-sidebar-meta {
+        font-family: var(--font-mono);
+        font-size: 0.52rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+    }
+
+    /* ─────────────────────────────────────────
+       OWNER ACTION LINKS
+    ───────────────────────────────────────── */
+    .nyt-actions {
+        display: flex;
+        gap: 0.8rem;
+        margin-top: 0.4rem;
+        align-items: center;
+    }
+
+    .nyt-action-link {
+        font-family: var(--font-mono);
+        font-size: 0.54rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
         text-decoration: underline;
-        text-underline-offset: 3px;
-        text-decoration-color: var(--rule);
+        text-underline-offset: 2px;
         transition: color 0.15s;
     }
 
-    .action-link:hover { color: var(--red-ink); text-decoration-color: var(--red-ink); }
-    .action-link-delete { color: var(--red-ink); text-decoration-color: rgba(139,26,26,0.25); }
+    .nyt-action-link:hover { color: var(--ink); }
+    .nyt-action-delete { color: var(--red-ink); }
+    .nyt-action-delete:hover { color: #6B0000; }
 
-    .read-link {
+    .nyt-read-link {
         font-family: var(--font-mono);
-        font-size: 0.58rem;
-        letter-spacing: 0.14em;
+        font-size: 0.54rem;
+        letter-spacing: 0.12em;
         text-transform: uppercase;
         color: var(--ink);
         text-decoration: none;
         font-weight: 700;
+        margin-left: auto;
         transition: color 0.15s;
     }
 
-    .read-link:hover { color: var(--red-ink); }
+    .nyt-read-link:hover { color: var(--red-ink); }
 
-    /* ─────────────────────────────────────────
-       COMMENTS
-    ───────────────────────────────────────── */
-    .comments-label {
+    /* No photo label */
+    .no-photo-label {
         font-family: var(--font-mono);
-        font-size: 0.56rem;
-        letter-spacing: 0.24em;
+        font-size: 0.54rem;
+        letter-spacing: 0.18em;
         text-transform: uppercase;
-        color: var(--ink-faint);
-        display: block;
-        margin-bottom: 0.4rem;
-    }
-
-    .comment-line {
-        font-family: var(--font-body);
-        font-size: 0.85rem;
-        color: var(--ink-mid);
-        border-top: 1px solid var(--rule);
-        padding-top: 0.3rem;
-        margin-top: 0.3rem;
-        line-height: 1.5;
-    }
-
-    .comment-author {
-        font-family: var(--font-mono);
-        font-size: 0.56rem;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        color: var(--ink-faint);
-        margin-right: 0.4rem;
+        color: var(--rule-heavy);
     }
 
     /* ─────────────────────────────────────────
        EMPTY STATE
     ───────────────────────────────────────── */
-    .empty-state {
+    .nyt-empty {
         text-align: center;
         padding: 5rem 2rem;
-        border: 1px solid var(--rule);
+        border-top: 3px solid var(--ink);
+        border-bottom: 1px solid var(--rule);
     }
 
-    .empty-heading {
+    .nyt-empty-heading {
         font-family: var(--font-display);
         font-size: 1.6rem;
         color: var(--ink-faint);
@@ -406,7 +418,7 @@
         margin-bottom: 0.5rem;
     }
 
-    .empty-sub {
+    .nyt-empty-sub {
         font-family: var(--font-body);
         font-size: 0.95rem;
         color: var(--ink-faint);
@@ -416,202 +428,181 @@
     /* ─────────────────────────────────────────
        RESPONSIVE
     ───────────────────────────────────────── */
-    @media (max-width: 900px) {
-        .article-hero { grid-template-columns: 1fr; }
-        .hero-image-wrap, .no-photo-hero { max-height: 260px; min-height: 200px; border-right: none; border-bottom: 1px solid var(--rule); }
-        .hero-content .card-title { font-size: 1.8rem; }
-        .small-grid { grid-template-columns: 1fr 1fr; }
-        .page-heading { font-size: 2.5rem; }
+    @media (max-width: 960px) {
+        .nyt-grid {
+            grid-template-columns: 1fr;
+        }
+        .nyt-divider { display: none; }
+        .nyt-main { padding-right: 0; }
+        .nyt-sidebar {
+            padding-left: 0;
+            border-top: 2px solid var(--ink);
+            padding-top: 1.2rem;
+            margin-top: 1.2rem;
+        }
+        .nyt-secondary-grid { grid-template-columns: 1fr 1fr; }
+        .nyt-hero-title { font-size: 1.7rem; }
     }
 
     @media (max-width: 600px) {
-        .medium-row { grid-template-columns: 1fr; }
-        .article-medium:first-child { border-right: none; border-bottom: 1px solid var(--rule); }
-        .small-grid { grid-template-columns: 1fr; }
-        .article-small { border-right: none; border-bottom: 1px solid var(--rule); }
-        .page-heading { font-size: 2rem; }
+        .nyt-secondary-grid { grid-template-columns: 1fr; }
+        .nyt-secondary-item {
+            border-right: none;
+            border-bottom: 1px solid var(--rule);
+            padding: 0.8rem 0;
+        }
+        .nyt-masthead-title { font-size: 1.4rem; }
     }
 </style>
 
-<div class="page-masthead">
-    <span class="page-kicker">The Daily Record</span>
-    <h1 class="page-heading">All Articles</h1>
-</div>
+<div class="nyt-page">
 
-<div class="masthead-rule-wrap">
-    <hr class="masthead-rule-heavy">
-    <span class="masthead-date">Latest Dispatches</span>
-    <hr class="masthead-rule-heavy">
-</div>
-
-{% if article_list %}
-<div class="broadsheet">
-
-    {% for article in article_list %}
-
-    {% if forloop.counter == 1 %}
-    <!-- ══ HERO ══ -->
-    <div class="article-hero {% if not article.image %}no-image{% endif %}">
-        {% if article.image %}
-        <div class="hero-image-wrap">
-            <img src="{{ article.image.url }}" alt="{{ article.title }}" class="card-image">
-        </div>
-        {% else %}
-        <div class="no-photo-hero">
-            <span class="no-photo-label">No Photograph</span>
-        </div>
-        {% endif %}
-
-        <div class="hero-content">
-            <span class="card-kicker">Feature</span>
-            <a href="{{ article.get_absolute_url }}" class="card-title">{{ article.title }}</a>
-            <span class="card-meta">By {{ article.author }}&nbsp;&middot;&nbsp;{{ article.date|date:"N j, Y" }}</span>
-            <p class="card-excerpt">{{ article.body }}</p>
-        </div>
-
-        <div class="hero-footer">
-            <div class="footer-actions">
-                {% if article.author.pk == request.user.pk %}
-                <a href="{% url 'article_edit' article.pk %}" class="action-link">Edit &rarr;</a>
-                <a href="{% url 'article_delete' article.pk %}" class="action-link action-link-delete">Delete</a>
-                {% endif %}
-            </div>
-            <a href="{{ article.get_absolute_url }}" class="read-link">Read &amp; Comment &rarr;</a>
-        </div>
-
-        {% if article.comment_set.all %}
-        <div class="hero-comments">
-            <span class="comments-label">Correspondence</span>
-            {% for comment in article.comment_set.all %}
-            <div class="comment-line">
-                <span class="comment-author">{{ comment.author }}</span>{{ comment }}
-            </div>
-            {% endfor %}
-        </div>
-        {% endif %}
+    <!-- Masthead -->
+    <div class="nyt-masthead">
+        <span class="nyt-masthead-title">
+            {% if active_category %}{{ active_category.name }}{% else %}Today's Articles{% endif %}
+        </span>
+        <span class="nyt-masthead-date">Latest Dispatches &nbsp;&middot;&nbsp; Independent Press</span>
     </div>
 
-    {% elif forloop.counter == 2 %}
-    <!-- ══ MEDIUM ROW ══ -->
-    <div class="medium-row">
-        <div class="article-medium">
-            {% if article.image %}
-            <div class="medium-image-wrap">
-                <img src="{{ article.image.url }}" alt="{{ article.title }}" class="card-image">
-            </div>
-            {% else %}
-            <div class="no-photo-medium">
-                <span class="no-photo-label">No Photograph</span>
-            </div>
-            {% endif %}
-            <div class="medium-content">
-                <span class="card-kicker">Report</span>
-                <a href="{{ article.get_absolute_url }}" class="card-title">{{ article.title }}</a>
-                <span class="card-meta">By {{ article.author }} &middot; {{ article.date|date:"N j, Y" }}</span>
-                <p class="card-excerpt">{{ article.body }}</p>
-            </div>
-            <div class="medium-footer">
-                <div class="footer-actions">
+    <!-- Category section nav -->
+    {% if categories %}
+    <div class="nyt-sections">
+        <a href="{% url 'article_list' %}" class="nyt-section-link {% if not active_category %}active{% endif %}">All</a>
+        {% for category in categories %}
+        <a href="{{ category.get_absolute_url }}" class="nyt-section-link {% if active_category.slug == category.slug %}active{% endif %}">
+            {{ category.name }}
+        </a>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if article_list %}
+
+    <div class="nyt-grid">
+
+        <!-- ══ LEFT: MAIN COLUMN ══ -->
+        <div class="nyt-main">
+
+            <!-- HERO: Article 1 -->
+            {% with article=article_list.0 %}
+            <div class="nyt-hero">
+                {% if article.image %}
+                <img src="{{ article.image.url }}" alt="{{ article.title }}" class="nyt-hero-image">
+                {% else %}
+                <div class="nyt-hero-no-image"><span class="no-photo-label">No Photograph</span></div>
+                {% endif %}
+
+                {% if article.category %}
+                <a href="{{ article.category.get_absolute_url }}" class="nyt-hero-category">{{ article.category.name }}</a>
+                {% else %}
+                <span class="nyt-hero-category" style="color:var(--ink-faint);">Feature</span>
+                {% endif %}
+
+                <a href="{{ article.get_absolute_url }}" class="nyt-hero-title">{{ article.title }}</a>
+                <p class="nyt-hero-excerpt">{{ article.body|safe|striptags }}</p>
+                <div class="nyt-actions">
+                    <span class="nyt-hero-meta">By {{ article.author }} &nbsp;&middot;&nbsp; {{ article.date|date:"N j, Y" }}</span>
                     {% if article.author.pk == request.user.pk %}
-                    <a href="{% url 'article_edit' article.pk %}" class="action-link">Edit &rarr;</a>
-                    <a href="{% url 'article_delete' article.pk %}" class="action-link action-link-delete">Delete</a>
+                    <a href="{% url 'article_edit' article.pk %}" class="nyt-action-link">Edit</a>
+                    <a href="{% url 'article_delete' article.pk %}" class="nyt-action-link nyt-action-delete">Delete</a>
                     {% endif %}
+                    <a href="{{ article.get_absolute_url }}" class="nyt-read-link">Read &rarr;</a>
                 </div>
-                <a href="{{ article.get_absolute_url }}" class="read-link">Read &rarr;</a>
             </div>
-            {% if article.comment_set.all %}
-            <div class="medium-comments">
-                <span class="comments-label">Correspondence</span>
-                {% for comment in article.comment_set.all %}
-                <div class="comment-line">
-                    <span class="comment-author">{{ comment.author }}</span>{{ comment }}
+            {% endwith %}
+
+            <!-- SECONDARY: Articles 2, 3, 4 -->
+            {% if article_list|length > 1 %}
+            <div class="nyt-secondary-grid">
+                {% for article in article_list %}
+                {% if forloop.counter >= 2 and forloop.counter <= 4 %}
+                <div class="nyt-secondary-item">
+                    {% if article.image %}
+                    <img src="{{ article.image.url }}" alt="{{ article.title }}" class="nyt-secondary-image">
+                    {% else %}
+                    <div class="nyt-secondary-no-image"><span class="no-photo-label">No Photo</span></div>
+                    {% endif %}
+
+                    {% if article.category %}
+                    <a href="{{ article.category.get_absolute_url }}" class="nyt-secondary-category">{{ article.category.name }}</a>
+                    {% else %}
+                    <span class="nyt-secondary-category" style="color:var(--ink-faint);">Report</span>
+                    {% endif %}
+
+                    <a href="{{ article.get_absolute_url }}" class="nyt-secondary-title">{{ article.title }}</a>
+                    <p class="nyt-secondary-excerpt">{{ article.body|safe|striptags }}</p>
+                    <div class="nyt-actions">
+                        <span class="nyt-secondary-meta">{{ article.author }} &middot; {{ article.date|date:"N j, Y" }}</span>
+                        {% if article.author.pk == request.user.pk %}
+                        <a href="{% url 'article_edit' article.pk %}" class="nyt-action-link">Edit</a>
+                        <a href="{% url 'article_delete' article.pk %}" class="nyt-action-link nyt-action-delete">Delete</a>
+                        {% endif %}
+                    </div>
                 </div>
+                {% endif %}
                 {% endfor %}
             </div>
             {% endif %}
+
         </div>
 
-    {% elif forloop.counter == 3 %}
-        <div class="article-medium">
-            {% if article.image %}
-            <div class="medium-image-wrap">
-                <img src="{{ article.image.url }}" alt="{{ article.title }}" class="card-image">
-            </div>
-            {% else %}
-            <div class="no-photo-medium">
-                <span class="no-photo-label">No Photograph</span>
-            </div>
+        <!-- ── VERTICAL RULE ── -->
+        <div class="nyt-divider"></div>
+
+        <!-- ══ RIGHT: SIDEBAR ══ -->
+        <div class="nyt-sidebar">
+            <span class="nyt-sidebar-label">More Stories</span>
+
+            {% if article_list|length <= 4 %}
+            <p style="font-family:var(--font-body); font-size:0.85rem; color:var(--ink-faint); font-style:italic;">
+                More articles will appear here as they are published.
+            </p>
             {% endif %}
-            <div class="medium-content">
-                <span class="card-kicker">Report</span>
-                <a href="{{ article.get_absolute_url }}" class="card-title">{{ article.title }}</a>
-                <span class="card-meta">By {{ article.author }} &middot; {{ article.date|date:"N j, Y" }}</span>
-                <p class="card-excerpt">{{ article.body }}</p>
-            </div>
-            <div class="medium-footer">
-                <div class="footer-actions">
-                    {% if article.author.pk == request.user.pk %}
-                    <a href="{% url 'article_edit' article.pk %}" class="action-link">Edit &rarr;</a>
-                    <a href="{% url 'article_delete' article.pk %}" class="action-link action-link-delete">Delete</a>
+
+            {% for article in article_list %}
+            {% if forloop.counter >= 5 %}
+            <div class="nyt-sidebar-item">
+                {% if article.image %}
+                <img src="{{ article.image.url }}" alt="{{ article.title }}" class="nyt-sidebar-image">
+                {% else %}
+                <div class="nyt-sidebar-no-image"><span class="no-photo-label" style="font-size:0.46rem;">No Photo</span></div>
+                {% endif %}
+                <div class="nyt-sidebar-content">
+                    {% if article.category %}
+                    <a href="{{ article.category.get_absolute_url }}" class="nyt-sidebar-category">{{ article.category.name }}</a>
+                    {% else %}
+                    <span class="nyt-sidebar-category" style="color:var(--ink-faint);">Dispatch</span>
                     {% endif %}
+                    <a href="{{ article.get_absolute_url }}" class="nyt-sidebar-title">{{ article.title }}</a>
+                    <div class="nyt-actions" style="margin-top:0.2rem;">
+                        <span class="nyt-sidebar-meta">{{ article.author }} &middot; {{ article.date|date:"N j, Y" }}</span>
+                        {% if article.author.pk == request.user.pk %}
+                        <a href="{% url 'article_edit' article.pk %}" class="nyt-action-link">Edit</a>
+                        <a href="{% url 'article_delete' article.pk %}" class="nyt-action-link nyt-action-delete">Del</a>
+                        {% endif %}
+                    </div>
                 </div>
-                <a href="{{ article.get_absolute_url }}" class="read-link">Read &rarr;</a>
-            </div>
-            {% if article.comment_set.all %}
-            <div class="medium-comments">
-                <span class="comments-label">Correspondence</span>
-                {% for comment in article.comment_set.all %}
-                <div class="comment-line">
-                    <span class="comment-author">{{ comment.author }}</span>{{ comment }}
-                </div>
-                {% endfor %}
             </div>
             {% endif %}
+            {% endfor %}
         </div>
-    </div><!-- /.medium-row -->
+
+    </div><!-- /.nyt-grid -->
 
     {% else %}
-    <!-- ══ SMALL GRID ══ -->
-    {% if forloop.counter == 4 %}<div class="small-grid">{% endif %}
-
-        <div class="article-small">
-            {% if article.image %}
-            <div class="small-image-wrap">
-                <img src="{{ article.image.url }}" alt="{{ article.title }}" class="card-image">
-            </div>
+    <div class="nyt-empty">
+        <p class="nyt-empty-heading">No Articles Yet</p>
+        <p class="nyt-empty-sub">
+            {% if active_category %}
+            No articles in {{ active_category.name }} yet.
             {% else %}
-            <div class="no-photo-small">
-                <span class="no-photo-label">No Photograph</span>
-            </div>
+            The press is quiet. Be the first to publish.
             {% endif %}
-            <div class="small-content">
-                <span class="card-kicker">Dispatch</span>
-                <a href="{{ article.get_absolute_url }}" class="card-title">{{ article.title }}</a>
-                <span class="card-meta">{{ article.author }} &middot; {{ article.date|date:"N j, Y" }}</span>
-            </div>
-            <div class="small-footer">
-                <div class="footer-actions">
-                    {% if article.author.pk == request.user.pk %}
-                    <a href="{% url 'article_edit' article.pk %}" class="action-link">Edit</a>
-                    <a href="{% url 'article_delete' article.pk %}" class="action-link action-link-delete">Delete</a>
-                    {% endif %}
-                </div>
-                <a href="{{ article.get_absolute_url }}" class="read-link">Read &rarr;</a>
-            </div>
-        </div>
-
-    {% if forloop.last %}</div>{% endif %}<!-- /.small-grid -->
-
+        </p>
+    </div>
     {% endif %}
-    {% endfor %}
 
-</div><!-- /.broadsheet -->
-
-{% else %}
-<div class="empty-state">
-    <p class="empty-heading">No Articles Yet</p>
-    <p class="empty-sub">The press is quiet. Be the first to publish.</p>
-</div>
-{% endif %}
+</div><!-- /.nyt-page -->
 
 {% endblock content %}

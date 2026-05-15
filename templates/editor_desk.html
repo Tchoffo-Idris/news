@@ -1,0 +1,500 @@
+{% extends "base.html" %}
+
+{% block title %}Editor's Desk{% endblock title %}
+
+{% block content %}
+
+<style>
+    .desk-wrapper {
+        max-width: 1100px;
+        margin: 2rem auto 4rem;
+    }
+
+    /* ── Header ── */
+    .desk-header {
+        border-top: 3px solid var(--ink);
+        padding-top: 1.2rem;
+        margin-bottom: 2rem;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .desk-kicker {
+        font-family: var(--font-mono);
+        font-size: 0.6rem;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+        display: block;
+        margin-bottom: 0.4rem;
+    }
+
+    .desk-heading {
+        font-family: var(--font-display);
+        font-size: 2.4rem;
+        font-weight: 900;
+        color: var(--ink);
+        letter-spacing: -0.03em;
+        line-height: 1;
+        margin: 0;
+    }
+
+    .desk-subheading {
+        font-family: var(--font-mono);
+        font-size: 0.65rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+        margin-top: 0.4rem;
+    }
+
+    .desk-new-btn {
+        font-family: var(--font-mono);
+        font-size: 0.68rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--cream);
+        background: var(--ink);
+        border: 1.5px solid var(--ink);
+        border-radius: 0;
+        padding: 9px 20px;
+        text-decoration: none;
+        display: inline-block;
+        transition: background 0.15s, border-color 0.15s;
+    }
+
+    .desk-new-btn:hover {
+        background: var(--red-ink);
+        border-color: var(--red-ink);
+        color: var(--cream);
+    }
+
+    /* ── Stats row ── */
+    .desk-stats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        border: 1px solid var(--rule);
+        margin-bottom: 2rem;
+    }
+
+    .desk-stat {
+        padding: 1.4rem 1.6rem;
+        border-right: 1px solid var(--rule);
+        text-align: center;
+    }
+
+    .desk-stat:last-child { border-right: none; }
+
+    .desk-stat-number {
+        font-family: var(--font-display);
+        font-size: 2.8rem;
+        font-weight: 900;
+        color: var(--ink);
+        letter-spacing: -0.04em;
+        line-height: 1;
+        display: block;
+    }
+
+    .desk-stat-label {
+        font-family: var(--font-mono);
+        font-size: 0.58rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+        display: block;
+        margin-top: 0.4rem;
+    }
+
+    /* ── Two column layout ── */
+    .desk-columns {
+        display: grid;
+        grid-template-columns: 1fr 300px;
+        gap: 2rem;
+    }
+
+    /* ── Article table ── */
+    .desk-section-label {
+        font-family: var(--font-mono);
+        font-size: 0.6rem;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        color: var(--ink);
+        font-weight: 700;
+        border-bottom: 2px solid var(--ink);
+        padding-bottom: 0.5rem;
+        margin-bottom: 0;
+        display: block;
+    }
+
+    .desk-table {
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid var(--rule);
+        border-top: none;
+    }
+
+    .desk-table th {
+        font-family: var(--font-mono);
+        font-size: 0.56rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+        padding: 0.7rem 1rem;
+        background: var(--cream-dark);
+        border-bottom: 1px solid var(--rule);
+        text-align: left;
+        font-weight: 400;
+    }
+
+    .desk-table td {
+        padding: 0.85rem 1rem;
+        border-bottom: 1px solid var(--rule);
+        vertical-align: top;
+    }
+
+    .desk-table tr:last-child td { border-bottom: none; }
+
+    .desk-table tr:hover td { background: var(--cream-dark); }
+
+    .desk-article-title {
+        font-family: var(--font-display);
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--ink);
+        text-decoration: none;
+        letter-spacing: -0.01em;
+        line-height: 1.2;
+        display: block;
+        transition: color 0.15s;
+    }
+
+    .desk-article-title:hover { color: var(--red-ink); }
+
+    .desk-article-category {
+        font-family: var(--font-mono);
+        font-size: 0.54rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+        display: block;
+        margin-top: 0.2rem;
+    }
+
+    .desk-article-date {
+        font-family: var(--font-mono);
+        font-size: 0.56rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+        white-space: nowrap;
+    }
+
+    .desk-comment-count {
+        font-family: var(--font-display);
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--ink);
+        text-align: center;
+        display: block;
+    }
+
+    .desk-row-actions {
+        display: flex;
+        gap: 0.8rem;
+        align-items: center;
+        white-space: nowrap;
+    }
+
+    .desk-action {
+        font-family: var(--font-mono);
+        font-size: 0.54rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--ink-mid);
+        text-decoration: underline;
+        text-underline-offset: 2px;
+        transition: color 0.15s;
+    }
+
+    .desk-action:hover { color: var(--ink); }
+    .desk-action-delete { color: var(--red-ink); }
+    .desk-action-delete:hover { color: #6B0000; }
+
+    /* ── Sidebar ── */
+    .desk-sidebar-section {
+        margin-bottom: 1.8rem;
+    }
+
+    /* Most commented spotlight */
+    .desk-spotlight {
+        border: 1px solid var(--rule);
+        border-top: none;
+        padding: 1.2rem;
+        background: var(--cream);
+    }
+
+    .desk-spotlight-image {
+        width: 100%;
+        height: 130px;
+        object-fit: cover;
+        display: block;
+        border: 1px solid var(--rule);
+        margin-bottom: 0.8rem;
+        filter: grayscale(20%);
+    }
+
+    .desk-spotlight-no-image {
+        width: 100%;
+        height: 100px;
+        background: var(--cream-dark);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid var(--rule);
+        margin-bottom: 0.8rem;
+    }
+
+    .desk-spotlight-title {
+        font-family: var(--font-display);
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: var(--ink);
+        text-decoration: none;
+        letter-spacing: -0.02em;
+        line-height: 1.2;
+        display: block;
+        margin-bottom: 0.4rem;
+        transition: color 0.15s;
+    }
+
+    .desk-spotlight-title:hover { color: var(--red-ink); }
+
+    .desk-spotlight-stat {
+        font-family: var(--font-mono);
+        font-size: 0.58rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+    }
+
+    .desk-spotlight-stat strong {
+        color: var(--ink);
+        font-size: 0.9rem;
+        font-family: var(--font-display);
+    }
+
+    /* Category breakdown */
+    .desk-category-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.55rem 0;
+        border-bottom: 1px solid var(--rule);
+    }
+
+    .desk-category-row:last-child { border-bottom: none; }
+
+    .desk-category-name {
+        font-family: var(--font-mono);
+        font-size: 0.6rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink-mid);
+    }
+
+    .desk-category-count {
+        font-family: var(--font-display);
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--ink);
+    }
+
+    /* Empty state */
+    .desk-empty {
+        padding: 3rem;
+        text-align: center;
+        border: 1px solid var(--rule);
+        border-top: none;
+    }
+
+    .desk-empty-text {
+        font-family: var(--font-body);
+        font-size: 0.95rem;
+        color: var(--ink-faint);
+        font-style: italic;
+    }
+
+    /* No photo label */
+    .no-photo-label {
+        font-family: var(--font-mono);
+        font-size: 0.52rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--rule-heavy);
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+        .desk-columns { grid-template-columns: 1fr; }
+        .desk-stats { grid-template-columns: repeat(2, 1fr); }
+        .desk-stat:nth-child(2) { border-right: none; }
+        .desk-stat:nth-child(3) { border-top: 1px solid var(--rule); }
+        .desk-stat:nth-child(4) { border-top: 1px solid var(--rule); }
+        .desk-heading { font-size: 1.8rem; }
+    }
+
+    @media (max-width: 600px) {
+        .desk-stats { grid-template-columns: 1fr 1fr; }
+        .desk-table th:nth-child(3),
+        .desk-table td:nth-child(3) { display: none; }
+    }
+</style>
+
+<div class="desk-wrapper">
+
+    <!-- Header -->
+    <div class="desk-header">
+        <div>
+            <span class="desk-kicker">Editorial Dashboard</span>
+            <h1 class="desk-heading">Editor's Desk</h1>
+            <p class="desk-subheading">Welcome back, {{ request.user.username }}</p>
+        </div>
+        <a href="{% url 'article_new' %}" class="desk-new-btn">
+            [+] New Article &rarr;
+        </a>
+    </div>
+
+    <!-- Stats -->
+    <div class="desk-stats">
+        <div class="desk-stat">
+            <span class="desk-stat-number">{{ total_articles }}</span>
+            <span class="desk-stat-label">Articles Published</span>
+        </div>
+        <div class="desk-stat">
+            <span class="desk-stat-number">{{ total_comments }}</span>
+            <span class="desk-stat-label">Comments Received</span>
+        </div>
+        <div class="desk-stat">
+            <span class="desk-stat-number">{{ by_category|length }}</span>
+            <span class="desk-stat-label">Categories Covered</span>
+        </div>
+        <div class="desk-stat">
+            <span class="desk-stat-number">
+                {% if most_commented %}{{ most_commented.comment_count }}{% else %}0{% endif %}
+            </span>
+            <span class="desk-stat-label">Most Comments on One Article</span>
+        </div>
+    </div>
+
+    <!-- Two columns -->
+    <div class="desk-columns">
+
+        <!-- Main: article table -->
+        <div>
+            <span class="desk-section-label">Your Articles</span>
+
+            {% if my_articles %}
+            <table class="desk-table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Date</th>
+                        <th>Comments</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for article in my_articles %}
+                    <tr>
+                        <td>
+                            <a href="{{ article.get_absolute_url }}" class="desk-article-title">{{ article.title }}</a>
+                            {% if article.category %}
+                            <span class="desk-article-category">{{ article.category.name }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <span class="desk-article-date">{{ article.date|date:"N j, Y" }}</span>
+                        </td>
+                        <td style="text-align:center;">
+                            <span class="desk-comment-count">{{ article.comment_count }}</span>
+                        </td>
+                        <td>
+                            <div class="desk-row-actions">
+                                <a href="{{ article.get_absolute_url }}" class="desk-action">View</a>
+                                <a href="{% url 'article_edit' article.pk %}" class="desk-action">Edit</a>
+                                <a href="{% url 'article_delete' article.pk %}" class="desk-action desk-action-delete">Delete</a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="desk-empty">
+                <p class="desk-empty-text">You haven't published any articles yet.</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Sidebar -->
+        <div>
+
+            <!-- Most commented spotlight -->
+            {% if most_commented %}
+            <div class="desk-sidebar-section">
+                <span class="desk-section-label">Most Discussed</span>
+                <div class="desk-spotlight">
+                    {% if most_commented.image %}
+                    <img src="{{ most_commented.image.url }}" alt="{{ most_commented.title }}" class="desk-spotlight-image">
+                    {% else %}
+                    <div class="desk-spotlight-no-image"><span class="no-photo-label">No Photograph</span></div>
+                    {% endif %}
+                    <a href="{{ most_commented.get_absolute_url }}" class="desk-spotlight-title">{{ most_commented.title }}</a>
+                    <span class="desk-spotlight-stat">
+                        <strong>{{ most_commented.comment_count }}</strong> comment{{ most_commented.comment_count|pluralize }}
+                    </span>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Category breakdown -->
+            {% if by_category %}
+            <div class="desk-sidebar-section">
+                <span class="desk-section-label">By Category</span>
+                <div style="border: 1px solid var(--rule); border-top: none; padding: 0.5rem 1rem;">
+                    {% for item in by_category %}
+                    <div class="desk-category-row">
+                        <span class="desk-category-name">
+                            {% if item.category__name %}{{ item.category__name }}{% else %}Uncategorised{% endif %}
+                        </span>
+                        <span class="desk-category-count">{{ item.count }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Latest article quick link -->
+            {% if latest_article %}
+            <div class="desk-sidebar-section">
+                <span class="desk-section-label">Latest Article</span>
+                <div style="border: 1px solid var(--rule); border-top: none; padding: 1rem;">
+                    <a href="{{ latest_article.get_absolute_url }}" class="desk-spotlight-title" style="font-size:0.95rem;">{{ latest_article.title }}</a>
+                    <span class="desk-article-date" style="display:block; margin-top:0.3rem;">{{ latest_article.date|date:"l, N j, Y" }}</span>
+                    <div style="margin-top:0.8rem; display:flex; gap:0.8rem;">
+                        <a href="{{ latest_article.get_absolute_url }}" class="desk-action">View &rarr;</a>
+                        <a href="{% url 'article_edit' latest_article.pk %}" class="desk-action">Edit &rarr;</a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock content %}
