@@ -3,6 +3,7 @@ from django.db import models
 from django.urls import reverse
 from PIL import Image
 from ckeditor.fields import RichTextField
+import re
 
 
 class Category(models.Model):
@@ -37,6 +38,11 @@ class Article(models.Model):
         related_name="articles",
     )
 
+    def reading_time(self):
+        plain_text = re.sub(r"<[^>]+>", "", self.body)
+        word_count = len(plain_text.split())
+        minutes = max(1, round(word_count / 200))
+        return minutes
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)

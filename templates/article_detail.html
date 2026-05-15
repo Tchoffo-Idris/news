@@ -5,6 +5,18 @@
 {% block content %}
 
 <style>
+    /* ── Reading progress bar ── */
+    .reading-progress {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 0%;
+        height: 3px;
+        background: var(--ink);
+        z-index: 9999;
+        transition: width 0.1s linear;
+    }
+
     .detail-wrapper {
         max-width: 720px;
         margin: 2.5rem auto 4rem;
@@ -224,6 +236,87 @@
     .action-link:hover { color: var(--red-ink); text-decoration-color: var(--red-ink); }
     .action-link-delete { color: var(--red-ink); text-decoration-color: rgba(139,26,26,0.3); }
 
+    /* ── Author card — ADDED ── */
+    .author-card {
+        display: flex;
+        gap: 1.2rem;
+        align-items: flex-start;
+        padding: 1.4rem;
+        border: 1px solid var(--rule);
+        background: var(--cream-dark);
+        margin-bottom: 2.5rem;
+    }
+
+    .author-avatar {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        object-fit: cover;
+        flex-shrink: 0;
+        border: 2px solid var(--rule-heavy);
+        filter: grayscale(15%);
+    }
+
+    .author-avatar-placeholder {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        background: var(--rule);
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid var(--rule-heavy);
+    }
+
+    .author-avatar-initial {
+        font-family: var(--font-display);
+        font-size: 1.6rem;
+        font-weight: 900;
+        color: var(--ink-mid);
+        text-transform: uppercase;
+        line-height: 1;
+    }
+
+    .author-card-content { flex: 1; min-width: 0; }
+
+    .author-card-label {
+        font-family: var(--font-mono);
+        font-size: 0.56rem;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+        display: block;
+        margin-bottom: 0.2rem;
+    }
+
+    .author-card-name {
+        font-family: var(--font-display);
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--ink);
+        letter-spacing: -0.01em;
+        display: block;
+        margin-bottom: 0.4rem;
+    }
+
+    .author-card-bio {
+        font-family: var(--font-body);
+        font-size: 0.92rem;
+        color: var(--ink-mid);
+        line-height: 1.65;
+        font-style: italic;
+        margin: 0;
+    }
+
+    .author-card-no-bio {
+        font-family: var(--font-body);
+        font-size: 0.88rem;
+        color: var(--ink-faint);
+        font-style: italic;
+        margin: 0;
+    }
+
     .section-kicker {
         font-family: var(--font-mono);
         font-size: 0.62rem;
@@ -336,8 +429,12 @@
         .detail-body > p:first-child::first-letter { font-size: 2.5rem; }
         .detail-body { font-size: 1rem; }
         .detail-wrapper { padding: 0 0.5rem; }
+        .author-card { flex-direction: column; align-items: center; text-align: center; }
     }
 </style>
+
+<!-- Reading progress bar -->
+<div class="reading-progress" id="readingProgress"></div>
 
 <div class="detail-wrapper">
 
@@ -351,7 +448,7 @@
 
     <h2 class="detail-heading">{{ object.title }}</h2>
     <hr class="detail-rule">
-    <p class="detail-meta">By {{ object.author }}&nbsp;&nbsp;&middot;&nbsp;&nbsp;{{ object.date|date:"l, N j, Y" }}</p>
+    <p class="detail-meta">By {{ object.author }}&nbsp;&nbsp;&middot;&nbsp;&nbsp;{{ object.date|date:"l, N j, Y" }}&nbsp;&nbsp;&middot;&nbsp;&nbsp;{{ object.reading_time }} min read</p>
 
     {% if object.image %}
     <img src="{{ object.image.url }}" alt="{{ object.title }}" class="detail-image">
@@ -366,6 +463,26 @@
         <a href="{% url 'article_delete' article.pk %}" class="action-link action-link-delete">Delete</a>
     </div>
     {% endif %}
+
+    <!-- ADDED: Author profile card -->
+    <div class="author-card">
+        {% if object.author.profile_picture %}
+        <img src="{{ object.author.profile_picture.url }}" alt="{{ object.author.username }}" class="author-avatar">
+        {% else %}
+        <div class="author-avatar-placeholder">
+            <span class="author-avatar-initial">{{ object.author.username|first }}</span>
+        </div>
+        {% endif %}
+        <div class="author-card-content">
+            <span class="author-card-label">About the Author</span>
+            <span class="author-card-name">{{ object.author.get_full_name|default:object.author.username }}</span>
+            {% if object.author.bio %}
+            <p class="author-card-bio">{{ object.author.bio }}</p>
+            {% else %}
+            <p class="author-card-no-bio">No biography provided.</p>
+            {% endif %}
+        </div>
+    </div>
 
     <span class="section-kicker">Correspondence</span>
     <h4 class="section-heading">Comments</h4>
@@ -397,6 +514,14 @@
     if (document.referrer.includes('/edit/')) {
         history.replaceState(null, '', "{% url 'article_list' %}");
     }
+
+    // Reading progress bar
+    const bar = document.getElementById('readingProgress');
+    window.addEventListener('scroll', function () {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        bar.style.width = (docHeight > 0 ? (scrollTop / docHeight) * 100 : 0) + '%';
+    });
 </script>
 
 {% endblock content %}

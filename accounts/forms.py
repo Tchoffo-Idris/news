@@ -19,4 +19,6 @@ class CustomUserChangeForm(UserChangeForm):
             "username",
             "email",
             "age",
+            "bio",
+            "profile_picture",
         )
