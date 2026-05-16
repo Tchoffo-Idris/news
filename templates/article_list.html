@@ -10,10 +10,15 @@
     ───────────────────────────────────────── */
     .nyt-page {
         max-width: 1200px;
+        width: 100%;
         margin: 0 auto;
         padding: 0;
         font-family: var(--font-body);
         color: var(--ink);
+    }
+
+    .nyt-page *, .nyt-page *::before, .nyt-page *::after {
+        box-sizing: border-box;
     }
 
     /* ─────────────────────────────────────────
@@ -94,11 +99,12 @@
         border-bottom: 1px solid var(--rule);
         padding-bottom: 1.5rem;
         margin-bottom: 1.5rem;
+        width: 100%;
     }
 
-    .nyt-main { padding-right: 1.8rem; }
+    .nyt-main { padding-right: 1.8rem; min-width: 0; }
     .nyt-divider { background: var(--rule); margin: 0 0; }
-    .nyt-sidebar { padding-left: 1.8rem; }
+    .nyt-sidebar { padding-left: 1.8rem; min-width: 0; }
 
     /* ─────────────────────────────────────────
        HERO ARTICLE (first article)
@@ -107,11 +113,14 @@
         padding-bottom: 1.2rem;
         margin-bottom: 1.2rem;
         border-bottom: 1px solid var(--rule);
+        min-width: 0;
     }
 
     .nyt-hero-image {
         width: 100%;
-        height: 380px;
+        max-width: 100%;
+        height: auto;
+        max-height: 480px;
         object-fit: cover;
         object-position: center;
         display: block;
@@ -153,6 +162,8 @@
         text-decoration: none;
         display: block;
         transition: color 0.15s;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
     }
 
     .nyt-hero-title:hover { color: var(--ink-mid); }
@@ -168,6 +179,7 @@
         line-clamp: 3;
         -webkit-box-orient: vertical;
         overflow: hidden;
+        overflow-wrap: break-word;
     }
 
     .nyt-hero-meta {
@@ -185,12 +197,14 @@
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 0;
+        width: 100%;
     }
 
     .nyt-secondary-item {
         padding-right: 1.2rem;
         border-right: 1px solid var(--rule);
         padding-bottom: 0.5rem;
+        min-width: 0;
     }
 
     .nyt-secondary-item:last-child {
@@ -204,6 +218,7 @@
 
     .nyt-secondary-image {
         width: 100%;
+        max-width: 100%;
         height: 130px;
         object-fit: cover;
         display: block;
@@ -245,6 +260,7 @@
         text-decoration: none;
         display: block;
         transition: color 0.15s;
+        overflow-wrap: break-word;
     }
 
     .nyt-secondary-title:hover { color: var(--ink-mid); }
@@ -260,6 +276,7 @@
         -webkit-box-orient: vertical;
         overflow: hidden;
         margin-bottom: 0.3rem;
+        overflow-wrap: break-word;
     }
 
     .nyt-secondary-meta {
@@ -292,6 +309,7 @@
         padding: 0.75rem 0;
         border-bottom: 1px solid var(--rule);
         align-items: flex-start;
+        min-width: 0;
     }
 
     .nyt-sidebar-item:last-child { border-bottom: none; }
@@ -340,6 +358,7 @@
         display: block;
         transition: color 0.15s;
         margin-bottom: 0.2rem;
+        overflow-wrap: break-word;
     }
 
     .nyt-sidebar-title:hover { color: var(--ink-mid); }
@@ -428,6 +447,12 @@
     /* ─────────────────────────────────────────
        RESPONSIVE
     ───────────────────────────────────────── */
+    @media (max-width: 1024px) {
+        .nyt-grid {
+            grid-template-columns: 1fr 1px 250px;
+        }
+    }
+
     @media (max-width: 960px) {
         .nyt-grid {
             grid-template-columns: 1fr;
@@ -450,6 +475,7 @@
             border-right: none;
             border-bottom: 1px solid var(--rule);
             padding: 0.8rem 0;
+            padding-left: 0 !important;
         }
         .nyt-masthead-title { font-size: 1.4rem; }
     }
@@ -477,46 +503,46 @@
     </div>
     {% endif %}
 
-    {% if article_list %}
+    {% if featured_article or article_list %}
 
     <div class="nyt-grid">
 
         <!-- ══ LEFT: MAIN COLUMN ══ -->
         <div class="nyt-main">
 
-            <!-- HERO: Article 1 -->
-            {% with article=article_list.0 %}
+            <!-- HERO: Featured Article -->
+            {% if featured_article %}
             <div class="nyt-hero">
-                {% if article.image %}
-                <img src="{{ article.image.url }}" alt="{{ article.title }}" class="nyt-hero-image">
+                {% if featured_article.image %}
+                <img src="{{ featured_article.image.url }}" alt="{{ featured_article.title }}" class="nyt-hero-image">
                 {% else %}
                 <div class="nyt-hero-no-image"><span class="no-photo-label">No Photograph</span></div>
                 {% endif %}
 
-                {% if article.category %}
-                <a href="{{ article.category.get_absolute_url }}" class="nyt-hero-category">{{ article.category.name }}</a>
+                {% if featured_article.category %}
+                <a href="{{ featured_article.category.get_absolute_url }}" class="nyt-hero-category">{{ featured_article.category.name }}</a>
                 {% else %}
                 <span class="nyt-hero-category" style="color:var(--ink-faint);">Feature</span>
                 {% endif %}
 
-                <a href="{{ article.get_absolute_url }}" class="nyt-hero-title">{{ article.title }}</a>
-                <p class="nyt-hero-excerpt">{{ article.body|safe|striptags }}</p>
+                <a href="{{ featured_article.get_absolute_url }}" class="nyt-hero-title">{{ featured_article.title }}</a>
+                <p class="nyt-hero-excerpt">{{ featured_article.body|safe|striptags }}</p>
                 <div class="nyt-actions">
-                    <span class="nyt-hero-meta">By {{ article.author }} &nbsp;&middot;&nbsp; {{ article.date|date:"N j, Y" }}</span>
-                    {% if article.author.pk == request.user.pk %}
-                    <a href="{% url 'article_edit' article.pk %}" class="nyt-action-link">Edit</a>
-                    <a href="{% url 'article_delete' article.pk %}" class="nyt-action-link nyt-action-delete">Delete</a>
+                    <span class="nyt-hero-meta">By {{ featured_article.author }} &nbsp;&middot;&nbsp; {{ featured_article.date|date:"N j, Y" }}</span>
+                    {% if featured_article.author.pk == request.user.pk %}
+                    <a href="{% url 'article_edit' featured_article.pk %}" class="nyt-action-link">Edit</a>
+                    <a href="{% url 'article_delete' featured_article.pk %}" class="nyt-action-link nyt-action-delete">Delete</a>
                     {% endif %}
-                    <a href="{{ article.get_absolute_url }}" class="nyt-read-link">Read &rarr;</a>
+                    <a href="{{ featured_article.get_absolute_url }}" class="nyt-read-link">Read &rarr;</a>
                 </div>
             </div>
-            {% endwith %}
+            {% endif %}
 
-            <!-- SECONDARY: Articles 2, 3, 4 -->
-            {% if article_list|length > 1 %}
+            <!-- SECONDARY: Next 3 Articles -->
+            {% if article_list %}
             <div class="nyt-secondary-grid">
                 {% for article in article_list %}
-                {% if forloop.counter >= 2 and forloop.counter <= 4 %}
+                {% if forloop.counter <= 3 %}
                 <div class="nyt-secondary-item">
                     {% if article.image %}
                     <img src="{{ article.image.url }}" alt="{{ article.title }}" class="nyt-secondary-image">
@@ -554,14 +580,14 @@
         <div class="nyt-sidebar">
             <span class="nyt-sidebar-label">More Stories</span>
 
-            {% if article_list|length <= 4 %}
+            {% if article_list|length < 4 %}
             <p style="font-family:var(--font-body); font-size:0.85rem; color:var(--ink-faint); font-style:italic;">
                 More articles will appear here as they are published.
             </p>
             {% endif %}
 
             {% for article in article_list %}
-            {% if forloop.counter >= 5 %}
+            {% if forloop.counter >= 4 %}
             <div class="nyt-sidebar-item">
                 {% if article.image %}
                 <img src="{{ article.image.url }}" alt="{{ article.title }}" class="nyt-sidebar-image">

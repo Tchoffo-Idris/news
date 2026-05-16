@@ -42,6 +42,7 @@ class Article(models.Model):
         related_name="bookmarked_articles",
         blank=True,
     )
+    is_featured = models.BooleanField(default=False)
 
     def reading_time(self):
         plain_text = re.sub(r"<[^>]+>", "", self.body)
@@ -50,6 +51,10 @@ class Article(models.Model):
         return minutes
 
     def save(self, *args, **kwargs):
+        if self.is_featured:
+            # Ensure only one article is featured at a time
+            Article.objects.filter(is_featured=True).exclude(pk=self.pk).update(is_featured=False)
+        
         super().save(*args, **kwargs)
         if self.image:
             img = Image.open(self.image.path)
@@ -68,8 +73,8 @@ class Article(models.Model):
     def get_absolute_url(self):
         return reverse("article_detail", kwargs={"pk": self.pk})
 
-    #class Meta:
-        #ordering = [ "-date"]
+    class Meta:
+        ordering = ["-date"]
 
 
 class Comment(models.Model):

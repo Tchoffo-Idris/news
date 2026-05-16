@@ -23,6 +23,20 @@ class ArticleListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["categories"] = Category.objects.all()
+        
+        # Identify the featured article (or latest as fallback)
+        featured = Article.objects.filter(is_featured=True).first()
+        if not featured:
+            featured = Article.objects.order_by("-date").first()
+        
+        context["featured_article"] = featured
+        
+        # The list to display in secondary/sidebar areas (excluding the featured one)
+        if featured:
+            context["article_list"] = Article.objects.exclude(pk=featured.pk).order_by("-date")
+        else:
+            context["article_list"] = Article.objects.all().order_by("-date")
+            
         return context
 
 
@@ -32,12 +46,25 @@ class ArticleByCategoryView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         self.category = Category.objects.get(slug=self.kwargs["slug"])
-        return Article.objects.filter(category=self.category)
+        return Article.objects.filter(category=self.category).order_by("-date")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["categories"] = Category.objects.all()
         context["active_category"] = self.category
+        
+        articles = self.get_queryset()
+        # Use featured article if it's in this category, otherwise use latest in category
+        featured = articles.filter(is_featured=True).first()
+        if not featured:
+            featured = articles.first()
+            
+        context["featured_article"] = featured
+        if featured:
+            context["article_list"] = articles.exclude(pk=featured.pk)
+        else:
+            context["article_list"] = articles
+            
         return context
 
 
@@ -159,12 +186,18 @@ class ArticleDetailView(LoginRequiredMixin, View):
 
 class ArticleUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Article
-    fields = ("title", "body", "image", "category")
+    fields = ("title", "body", "image", "category", "is_featured")
     template_name = "article_edit.html"
 
     def test_func(self):
         obj = self.get_object()
         return obj.author == self.request.user
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        if not self.request.user.is_staff:
+            form.fields.pop("is_featured", None)
+        return form
 
 
 class ArticleDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
@@ -180,8 +213,14 @@ class ArticleDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 class ArticleCreateView(LoginRequiredMixin, CreateView):
     model = Article
     template_name = "article_new.html"
-    fields = ("title", "body", "image", "category")
+    fields = ("title", "body", "image", "category", "is_featured")
 
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        if not self.request.user.is_staff:
+            form.fields.pop("is_featured", None)
+        return form

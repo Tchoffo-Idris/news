@@ -341,10 +341,8 @@
         ───────────────────────────────────────── */
         main { position: relative; z-index: 1; }
 
-        main .container {
-            padding-top: 2.5rem;
-            padding-bottom: 4rem;
-            max-width: 1180px;
+        main .container-fluid {
+            padding: 2.5rem 28px 4rem;
         }
 
         h1, h2, h3, h4, h5, h6 {
@@ -374,7 +372,7 @@
 
         @media (max-width: 768px) {
             .navbar-brand { font-size: 1.9rem; }
-            main .container { padding-top: 1.5rem; }
+            main .container-fluid { padding: 1.5rem 15px 4rem; }
             .navbar-search-input { width: 120px; }
             .navbar-search-input:focus { width: 140px; }
         }
@@ -527,7 +525,7 @@
         </nav>
 
         <main>
-            <div class="container">
+            <div class="container-fluid">
                 {% block content %}
                 {% endblock content %}
             </div>
