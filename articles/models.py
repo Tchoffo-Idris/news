@@ -37,6 +37,11 @@ class Article(models.Model):
         blank=True,
         related_name="articles",
     )
+    bookmarks = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name="bookmarked_articles",
+        blank=True,
+    )
 
     def reading_time(self):
         plain_text = re.sub(r"<[^>]+>", "", self.body)
@@ -48,15 +53,12 @@ class Article(models.Model):
         super().save(*args, **kwargs)
         if self.image:
             img = Image.open(self.image.path)
-            # Convert to RGB to ensure JPEG compatibility
             if img.mode != "RGB":
                 img = img.convert("RGB")
-            # Resize if wider than 800px
             if img.width > 800:
                 ratio = 800 / img.width
                 new_height = int(img.height * ratio)
                 img = img.resize((800, new_height), Image.LANCZOS)
-            # Always save as compressed JPEG regardless of original format
             self.image.name = self.image.name.rsplit(".", 1)[0] + ".jpg"
             img.save(self.image.path, format="JPEG", optimize=True, quality=60)
 

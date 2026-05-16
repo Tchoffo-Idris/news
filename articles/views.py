@@ -7,6 +7,7 @@ from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.db.models import Q, Count
+from django.http import JsonResponse
 
 from .models import Article, Category
 from .forms import CommentForm
@@ -67,38 +68,51 @@ class EditorDeskView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
-
-        # All articles by this author
         my_articles = Article.objects.filter(author=user).order_by("-date")
-
-        # Stats
         total_articles = my_articles.count()
         total_comments = sum(a.comment_set.count() for a in my_articles)
-
-        # Articles with comment counts
-        articles_with_counts = my_articles.annotate(
-            comment_count=Count("comment")
-        )
-
-        # Most commented article
+        articles_with_counts = my_articles.annotate(comment_count=Count("comment"))
         most_commented = articles_with_counts.order_by("-comment_count").first()
-
-        # Latest article
         latest_article = my_articles.first()
-
-        # Articles by category breakdown
         by_category = (
             my_articles.values("category__name")
             .annotate(count=Count("id"))
             .order_by("-count")
         )
-
         context["my_articles"] = articles_with_counts
         context["total_articles"] = total_articles
         context["total_comments"] = total_comments
         context["most_commented"] = most_commented
         context["latest_article"] = latest_article
         context["by_category"] = by_category
+        return context
+
+
+# ── ADDED: Bookmark toggle (AJAX) ──
+class BookmarkToggleView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        article = Article.objects.get(pk=pk)
+        user = request.user
+        if user in article.bookmarks.all():
+            article.bookmarks.remove(user)
+            bookmarked = False
+        else:
+            article.bookmarks.add(user)
+            bookmarked = True
+        return JsonResponse({"bookmarked": bookmarked})
+
+
+# ── ADDED: Reading list page ──
+class ReadingListView(LoginRequiredMixin, ListView):
+    model = Article
+    template_name = "reading_list.html"
+
+    def get_queryset(self):
+        return self.request.user.bookmarked_articles.order_by("-date")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["categories"] = Category.objects.all()
         return context
 
 

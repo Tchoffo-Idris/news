@@ -9,6 +9,8 @@ from .views import (
     ArticleByCategoryView,
     ArticleSearchView,
     EditorDeskView,
+    BookmarkToggleView,
+    ReadingListView,
 )
 
 urlpatterns = [
@@ -28,4 +30,8 @@ urlpatterns = [
          name="article_search"),
     path("desk/", EditorDeskView.as_view(),
          name="editor_desk"),
+    path("<int:pk>/bookmark/", BookmarkToggleView.as_view(),
+         name="article_bookmark"),
+    path("reading-list/", ReadingListView.as_view(),
+         name="reading_list"),
 ]

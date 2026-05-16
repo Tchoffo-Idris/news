@@ -236,7 +236,89 @@
     .action-link:hover { color: var(--red-ink); text-decoration-color: var(--red-ink); }
     .action-link-delete { color: var(--red-ink); text-decoration-color: rgba(139,26,26,0.3); }
 
-    /* ── Author card — ADDED ── */
+    /* ── ADDED: Sidebar and Top Bookmark ── */
+    .sidebar-actions {
+        position: fixed;
+        left: 3rem;
+        top: 40%;
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+        z-index: 100;
+    }
+
+    .sidebar-btn {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: var(--cream);
+        border: 1px solid var(--rule-heavy);
+        color: var(--ink-mid);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 3px 3px 0 rgba(0,0,0,0.1);
+    }
+
+    .sidebar-btn:hover {
+        background: var(--ink);
+        color: var(--cream);
+        border-color: var(--ink);
+        transform: scale(1.1);
+    }
+
+    .sidebar-btn.saved {
+        background: var(--red-ink);
+        color: var(--cream);
+        border-color: var(--red-ink);
+    }
+
+    .detail-meta-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.6rem;
+    }
+
+    .detail-meta-row .detail-meta {
+        margin-bottom: 0;
+    }
+
+    .bookmark-btn-top {
+        font-family: var(--font-mono);
+        font-size: 0.58rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        background: transparent;
+        border: 1px solid var(--rule-heavy);
+        color: var(--ink-mid);
+        padding: 5px 12px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.15s;
+    }
+
+    .bookmark-btn-top:hover {
+        background: var(--ink);
+        color: var(--cream);
+        border-color: var(--ink);
+    }
+
+    .bookmark-btn-top.saved {
+        background: var(--ink);
+        color: var(--cream);
+        border-color: var(--ink);
+    }
+
+    @media (max-width: 1100px) {
+        .sidebar-actions { display: none; }
+    }
+
+    /* ── Author card ── */
     .author-card {
         display: flex;
         gap: 1.2rem;
@@ -448,7 +530,41 @@
 
     <h2 class="detail-heading">{{ object.title }}</h2>
     <hr class="detail-rule">
-    <p class="detail-meta">By {{ object.author }}&nbsp;&nbsp;&middot;&nbsp;&nbsp;{{ object.date|date:"l, N j, Y" }}&nbsp;&nbsp;&middot;&nbsp;&nbsp;{{ object.reading_time }} min read</p>
+    <div class="detail-meta-row">
+        <p class="detail-meta">By {{ object.author }}&nbsp;&nbsp;&middot;&nbsp;&nbsp;{{ object.date|date:"l, N j, Y" }}&nbsp;&nbsp;&middot;&nbsp;&nbsp;{{ object.reading_time }} min read</p>
+        
+        {% if user.is_authenticated %}
+        <button id="bookmarkBtnTop" 
+            class="bookmark-btn-top {% if request.user in object.bookmarks.all %}saved{% endif %}"
+            onclick="toggleBookmark('{{ object.pk }}', this)"
+            title="Save to Reading List">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" 
+                viewBox="0 0 24 24" 
+                fill="{% if request.user in object.bookmarks.all %}currentColor{% else %}none{% endif %}" 
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+            </svg>
+            <span>{% if request.user in object.bookmarks.all %}Saved{% else %}Save{% endif %}</span>
+        </button>
+        {% endif %}
+    </div>
+
+    <!-- Floating Sidebar Actions -->
+    {% if user.is_authenticated %}
+    <div class="sidebar-actions">
+        <button id="bookmarkBtnSidebar"
+            class="sidebar-btn {% if request.user in object.bookmarks.all %}saved{% endif %}"
+            onclick="toggleBookmark('{{ object.pk }}', this)"
+            title="{% if request.user in object.bookmarks.all %}Remove from Reading List{% else %}Save for Later{% endif %}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" 
+                viewBox="0 0 24 24" 
+                fill="{% if request.user in object.bookmarks.all %}currentColor{% else %}none{% endif %}" 
+                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+            </svg>
+        </button>
+    </div>
+    {% endif %}
 
     {% if object.image %}
     <img src="{{ object.image.url }}" alt="{{ object.title }}" class="detail-image">
@@ -464,7 +580,7 @@
     </div>
     {% endif %}
 
-    <!-- ADDED: Author profile card -->
+    <!-- Author profile card -->
     <div class="author-card">
         {% if object.author.profile_picture %}
         <img src="{{ object.author.profile_picture.url }}" alt="{{ object.author.username }}" class="author-avatar">
@@ -522,6 +638,42 @@
         const docHeight = document.documentElement.scrollHeight - window.innerHeight;
         bar.style.width = (docHeight > 0 ? (scrollTop / docHeight) * 100 : 0) + '%';
     });
+
+    // ADDED: Bookmark toggle
+    function toggleBookmark(pk, btn) {
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        fetch(`/articles/${pk}/bookmark/`, {
+            method: 'POST',
+            headers: { 'X-CSRFToken': csrfToken, 'Content-Type': 'application/json' },
+        })
+        .then(res => res.json())
+        .then(data => {
+            const btnTop = document.getElementById('bookmarkBtnTop');
+            const btnSidebar = document.getElementById('bookmarkBtnSidebar');
+
+            const updateBtn = (b, isTop) => {
+                if (!b) return;
+                const icon = b.querySelector('svg');
+                const label = b.querySelector('span');
+                if (data.bookmarked) {
+                    b.classList.add('saved');
+                    icon.setAttribute('fill', 'currentColor');
+                    if (label) {
+                        label.textContent = isTop ? 'Saved' : 'Saved \u2192 Reading List';
+                    }
+                } else {
+                    b.classList.remove('saved');
+                    icon.setAttribute('fill', 'none');
+                    if (label) {
+                        label.textContent = isTop ? 'Save' : 'Save for Later';
+                    }
+                }
+            };
+
+            updateBtn(btnTop, true);
+            updateBtn(btnSidebar, false);
+        });
+    }
 </script>
 
 {% endblock content %}
