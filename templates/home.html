@@ -4,222 +4,241 @@
 
 {% block content %}
 
-<style>
-    .home-wrapper {
-        display: flex;
-        justify-content: center;
-        padding: 3.5rem 1rem 5rem;
-    }
+<!-- 1. Include the Skeleton Template at the top -->
+{% include 'skeleton_loader.html' %}
 
-    .home-card {
-        width: 100%;
-        max-width: 560px;
-        background: var(--cream);
-        border: 1px solid var(--rule-heavy);
-        box-shadow: 4px 6px 0 rgba(30, 20, 10, 0.12), 1px 2px 0 rgba(30, 20, 10, 0.06);
-        padding: 3rem 2.8rem 2.6rem;
-        position: relative;
-        text-align: center;
-    }
+<!-- 2. Wrap existing content in a hidden container -->
+<div id="actualContentContainer" style="display: none;">
+    <style>
+        .home-wrapper {
+            display: flex;
+            justify-content: center;
+            padding: 3.5rem 1rem 5rem;
+        }
 
-    .home-card::before {
-        content: '';
-        position: absolute;
-        top: -3px; left: -3px;
-        width: 22px; height: 22px;
-        border-top: 3px solid var(--ink);
-        border-left: 3px solid var(--ink);
-    }
+        .home-card {
+            width: 100%;
+            max-width: 560px;
+            background: var(--cream);
+            border: 1px solid var(--rule-heavy);
+            box-shadow: 4px 6px 0 rgba(30, 20, 10, 0.12), 1px 2px 0 rgba(30, 20, 10, 0.06);
+            padding: 3rem 2.8rem 2.6rem;
+            position: relative;
+            text-align: center;
+        }
 
-    .home-card::after {
-        content: '';
-        position: absolute;
-        bottom: -3px; right: -3px;
-        width: 22px; height: 22px;
-        border-bottom: 3px solid var(--ink);
-        border-right: 3px solid var(--ink);
-    }
+        .home-card::before {
+            content: '';
+            position: absolute;
+            top: -3px; left: -3px;
+            width: 22px; height: 22px;
+            border-top: 3px solid var(--ink);
+            border-left: 3px solid var(--ink);
+        }
 
-    /* Masthead ornament */
-    .home-ornament {
-        font-family: var(--font-mono);
-        font-size: 0.6rem;
-        letter-spacing: 0.35em;
-        text-transform: uppercase;
-        color: var(--ink-faint);
-        display: block;
-        margin-bottom: 1rem;
-    }
+        .home-card::after {
+            content: '';
+            position: absolute;
+            bottom: -3px; right: -3px;
+            width: 22px; height: 22px;
+            border-bottom: 3px solid var(--ink);
+            border-right: 3px solid var(--ink);
+        }
 
-    .home-ornament::before,
-    .home-ornament::after {
-        content: '— ';
-    }
+        /* Masthead ornament */
+        .home-ornament {
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--ink-faint);
+            display: block;
+            margin-bottom: 1rem;
+        }
 
-    .home-heading {
-        font-family: var(--font-display);
-        font-size: 2.4rem;
-        font-weight: 900;
-        color: var(--ink);
-        letter-spacing: -0.03em;
-        line-height: 1.1;
-        margin-bottom: 0;
-    }
+        .home-ornament::before,
+        .home-ornament::after {
+            content: '— ';
+        }
 
-    .home-rule {
-        border: none;
-        border-top: 3px double var(--ink);
-        margin: 1rem auto 0.5rem;
-        max-width: 100px;
-    }
+        .home-heading {
+            font-family: var(--font-display);
+            font-size: 2.4rem;
+            font-weight: 900;
+            color: var(--ink);
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 0;
+        }
 
-    /* Authenticated state */
-    .home-greeting {
-        font-family: var(--font-body);
-        font-size: 1.1rem;
-        color: var(--ink-mid);
-        line-height: 1.7;
-        font-style: italic;
-        margin-bottom: 0.3rem;
-    }
+        .home-rule {
+            border: none;
+            border-top: 3px double var(--ink);
+            margin: 1rem auto 0.5rem;
+            max-width: 100px;
+        }
 
-    .home-username {
-        font-family: var(--font-display);
-        font-style: normal;
-        font-weight: 700;
-        color: var(--ink);
-    }
+        /* Authenticated state */
+        .home-greeting {
+            font-family: var(--font-body);
+            font-size: 1.1rem;
+            color: var(--ink-mid);
+            line-height: 1.7;
+            font-style: italic;
+            margin-bottom: 0.3rem;
+        }
 
-    .home-divider {
-        border: none;
-        border-top: 1px solid var(--rule);
-        margin: 1.6rem auto;
-        max-width: 200px;
-    }
+        .home-username {
+            font-family: var(--font-display);
+            font-style: normal;
+            font-weight: 700;
+            color: var(--ink);
+        }
 
-    .home-actions {
-        display: flex;
-        flex-direction: column;
-        gap: 0.9rem;
-        align-items: center;
-        margin-top: 0.4rem;
-    }
+        .home-divider {
+            border: none;
+            border-top: 1px solid var(--rule);
+            margin: 1.6rem auto;
+            max-width: 200px;
+        }
 
-    .btn-ink-solid {
-        font-family: var(--font-mono);
-        font-size: 0.72rem;
-        letter-spacing: 0.2em;
-        text-transform: uppercase;
-        color: var(--cream);
-        background: var(--ink);
-        border: 1.5px solid var(--ink);
-        border-radius: 0;
-        padding: 11px 32px;
-        text-decoration: none;
-        display: inline-block;
-        line-height: 1.6;
-        transition: background 0.15s, border-color 0.15s;
-        width: 100%;
-        text-align: center;
-    }
+        .home-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.9rem;
+            align-items: center;
+            margin-top: 0.4rem;
+        }
 
-    .btn-ink-solid:hover {
-        background: var(--red-ink);
-        border-color: var(--red-ink);
-        color: var(--cream);
-    }
+        .btn-ink-solid {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--cream);
+            background: var(--ink);
+            border: 1.5px solid var(--ink);
+            border-radius: 0;
+            padding: 11px 32px;
+            text-decoration: none;
+            display: inline-block;
+            line-height: 1.6;
+            transition: background 0.15s, border-color 0.15s;
+            width: 100%;
+            text-align: center;
+        }
 
-    .btn-ink-outline {
-        font-family: var(--font-mono);
-        font-size: 0.72rem;
-        letter-spacing: 0.2em;
-        text-transform: uppercase;
-        color: var(--ink-mid);
-        background: transparent;
-        border: 1.5px solid var(--rule-heavy);
-        border-radius: 0;
-        padding: 11px 32px;
-        text-decoration: none;
-        display: inline-block;
-        line-height: 1.6;
-        transition: background 0.15s, color 0.15s;
-        width: 100%;
-        text-align: center;
-        cursor: pointer;
-    }
+        .btn-ink-solid:hover {
+            background: var(--red-ink);
+            border-color: var(--red-ink);
+            color: var(--cream);
+        }
 
-    .btn-ink-outline:hover {
-        background: var(--ink-mid);
-        color: var(--cream);
-    }
+        .btn-ink-outline {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--ink-mid);
+            background: transparent;
+            border: 1.5px solid var(--rule-heavy);
+            border-radius: 0;
+            padding: 11px 32px;
+            text-decoration: none;
+            display: inline-block;
+            line-height: 1.6;
+            transition: background 0.15s, color 0.15s;
+            width: 100%;
+            text-align: center;
+            cursor: pointer;
+        }
 
-    /* Guest state */
-    .home-guest-text {
-        font-family: var(--font-body);
-        font-size: 1rem;
-        color: var(--ink-faint);
-        font-style: italic;
-        margin-bottom: 1.6rem;
-    }
+        .btn-ink-outline:hover {
+            background: var(--ink-mid);
+            color: var(--cream);
+        }
 
-    .guest-actions {
-        display: flex;
-        gap: 1rem;
-        justify-content: center;
-        flex-wrap: wrap;
-    }
+        /* Guest state */
+        .home-guest-text {
+            font-family: var(--font-body);
+            font-size: 1rem;
+            color: var(--ink-faint);
+            font-style: italic;
+            margin-bottom: 1.6rem;
+        }
 
-    .guest-actions .btn-ink-solid,
-    .guest-actions .btn-ink-outline {
-        width: auto;
-    }
+        .guest-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
 
-    @media (max-width: 768px) {
-        .home-card { padding: 2rem 1.4rem; }
-        .home-heading { font-size: 1.9rem; }
-    }
-</style>
+        .guest-actions .btn-ink-solid,
+        .guest-actions .btn-ink-outline {
+            width: auto;
+        }
 
-<div class="home-wrapper">
-    <div class="home-card">
+        @media (max-width: 768px) {
+            .home-card { padding: 2rem 1.4rem; }
+            .home-heading { font-size: 1.9rem; }
+        }
+    </style>
 
-        {% if user.is_authenticated %}
+    <div class="home-wrapper">
+        <div class="home-card">
 
-        <span class="home-ornament">Welcome Back</span>
-        <h1 class="home-heading">Good to see you,<br><span class="home-username">{{ user.username }}</span></h1>
-        <hr class="home-rule">
+            {% if user.is_authenticated %}
 
-        <p class="home-greeting">
-            Your readership is valued.<br>Browse the latest dispatches or submit a new piece.
-        </p>
+            <span class="home-ornament">Welcome Back</span>
+            <h1 class="home-heading">Good to see you,<br><span class="home-username">{{ user.username }}</span></h1>
+            <hr class="home-rule">
 
-        <hr class="home-divider">
+            <p class="home-greeting">
+                Your readership is valued.<br>Browse the latest dispatches or submit a new piece.
+            </p>
 
-        <div class="home-actions">
-            <a href="{% url 'article_list' %}" class="btn-ink-solid">View All Articles &rarr;</a>
-            <a href="{% url 'logout' %}" class="btn-ink-outline">Log Out &rarr;</a>
+            <hr class="home-divider">
+
+            <div class="home-actions">
+                <a href="{% url 'article_list' %}" class="btn-ink-solid">View All Articles &rarr;</a>
+                <a href="{% url 'logout' %}" class="btn-ink-outline">Log Out &rarr;</a>
+            </div>
+
+            {% else %}
+
+            <span class="home-ornament">Independent Press</span>
+            <h1 class="home-heading">The Newspaper</h1>
+            <hr class="home-rule">
+
+            <p class="home-greeting" style="margin-top:0.8rem;">
+                Read, write, and respond.<br>Join our community of correspondents.
+            </p>
+
+            <hr class="home-divider">
+
+            <div class="guest-actions">
+                <a href="{% url 'login' %}" class="btn-ink-outline">Log In</a>
+                <a href="{% url 'signup' %}" class="btn-ink-solid">Sign Up &rarr;</a>
+            </div>
+
+            {% endif %}
+
         </div>
-
-        {% else %}
-
-        <span class="home-ornament">Independent Press</span>
-        <h1 class="home-heading">The Newspaper</h1>
-        <hr class="home-rule">
-
-        <p class="home-greeting" style="margin-top:0.8rem;">
-            Read, write, and respond.<br>Join our community of correspondents.
-        </p>
-
-        <hr class="home-divider">
-
-        <div class="guest-actions">
-            <a href="{% url 'login' %}" class="btn-ink-outline">Log In</a>
-            <a href="{% url 'signup' %}" class="btn-ink-solid">Sign Up &rarr;</a>
-        </div>
-
-        {% endif %}
-
     </div>
 </div>
+
+<!-- 3. Client-side execution listener to toggle visibility -->
+<script>
+    window.addEventListener('load', function() {
+        const skeleton = document.getElementById('skeletonContainer');
+        const content = document.getElementById('actualContentContainer');
+        
+        if (skeleton && content) {
+            skeleton.style.display = 'none';
+            content.style.display = 'block';
+        }
+    });
+</script>
 
 {% endblock content %}

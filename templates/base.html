@@ -47,6 +47,42 @@
         html { font-size: 18px; -webkit-font-smoothing: antialiased; }
 
         /* ─────────────────────────────────────────
+           OFFLINE BANNER
+        ───────────────────────────────────────── */
+        @keyframes alertFlash {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        #offlineBanner {
+            display: none;
+            background-color: #FF3333;
+            color: #000;
+            text-align: center;
+            padding: 8px 0;
+            font-family: var(--font-mono);
+            font-weight: 700;
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            border-bottom: 1.5px solid #000;
+            position: relative;
+            z-index: 2000;
+            width: 100%;
+        }
+
+        .alert-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: #000;
+            border-radius: 50%;
+            margin-right: 10px;
+            vertical-align: middle;
+            animation: alertFlash 0.8s steps(2) infinite;
+        }
+
+        /* ─────────────────────────────────────────
            BODY — NEWSPRINT BACKGROUND
         ───────────────────────────────────────── */
         body {
@@ -405,6 +441,12 @@
 </head>
 
 <body>
+    <!-- Offline Alert Strip -->
+    <div id="offlineBanner">
+        <span class="alert-dot"></span>
+        No Internet Connection — Tracking Offline Mode
+    </div>
+
     <div class="page-sheet">
 
         <nav class="navbar navbar-expand-lg">
@@ -586,6 +628,22 @@
         
         lastScrollY = window.scrollY;
     }, { passive: true });
+
+    // Connectivity Engine
+    const banner = document.getElementById('offlineBanner');
+
+    function updateConnectionStatus() {
+        if (navigator.onLine) {
+            banner.style.display = 'none';
+        } else {
+            banner.style.display = 'block';
+        }
+    }
+
+    window.addEventListener('online', updateConnectionStatus);
+    window.addEventListener('offline', updateConnectionStatus);
+
+    document.addEventListener('DOMContentLoaded', updateConnectionStatus);
     </script>
 </body>
 
