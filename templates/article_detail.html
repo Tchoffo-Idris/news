@@ -18,9 +18,9 @@
     }
 
     .detail-wrapper {
-        max-width: 720px;
-        margin: 2.5rem auto 4rem;
         width: 100%;
+        max-width: 850px;
+        margin: 2.5rem auto 4rem;
         overflow-x: hidden;
         padding: 0 1rem;
         box-sizing: border-box;
@@ -250,29 +250,20 @@
     .sidebar-btn {
         width: 42px;
         height: 42px;
-        border-radius: 50%;
+        border-radius: 0;
         background: var(--cream);
-        border: 1px solid var(--rule-heavy);
-        color: var(--ink-mid);
+        border: 1px solid var(--ink);
+        color: var(--ink);
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        transition: all 0.2s ease;
-        box-shadow: 3px 3px 0 rgba(0,0,0,0.1);
+        transition: all 0.1s;
     }
 
     .sidebar-btn:hover {
         background: var(--ink);
         color: var(--cream);
-        border-color: var(--ink);
-        transform: scale(1.1);
-    }
-
-    .sidebar-btn.saved {
-        background: var(--red-ink);
-        color: var(--cream);
-        border-color: var(--red-ink);
     }
 
     .detail-meta-row {
@@ -282,30 +273,153 @@
         margin-bottom: 1.6rem;
     }
 
-    .detail-meta-row .detail-meta {
-        margin-bottom: 0;
+    /* ── TTS Controls ── */
+    .meta-actions-wrap {
+        display: flex;
+        align-items: center;
+        gap: 12px;
     }
 
-    .bookmark-btn-top {
+    .btn-tts-trigger {
         font-family: var(--font-mono);
         font-size: 0.58rem;
         letter-spacing: 0.14em;
         text-transform: uppercase;
-        background: transparent;
-        border: 1px solid var(--rule-heavy);
-        color: var(--ink-mid);
+        background: var(--cream);
+        border: 1px solid var(--ink);
+        color: var(--ink);
         padding: 5px 12px;
+        border-radius: 0;
         cursor: pointer;
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        transition: all 0.15s;
+        transition: background 0.15s, color 0.15s;
+        box-shadow: none !important;
+        transform: none !important;
     }
 
-    .bookmark-btn-top:hover {
+    .btn-tts-trigger:hover {
         background: var(--ink);
         color: var(--cream);
-        border-color: var(--ink);
+        box-shadow: none !important;
+        transform: none !important;
+    }
+
+    #audioPlayerBar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: var(--cream);
+        border-top: 1px solid var(--ink);
+        z-index: 10000;
+        padding: 14px 28px;
+        display: none;
+        align-items: center;
+        gap: 24px;
+        box-shadow: none !important;
+    }
+
+    .player-controls {
+        display: flex;
+        gap: 10px;
+    }
+
+    .player-btn {
+        width: 44px;
+        height: 44px;
+        background: var(--cream);
+        border: 1px solid var(--ink);
+        color: var(--ink);
+        border-radius: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background 0.15s, color 0.15s;
+        box-shadow: none !important;
+        transform: none !important;
+    }
+
+    .player-btn:hover {
+        background: var(--ink);
+        color: var(--cream);
+        box-shadow: none !important;
+        transform: none !important;
+    }
+
+    .player-info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        min-width: 0;
+    }
+
+    .player-title {
+        font-family: var(--font-mono);
+        font-size: 0.65rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--ink);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* ── Interactive Scrubber ── */
+    #audioScrubber {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 100%;
+        height: 4px;
+        background: var(--cream-dark);
+        outline: none;
+        cursor: pointer;
+        border: 1px solid var(--ink);
+        margin: 0;
+    }
+
+    #audioScrubber::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 14px;
+        height: 14px;
+        background: var(--ink);
+        border-radius: 50%;
+        cursor: pointer;
+        border: none;
+        box-shadow: none;
+    }
+
+    #audioScrubber::-moz-range-thumb {
+        width: 14px;
+        height: 14px;
+        background: var(--ink);
+        border-radius: 50%;
+        cursor: pointer;
+        border: none;
+        box-shadow: none;
+    }
+
+    .player-speed-select {
+        font-family: var(--font-mono);
+        font-size: 0.65rem;
+        border: 1px solid var(--ink);
+        background: var(--cream);
+        color: var(--ink);
+        padding: 6px 10px;
+        border-radius: 0;
+        outline: none;
+        cursor: pointer;
+        appearance: none;
+        -webkit-appearance: none;
+    }
+
+    @media (max-width: 768px) {
+        #audioPlayerBar { padding: 12px 15px; gap: 15px; }
+        .player-title { display: none; }
     }
 
     @media (max-width: 1100px) {
@@ -523,6 +637,14 @@
     {% endif %}
 
     <h2 class="detail-heading">{{ object.title }}</h2>
+    <div class="meta-actions-wrap">
+        <button class="btn-tts-trigger" id="listenBtn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            Listen to Story
+        </button>
+    </div>
     <hr class="detail-rule">
     <div class="detail-meta-row">
         <p class="detail-meta">By {{ object.author }}&nbsp;&nbsp;&middot;&nbsp;&nbsp;{{ object.date|date:"l, N j, Y" }}&nbsp;&nbsp;&middot;&nbsp;&nbsp;{{ object.reading_time }} min read</p>
@@ -565,7 +687,7 @@
     <span class="detail-image-caption">Photograph &middot; {{ object.title }}</span>
     {% endif %}
 
-    <div class="detail-body">{{ object.body|safe }}</div>
+    <div class="detail-body" id="articleBodyContent">{{ object.body|safe }}</div>
 
     {% if article.author.pk == request.user.pk %}
     <div class="detail-owner-actions">
@@ -620,6 +742,29 @@
 
 </div>
 
+<!-- Fixed Audio Player Bar -->
+<div id="audioPlayerBar">
+    <div class="player-controls">
+        <button class="player-btn" id="playPauseBtn" title="Play/Pause">
+            <svg id="playIcon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            <svg id="pauseIcon" style="display:none;" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+        </button>
+        <button class="player-btn" id="stopBtn" title="Stop">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16"></rect></svg>
+        </button>
+    </div>
+    <div class="player-info">
+        <div class="player-title">{{ object.title }}</div>
+        <input type="range" id="audioScrubber" min="0" max="100" value="0" step="1">
+    </div>
+    <select class="player-speed-select" id="speedSelect">
+        <option value="1">1.0x</option>
+        <option value="1.25">1.25x</option>
+        <option value="1.5">1.5x</option>
+        <option value="2">2.0x</option>
+    </select>
+</div>
+
 <script>
     if (document.referrer.includes('/edit/')) {
         history.replaceState(null, '', "{% url 'article_list' %}");
@@ -633,7 +778,7 @@
         bar.style.width = (docHeight > 0 ? (scrollTop / docHeight) * 100 : 0) + '%';
     });
 
-    // ADDED: Bookmark toggle
+    // Bookmark toggle
     function toggleBookmark(pk, btn) {
         const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
         fetch(`/articles/${pk}/bookmark/`, {
@@ -668,6 +813,141 @@
             updateBtn(btnSidebar, false);
         });
     }
+
+    // ── TEXT TO SPEECH ENGINE WITH SMOOTH NATIVE TRACKING ──
+    (function() {
+        const synth = window.speechSynthesis;
+        const articleTitle = "{{ object.title|escapejs }}";
+        const bodyContent = document.getElementById('articleBodyContent').innerText;
+        const fullText = articleTitle + ". " + bodyContent;
+
+        const playerBar = document.getElementById('audioPlayerBar');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const speedSelect = document.getElementById('speedSelect');
+        const scrubber = document.getElementById('audioScrubber');
+        const playIcon = document.getElementById('playIcon');
+        const pauseIcon = document.getElementById('pauseIcon');
+        const listenBtn = document.getElementById('listenBtn');
+
+        let utterance = null;
+        let isSpeaking = false;
+        let charOffset = 0; // The absolute index in fullText where the current utterance started
+
+        function updateScrubberBackground(value) {
+            if (scrubber) {
+                scrubber.style.background = `linear-gradient(to right, var(--ink) 0%, var(--ink) ${value}%, var(--cream-dark) ${value}%, var(--cream-dark) 100%)`;
+            }
+        }
+
+        function createUtterance(startAt = 0) {
+            const textToSpeak = fullText.slice(Math.floor(startAt));
+            charOffset = Math.floor(startAt);
+            
+            utterance = new SpeechSynthesisUtterance(textToSpeak);
+            utterance.rate = parseFloat(speedSelect.value);
+            
+            // SMOOTH NATIVE TRACKING FIX
+            utterance.onboundary = (event) => {
+                if (event.name === 'word') {
+                    // Calculate absolute character position
+                    const absoluteCharIndex = charOffset + event.charIndex;
+                    // Calculate exact percentage
+                    const percent = (absoluteCharIndex / fullText.length) * 100;
+                    
+                    scrubber.value = percent;
+                    updateScrubberBackground(percent);
+                }
+            };
+
+            utterance.onend = () => {
+                // Only stop if we reached the end of the text
+                // Speech API might fire end early on seek, so we check position
+                if (!isSpeaking) return; 
+                stopSpeech();
+            };
+        }
+
+        function startSpeech() {
+            if (synth.paused) {
+                synth.resume();
+            } else {
+                synth.cancel();
+                createUtterance(charOffset);
+                synth.speak(utterance);
+            }
+            isSpeaking = true;
+            updateUI();
+            playerBar.style.display = 'flex';
+        }
+
+        function pauseSpeech() {
+            synth.pause();
+            isSpeaking = false;
+            updateUI();
+        }
+
+        function stopSpeech() {
+            synth.cancel();
+            isSpeaking = false;
+            charOffset = 0;
+            scrubber.value = 0;
+            updateScrubberBackground(0);
+            updateUI();
+            playerBar.style.display = 'none';
+        }
+
+        function updateUI() {
+            if (isSpeaking) {
+                playIcon.style.display = 'none';
+                pauseIcon.style.display = 'block';
+            } else {
+                playIcon.style.display = 'block';
+                pauseIcon.style.display = 'none';
+            }
+        }
+
+        listenBtn.addEventListener('click', () => {
+            stopSpeech(); // Reset if already playing
+            startSpeech();
+        });
+        
+        playPauseBtn.addEventListener('click', () => {
+            if (isSpeaking) pauseSpeech();
+            else startSpeech();
+        });
+
+        stopBtn.addEventListener('click', stopSpeech);
+
+        speedSelect.addEventListener('change', () => {
+            if (isSpeaking || synth.paused) {
+                const wasSpeaking = isSpeaking;
+                synth.cancel();
+                createUtterance(charOffset);
+                if (wasSpeaking) synth.speak(utterance);
+            }
+        });
+
+        scrubber.addEventListener('input', () => {
+            const percent = parseFloat(scrubber.value);
+            updateScrubberBackground(percent);
+            
+            // Calculate new absolute char index based on slider percentage
+            const newCharIndex = (percent / 100) * fullText.length;
+            
+            const wasSpeaking = isSpeaking;
+            synth.cancel();
+            createUtterance(newCharIndex);
+            if (wasSpeaking) synth.speak(utterance);
+        });
+
+        window.addEventListener('beforeunload', () => {
+            synth.cancel();
+        });
+
+        // Initialize background
+        updateScrubberBackground(0);
+    })();
 </script>
 
 {% endblock content %}

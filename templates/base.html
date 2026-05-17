@@ -383,23 +383,23 @@
             letter-spacing: 0.14em;
             text-transform: uppercase;
             color: var(--cream);
-            background: var(--ink); /* Swapped from red-ink to your deep black/charcoal ink */
+            background: var(--ink);
             text-decoration: none;
             padding: 6px 14px;
-            border: 2px solid var(--ink);
+            border: 1px solid var(--ink);
             border-radius: 0;
-            box-shadow: 3px 3px 0px var(--ink-faint); /* Using a slightly lighter ink for the shadow so the button pops */
             display: inline-flex;
             align-items: center;
-            transition: all 0.1s ease;
+            transition: background 0.15s, color 0.15s;
+            box-shadow: none !important;
+            transform: none !important;
         }
 
         .btn-new-article-3d:hover {
-            color: var(--ink); /* Dark text on hover */
-            background: var(--cream-dark); /* Light vintage paper color on hover */
-            box-shadow: 1px 1px 0px var(--ink);
-            transform: translate(2px, 2px);
-            border-color: var(--ink);
+            color: var(--ink);
+            background: var(--cream);
+            box-shadow: none !important;
+            transform: none !important;
         }
     </style>
 </head>
