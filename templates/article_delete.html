@@ -110,7 +110,9 @@
         padding: 10px 24px;
         cursor: pointer;
         text-decoration: none;
-        display: inline-block;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
         line-height: 1.6;
         transition: background 0.15s, border-color 0.15s;
     }
@@ -119,6 +121,11 @@
         background: #6B0000;
         border-color: #6B0000;
         color: var(--cream);
+    }
+
+    .btn-ink-danger:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
     }
 
     .btn-ink-outline {
@@ -140,6 +147,29 @@
     .btn-ink-outline:hover {
         background: var(--ink-mid);
         color: var(--cream);
+    }
+
+    /* Spinner animation */
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    .btn-spinner {
+        display: none;
+        width: 12px;
+        height: 12px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+    }
+
+    .btn-ink-danger.loading .btn-spinner {
+        display: block;
+    }
+
+    .btn-ink-danger.loading .btn-text {
+        opacity: 0.8;
     }
 
     @media (max-width: 768px) {
@@ -164,10 +194,27 @@
             <a href="{% url 'article_list' %}" class="btn-ink-outline">&larr; Cancel</a>
             <form action="" method="post" style="display:inline;">
                 {% csrf_token %}
-                <button class="btn-ink-danger" type="submit">Delete &rarr;</button>
+                <button class="btn-ink-danger" type="submit" id="deleteBtn">
+                    <span class="btn-spinner"></span>
+                    <span class="btn-text">Delete →</span>
+                </button>
             </form>
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const deleteBtn = document.getElementById('deleteBtn');
+        
+        if (deleteBtn) {
+            const form = deleteBtn.closest('form');
+            form.addEventListener('submit', function() {
+                deleteBtn.disabled = true;
+                deleteBtn.classList.add('loading');
+            });
+        }
+    });
+</script>
 
 {% endblock content %}

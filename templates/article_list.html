@@ -632,3 +632,140 @@
 </div><!-- /.nyt-page -->
 
 {% endblock content %}
+
+<style>
+    /* Skeleton Loader Styles */
+    @keyframes shimmer {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+    }
+
+    .skeleton-loader {
+        display: none;
+    }
+
+    .skeleton-loader.active {
+        display: block;
+    }
+
+    .skeleton-block {
+        background: var(--cream-dark);
+        border: 1px solid var(--rule);
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 1rem;
+    }
+
+    .skeleton-block::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 20%, rgba(255,255,255,0.6) 60%, rgba(255,255,255,0) 100%);
+        animation: shimmer 1.6s infinite;
+    }
+
+    .skeleton-hero { height: 420px; margin-bottom: 1.2rem; }
+    .skeleton-kicker { height: 12px; width: 100px; margin-bottom: 0.4rem; }
+    .skeleton-title { height: 40px; margin-bottom: 0.5rem; }
+    .skeleton-excerpt { height: 60px; margin-bottom: 0.5rem; }
+    .skeleton-meta { height: 12px; width: 250px; margin-bottom: 1.2rem; }
+
+    .skeleton-secondary-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0;
+        margin-bottom: 1.5rem;
+    }
+
+    .skeleton-secondary-item {
+        padding-right: 1.2rem;
+        border-right: 1px solid var(--rule);
+    }
+
+    .skeleton-secondary-item:last-child {
+        border-right: none;
+        padding-right: 0;
+    }
+
+    .skeleton-secondary-item:not(:first-child) {
+        padding-left: 1.2rem;
+    }
+
+    .skeleton-img { height: 130px; margin-bottom: 0.5rem; }
+    .skeleton-line { height: 14px; margin-bottom: 0.5rem; }
+    .skeleton-line-sm { height: 10px; width: 60%; }
+
+    @media (max-width: 960px) {
+        .skeleton-secondary-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 600px) {
+        .skeleton-secondary-grid { grid-template-columns: 1fr; }
+        .skeleton-secondary-item {
+            border-right: none;
+            border-bottom: 1px solid var(--rule);
+            padding: 0.8rem 0;
+            padding-left: 0 !important;
+        }
+    }
+</style>
+
+<div class="skeleton-loader active" id="articleListSkeleton">
+    <div class="nyt-page">
+        <div style="border-bottom: 1px solid var(--rule); padding: 0.8rem 0; margin-bottom: 1.5rem;">
+            <div class="skeleton-block skeleton-title" style="width: 200px;"></div>
+        </div>
+
+        <div class="nyt-grid">
+            <div class="nyt-main">
+                <div class="skeleton-block skeleton-hero"></div>
+                
+                <div class="skeleton-secondary-grid">
+                    <div class="skeleton-secondary-item">
+                        <div class="skeleton-block skeleton-img"></div>
+                        <div class="skeleton-block skeleton-line"></div>
+                        <div class="skeleton-block skeleton-line"></div>
+                        <div class="skeleton-block skeleton-line-sm"></div>
+                    </div>
+                    <div class="skeleton-secondary-item">
+                        <div class="skeleton-block skeleton-img"></div>
+                        <div class="skeleton-block skeleton-line"></div>
+                        <div class="skeleton-block skeleton-line"></div>
+                        <div class="skeleton-block skeleton-line-sm"></div>
+                    </div>
+                    <div class="skeleton-secondary-item">
+                        <div class="skeleton-block skeleton-img"></div>
+                        <div class="skeleton-block skeleton-line"></div>
+                        <div class="skeleton-block skeleton-line"></div>
+                        <div class="skeleton-block skeleton-line-sm"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nyt-divider"></div>
+
+            <div class="nyt-sidebar">
+                <div class="skeleton-block skeleton-line" style="width: 140px; margin-bottom: 1rem;"></div>
+                <div class="skeleton-block skeleton-img" style="height: 100px; margin-bottom: 0.8rem;"></div>
+                <div class="skeleton-block skeleton-line"></div>
+                <div class="skeleton-block skeleton-line-sm"></div>
+                <div class="skeleton-block skeleton-img" style="height: 100px; margin: 1rem 0 0.8rem;"></div>
+                <div class="skeleton-block skeleton-line"></div>
+                <div class="skeleton-block skeleton-line-sm"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.addEventListener('load', function() {
+        const skeleton = document.getElementById('articleListSkeleton');
+        if (skeleton) {
+            skeleton.classList.remove('active');
+        }
+    });
+</script>
+

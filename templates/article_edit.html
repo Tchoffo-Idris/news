@@ -206,12 +206,42 @@
         cursor: pointer;
         margin-top: 1.2rem;
         transition: background 0.15s, border-color 0.15s;
-        display: inline-block;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
     }
 
     .btn-submit:hover {
         background: var(--red-ink);
         border-color: var(--red-ink);
+    }
+
+    .btn-submit:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+
+    /* Spinner animation */
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    .btn-spinner {
+        display: none;
+        width: 14px;
+        height: 14px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+    }
+
+    .btn-submit.loading .btn-spinner {
+        display: block;
+    }
+
+    .btn-submit.loading .btn-text {
+        opacity: 0.8;
     }
 
     @media (max-width: 768px) {
@@ -233,7 +263,7 @@
         </div>
         {% endif %}
 
-        <form action="" method="post" enctype="multipart/form-data">
+        <form action="" method="post" enctype="multipart/form-data" id="articleForm">
             {% csrf_token %}
             {{ form|crispy }}
 
@@ -242,7 +272,10 @@
                 <span class="image-preview-label">New image preview</span>
             </div>
 
-            <button class="btn-submit" type="submit">Update Article &rarr;</button>
+            <button class="btn-submit" type="submit" id="submitBtn">
+                <span class="btn-spinner"></span>
+                <span class="btn-text">Update Article →</span>
+            </button>
         </form>
     </div>
 </div>
@@ -254,6 +287,8 @@
         const fileInput = document.querySelector('input[type="file"]');
         const preview = document.getElementById('imagePreview');
         const wrap = document.getElementById('previewWrap');
+        const submitBtn = document.getElementById('submitBtn');
+        const articleForm = document.getElementById('articleForm');
 
         if (fileInput) {
             fileInput.addEventListener('change', function () {
@@ -270,6 +305,12 @@
                 }
             });
         }
+
+        // Add loading state to submit button
+        articleForm.addEventListener('submit', function() {
+            submitBtn.disabled = true;
+            submitBtn.classList.add('loading');
+        });
     });
 </script>
 

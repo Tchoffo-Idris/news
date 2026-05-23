@@ -243,237 +243,160 @@
         top: 40%;
         display: flex;
         flex-direction: column;
-        gap: 0.8rem;
-        z-index: 100;
+        gap: 1.2rem;
     }
 
-    .sidebar-btn {
-        width: 42px;
-        height: 42px;
-        border-radius: 0;
+    .sidebar-action-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
         background: var(--cream);
-        border: 1px solid var(--ink);
-        color: var(--ink);
+        border: 1px solid var(--rule);
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        transition: all 0.1s;
+        transition: all 0.15s;
     }
 
-    .sidebar-btn:hover {
+    .sidebar-action-btn:hover {
         background: var(--ink);
         color: var(--cream);
+        border-color: var(--ink);
     }
 
-    .detail-meta-row {
+    .sidebar-action-btn svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .sidebar-action-btn.saved {
+        background: var(--ink);
+        color: var(--cream);
+        border-color: var(--ink);
+    }
+
+    @media (max-width: 1024px) { .sidebar-actions { display: none; } }
+
+    /* ── Share section ── */
+    .detail-share {
+        border-top: 1px solid var(--rule);
+        border-bottom: 1px solid var(--rule);
+        padding: 1.4rem 0;
+        margin: 2rem 0;
         display: flex;
-        justify-content: space-between;
+        gap: 1rem;
         align-items: center;
-        margin-bottom: 1.6rem;
     }
 
-    /* ── TTS Controls ── */
-    .meta-actions-wrap {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
-
-    .btn-tts-trigger {
+    .share-label {
         font-family: var(--font-mono);
-        font-size: 0.58rem;
-        letter-spacing: 0.14em;
+        font-size: 0.62rem;
+        letter-spacing: 0.16em;
         text-transform: uppercase;
-        background: var(--cream);
-        border: 1px solid var(--ink);
-        color: var(--ink);
-        padding: 5px 12px;
-        border-radius: 0;
-        cursor: pointer;
+        color: var(--ink-faint);
+    }
+
+    .share-btn {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
-        transition: background 0.15s, color 0.15s;
-        box-shadow: none !important;
-        transform: none !important;
-    }
-
-    .btn-tts-trigger:hover {
-        background: var(--ink);
-        color: var(--cream);
-        box-shadow: none !important;
-        transform: none !important;
-    }
-
-    #audioPlayerBar {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        background: var(--cream);
-        border-top: 1px solid var(--ink);
-        z-index: 10000;
-        padding: 14px 28px;
-        display: none;
-        align-items: center;
-        gap: 24px;
-        box-shadow: none !important;
-    }
-
-    .player-controls {
-        display: flex;
-        gap: 10px;
-    }
-
-    .player-btn {
-        width: 44px;
-        height: 44px;
-        background: var(--cream);
-        border: 1px solid var(--ink);
-        color: var(--ink);
-        border-radius: 0;
-        display: flex;
-        align-items: center;
         justify-content: center;
-        cursor: pointer;
-        transition: background 0.15s, color 0.15s;
-        box-shadow: none !important;
-        transform: none !important;
-    }
-
-    .player-btn:hover {
-        background: var(--ink);
-        color: var(--cream);
-        box-shadow: none !important;
-        transform: none !important;
-    }
-
-    .player-info {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        min-width: 0;
-    }
-
-    .player-title {
-        font-family: var(--font-mono);
-        font-size: 0.65rem;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        color: var(--ink);
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    /* ── Interactive Scrubber ── */
-    #audioScrubber {
-        -webkit-appearance: none;
-        appearance: none;
-        width: 100%;
-        height: 4px;
-        background: var(--cream-dark);
-        outline: none;
-        cursor: pointer;
-        border: 1px solid var(--ink);
-        margin: 0;
-    }
-
-    #audioScrubber::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        appearance: none;
-        width: 14px;
-        height: 14px;
-        background: var(--ink);
-        border-radius: 50%;
-        cursor: pointer;
-        border: none;
-        box-shadow: none;
-    }
-
-    #audioScrubber::-moz-range-thumb {
-        width: 14px;
-        height: 14px;
-        background: var(--ink);
-        border-radius: 50%;
-        cursor: pointer;
-        border: none;
-        box-shadow: none;
-    }
-
-    .player-speed-select {
-        font-family: var(--font-mono);
-        font-size: 0.65rem;
-        border: 1px solid var(--ink);
-        background: var(--cream);
-        color: var(--ink);
-        padding: 6px 10px;
+        width: 32px;
+        height: 32px;
+        border: 1px solid var(--rule-heavy);
+        background: transparent;
         border-radius: 0;
-        outline: none;
+        color: var(--ink);
         cursor: pointer;
-        appearance: none;
-        -webkit-appearance: none;
+        transition: all 0.15s;
     }
 
-    @media (max-width: 768px) {
-        #audioPlayerBar { padding: 12px 15px; gap: 15px; }
-        .player-title { display: none; }
+    .share-btn:hover { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+
+    .share-btn svg { width: 16px; height: 16px; }
+
+    /* ── Top Actions ── */
+    .detail-top-actions {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.2rem;
+        align-items: center;
+        flex-wrap: wrap;
     }
 
-    @media (max-width: 1100px) {
-        .sidebar-actions { display: none; }
+    .bookmark-btn-top {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-family: var(--font-mono);
+        font-size: 0.62rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--ink-mid);
+        background: transparent;
+        border: 1px solid var(--rule-heavy);
+        padding: 7px 12px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.15s;
     }
 
-    /* ── Author card ── */
+    .bookmark-btn-top:hover { color: var(--ink); border-color: var(--ink); }
+
+    .bookmark-btn-top.saved {
+        color: var(--red-ink);
+        border-color: var(--red-ink);
+        background: rgba(139,26,26,0.05);
+    }
+
+    .bookmark-btn-top svg { width: 14px; height: 14px; }
+
+    .listen-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-family: var(--font-mono);
+        font-size: 0.62rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--cream);
+        background: var(--ink);
+        border: 1px solid var(--ink);
+        padding: 7px 12px;
+        cursor: pointer;
+        border-radius: 0;
+        transition: all 0.15s;
+    }
+
+    .listen-btn:hover { background: var(--red-ink); border-color: var(--red-ink); }
+
+    .listen-btn svg { width: 14px; height: 14px; }
+
+    /* ── Author Card ── */
     .author-card {
         display: flex;
         gap: 1.2rem;
-        align-items: flex-start;
-        padding: 1.4rem;
+        padding: 1.6rem;
         border: 1px solid var(--rule);
+        margin: 3rem 0 2rem;
         background: var(--cream-dark);
-        margin-bottom: 2.5rem;
     }
 
-    .author-avatar {
-        width: 72px;
-        height: 72px;
+    .author-card-image {
+        width: 100px;
+        height: 100px;
         border-radius: 50%;
         object-fit: cover;
         flex-shrink: 0;
         border: 2px solid var(--rule-heavy);
-        filter: grayscale(15%);
     }
 
-    .author-avatar-placeholder {
-        width: 72px;
-        height: 72px;
-        border-radius: 50%;
-        background: var(--rule);
-        flex-shrink: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: 2px solid var(--rule-heavy);
-    }
-
-    .author-avatar-initial {
-        font-family: var(--font-display);
-        font-size: 1.6rem;
-        font-weight: 900;
-        color: var(--ink-mid);
-        text-transform: uppercase;
-        line-height: 1;
-    }
-
-    .author-card-content { flex: 1; min-width: 0; }
+    .author-card-text { flex: 1; }
 
     .author-card-label {
         font-family: var(--font-mono);
-        font-size: 0.56rem;
-        letter-spacing: 0.24em;
+        font-size: 0.58rem;
+        letter-spacing: 0.14em;
         text-transform: uppercase;
         color: var(--ink-faint);
         display: block;
@@ -482,116 +405,95 @@
 
     .author-card-name {
         font-family: var(--font-display);
-        font-size: 1.1rem;
+        font-size: 1.2rem;
         font-weight: 700;
         color: var(--ink);
-        letter-spacing: -0.01em;
         display: block;
         margin-bottom: 0.4rem;
     }
 
     .author-card-bio {
         font-family: var(--font-body);
-        font-size: 0.92rem;
+        font-size: 0.9rem;
         color: var(--ink-mid);
-        line-height: 1.65;
-        font-style: italic;
+        line-height: 1.6;
         margin: 0;
     }
 
     .author-card-no-bio {
         font-family: var(--font-body);
-        font-size: 0.88rem;
+        font-size: 0.9rem;
         color: var(--ink-faint);
         font-style: italic;
         margin: 0;
     }
 
+    /* ── Comments ── */
     .section-kicker {
         font-family: var(--font-mono);
-        font-size: 0.62rem;
-        letter-spacing: 0.28em;
+        font-size: 0.58rem;
+        letter-spacing: 0.16em;
         text-transform: uppercase;
         color: var(--ink-faint);
         display: block;
-        margin-bottom: 0.4rem;
+        margin-bottom: 0.3rem;
     }
 
     .section-heading {
         font-family: var(--font-display);
-        font-size: 1.35rem;
+        font-size: 1.5rem;
         font-weight: 700;
         color: var(--ink);
         letter-spacing: -0.02em;
-        margin-bottom: 0;
+        line-height: 1.1;
+        margin: 0;
     }
 
     .section-rule {
         border: none;
-        border-top: 1px solid var(--rule-heavy);
-        margin: 0.7rem 0 1.2rem;
+        border-top: 2px double var(--ink);
+        margin: 0.8rem 0 1.6rem;
     }
 
     .comment-entry {
-        padding: 0.8rem 0;
+        padding: 1.4rem;
         border-bottom: 1px solid var(--rule);
+        background: var(--cream-dark);
     }
+
+    .comment-entry:last-child { border-bottom: none; }
 
     .comment-author-tag {
         font-family: var(--font-mono);
-        font-size: 0.62rem;
+        font-size: 0.58rem;
         letter-spacing: 0.14em;
         text-transform: uppercase;
-        color: var(--ink-faint);
-        margin-bottom: 0.2rem;
+        color: var(--ink-mid);
+        font-weight: 700;
         display: block;
+        margin-bottom: 0.4rem;
     }
 
     .comment-text {
         font-family: var(--font-body);
-        font-size: 0.98rem;
+        font-size: 0.95rem;
         color: var(--ink-mid);
-        line-height: 1.65;
+        line-height: 1.7;
         margin: 0;
     }
 
     .no-comments {
         font-family: var(--font-body);
-        font-size: 0.9rem;
+        font-size: 0.95rem;
         color: var(--ink-faint);
         font-style: italic;
-        padding: 0.5rem 0 1rem;
+        text-align: center;
+        padding: 2rem 0;
+        margin: 0;
     }
 
-    .comment-form-wrap { margin-top: 2.2rem; }
-
-    .comment-form-wrap .form-label,
-    .comment-form-wrap label {
-        font-family: var(--font-mono);
-        font-size: 0.65rem;
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
-        color: var(--ink-mid);
-        margin-bottom: 5px;
-    }
-
-    .comment-form-wrap .form-control {
-        background: var(--cream-dark);
-        border: 1px solid var(--rule-heavy);
-        border-radius: 0;
-        color: var(--ink);
-        font-family: var(--font-body);
-        font-size: 1rem;
-        padding: 9px 12px;
-        box-shadow: none;
-        transition: border-color 0.15s;
-    }
-
-    .comment-form-wrap .form-control:focus {
-        background: #fff;
-        border-color: var(--ink);
-        outline: none;
-        box-shadow: none;
+    .comment-form-wrap {
+        margin-top: 2rem;
     }
 
     .btn-submit {
@@ -603,9 +505,9 @@
         background: var(--ink);
         border: 1.5px solid var(--ink);
         border-radius: 0;
-        padding: 9px 24px;
+        padding: 10px 26px;
         cursor: pointer;
-        margin-top: 0.5rem;
+        margin-top: 1rem;
         transition: background 0.15s, border-color 0.15s;
     }
 
@@ -614,132 +516,286 @@
         border-color: var(--red-ink);
     }
 
+    /* ── Audio Player ── */
+    #audioPlayerBar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: var(--ink);
+        color: var(--cream);
+        padding: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        box-shadow: 0 -2px 8px rgba(30, 20, 10, 0.1);
+        z-index: 1000;
+    }
+
+    .player-controls {
+        display: flex;
+        gap: 0.8rem;
+    }
+
+    .player-btn {
+        background: transparent;
+        border: none;
+        color: var(--cream);
+        cursor: pointer;
+        padding: 0.4rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.15s;
+    }
+
+    .player-btn:hover { opacity: 0.8; }
+
+    .player-info {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        min-width: 0;
+    }
+
+    .player-title {
+        font-family: var(--font-body);
+        font-size: 0.9rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    #audioScrubber {
+        flex: 1;
+        min-width: 100px;
+        height: 4px;
+        -webkit-appearance: none;
+        appearance: none;
+        background: rgba(255, 255, 255, 0.3);
+        border: none;
+        outline: none;
+        border-radius: 2px;
+        cursor: pointer;
+    }
+
+    #audioScrubber::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 12px;
+        height: 12px;
+        background: var(--cream);
+        border-radius: 50%;
+        cursor: pointer;
+    }
+
+    #audioScrubber::-moz-range-thumb {
+        width: 12px;
+        height: 12px;
+        background: var(--cream);
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+
+    .player-speed-select {
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        color: var(--ink);
+        background: var(--cream);
+        border: 1px solid var(--cream);
+        padding: 4px 8px;
+        border-radius: 0;
+        cursor: pointer;
+    }
+
+    /* ── Skeleton Loader Styles ── */
+    @keyframes shimmer {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+    }
+
+    .skeleton-detail-loader {
+        max-width: 850px;
+        margin: 2.5rem auto 4rem;
+        padding: 0 1rem;
+    }
+
+    .skeleton-block {
+        background: var(--cream-dark);
+        border: 1px solid var(--rule);
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 1.5rem;
+    }
+
+    .skeleton-block::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 20%, rgba(255,255,255,0.6) 60%, rgba(255,255,255,0) 100%);
+        animation: shimmer 1.6s infinite;
+    }
+
+    .skeleton-back { height: 16px; width: 120px; margin-bottom: 1.6rem; }
+    .skeleton-kicker { height: 12px; width: 140px; margin-bottom: 0.5rem; }
+    .skeleton-category { height: 20px; width: 100px; margin-bottom: 0.7rem; }
+    .skeleton-heading { height: 48px; margin-bottom: 0.6rem; }
+    .skeleton-meta { height: 14px; width: 300px; margin-bottom: 1.6rem; }
+    .skeleton-image { height: 420px; margin-bottom: 0.5rem; }
+    .skeleton-line { height: 16px; width: 100%; margin-bottom: 1rem; }
+    .skeleton-line:last-child { margin-bottom: 0; }
+    .skeleton-line.short { width: 85%; }
+
     @media (max-width: 768px) {
-        .detail-heading { font-size: 1.8rem; }
-        .detail-body > p:first-child::first-letter { font-size: 2.5rem; }
-        .detail-body { font-size: 1rem; }
-        .detail-wrapper { padding: 0 1rem; }
-        .author-card { flex-direction: column; align-items: center; text-align: center; }
+        .skeleton-heading { height: 40px; }
+        .skeleton-image { height: 280px; }
     }
 </style>
 
-<!-- Reading progress bar -->
-<div class="reading-progress" id="readingProgress"></div>
+<!-- Skeleton Loader (hidden by default) -->
+<div id="skeletonLoader" class="skeleton-detail-loader">
+    <div class="skeleton-block skeleton-back"></div>
+    <div class="skeleton-block skeleton-kicker"></div>
+    <div class="skeleton-block skeleton-category"></div>
+    <div class="skeleton-block skeleton-heading"></div>
+    <div class="skeleton-block skeleton-meta"></div>
+    <div class="skeleton-block skeleton-image"></div>
+    <div class="skeleton-block skeleton-line"></div>
+    <div class="skeleton-block skeleton-line"></div>
+    <div class="skeleton-block skeleton-line short"></div>
+    <div class="skeleton-block skeleton-line"></div>
+    <div class="skeleton-block skeleton-line"></div>
+    <div class="skeleton-block skeleton-line short"></div>
+</div>
 
-<div class="detail-wrapper">
+<!-- Actual Content (shown after load) -->
+<div id="detailContent" style="display: none;">
+    <div id="readingProgress" class="reading-progress"></div>
 
-    <a href="{% url 'article_list' %}" class="back-link">&larr; All Articles</a>
+    <div class="detail-wrapper">
+        <a href="{% url 'article_list' %}" class="back-link">&larr; Back to Articles</a>
 
-    {% if object.category %}
-    <a href="{{ object.category.get_absolute_url }}" class="detail-category">{{ object.category.name }}</a>
-    {% else %}
-    <span class="detail-kicker">Feature</span>
-    {% endif %}
-
-    <h2 class="detail-heading">{{ object.title }}</h2>
-    <div class="meta-actions-wrap">
-        <button class="btn-tts-trigger" id="listenBtn">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polygon points="5 3 19 12 5 21 5 3"></polygon>
-            </svg>
-            Listen to Story
-        </button>
-    </div>
-    <hr class="detail-rule">
-    <div class="detail-meta-row">
-        <p class="detail-meta">By {{ object.author }}&nbsp;&nbsp;&middot;&nbsp;&nbsp;{{ object.date|date:"l, N j, Y" }}&nbsp;&nbsp;&middot;&nbsp;&nbsp;{{ object.reading_time }} min read</p>
-        
-        {% if user.is_authenticated %}
-        <button id="bookmarkBtnTop" 
-            class="bookmark-btn-top {% if request.user in object.bookmarks.all %}saved{% endif %}"
-            onclick="toggleBookmark('{{ object.pk }}', this)"
-            title="Save to Reading List">
-            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" 
-                viewBox="0 0 24 24" 
-                fill="{% if request.user in object.bookmarks.all %}currentColor{% else %}none{% endif %}" 
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
-            </svg>
-            <span>{% if request.user in object.bookmarks.all %}Saved{% else %}Save{% endif %}</span>
-        </button>
+        {% if object.category %}
+        <span class="detail-kicker">{{ object.category.name|upper }}</span>
         {% endif %}
-    </div>
 
-    <!-- Floating Sidebar Actions -->
-    {% if user.is_authenticated %}
-    <div class="sidebar-actions">
-        <button id="bookmarkBtnSidebar"
-            class="sidebar-btn {% if request.user in object.bookmarks.all %}saved{% endif %}"
-            onclick="toggleBookmark('{{ object.pk }}', this)"
-            title="{% if request.user in object.bookmarks.all %}Remove from Reading List{% else %}Save for Later{% endif %}">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" 
-                viewBox="0 0 24 24" 
-                fill="{% if request.user in object.bookmarks.all %}currentColor{% else %}none{% endif %}" 
-                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
-            </svg>
-        </button>
-    </div>
-    {% endif %}
+        <h1 class="detail-heading">{{ object.title }}</h1>
+        <hr class="detail-rule">
 
-    {% if object.image %}
-    <img src="{{ object.image.url }}" alt="{{ object.title }}" class="detail-image">
-    <span class="detail-image-caption">Photograph &middot; {{ object.title }}</span>
-    {% endif %}
+        <p class="detail-meta">
+            By <strong>{{ object.author }}</strong> &nbsp;&middot;&nbsp; {{ object.date|date:"l, N j, Y" }} &nbsp;&middot;&nbsp; {{ object.reading_time }} min
+        </p>
 
-    <div class="detail-body" id="articleBodyContent">{{ object.body|safe }}</div>
+        {% if object.image %}
+        <img src="{{ object.image.url }}" alt="{{ object.title }}" class="detail-image">
+        {% if object.image_caption %}
+        <span class="detail-image-caption">{{ object.image_caption }}</span>
+        {% endif %}
+        {% endif %}
 
-    {% if article.author.pk == request.user.pk %}
-    <div class="detail-owner-actions">
-        <a href="{% url 'article_edit' article.pk %}" class="action-link">Edit Article &rarr;</a>
-        <a href="{% url 'article_delete' article.pk %}" class="action-link action-link-delete">Delete</a>
-    </div>
-    {% endif %}
+        <!-- Top Actions -->
+        <div class="detail-top-actions">
+            {% if user.is_authenticated %}
+            <button id="bookmarkBtnTop" class="bookmark-btn-top" onclick="toggleBookmark({{ object.pk }}, this)">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                </svg>
+                <span>Save</span>
+            </button>
+            {% endif %}
+            <button id="listenBtn" class="listen-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <path d="M15.54 5.54a9 9 0 0 1 0 12.92M19.07 4.93a16 16 0 0 1 0 14.14"></path>
+                </svg>
+                <span>Listen</span>
+            </button>
+        </div>
 
-    <!-- Author profile card -->
-    <div class="author-card">
-        {% if object.author.profile_picture %}
-        <img src="{{ object.author.profile_picture.url }}" alt="{{ object.author.username }}" class="author-avatar">
-        {% else %}
-        <div class="author-avatar-placeholder">
-            <span class="author-avatar-initial">{{ object.author.username|first }}</span>
+        <!-- Article Body -->
+        <div id="articleBodyContent" class="detail-body">{{ object.body|safe }}</div>
+
+        <!-- Share Section -->
+        <div class="detail-share">
+            <span class="share-label">Share</span>
+            <button class="share-btn" title="Share on Twitter" onclick="shareOn('twitter')">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2s9 5 20 5a9.5 9.5 0 00-9-5.5c4.75 2.25 7-7 7-7" stroke="currentColor" stroke-width="2" fill="none"></path></svg>
+            </button>
+            <button class="share-btn" title="Share on Facebook" onclick="shareOn('facebook')">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a6 6 0 0 0-6 6v3H7v4h2v8h4v-8h3l1-4h-4V8a2 2 0 0 1 2-2h1z" stroke="currentColor" stroke-width="2" fill="none"></path></svg>
+            </button>
+            <button class="share-btn" title="Copy link" onclick="copyLink()">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+            </button>
+        </div>
+
+        <!-- Owner Actions -->
+        {% if user == object.author %}
+        <div class="detail-owner-actions">
+            <a href="{% url 'article_edit' object.pk %}" class="action-link">Edit &rarr;</a>
+            <a href="{% url 'article_delete' object.pk %}" class="action-link action-link-delete">Delete &rarr;</a>
         </div>
         {% endif %}
-        <div class="author-card-content">
-            <span class="author-card-label">About the Author</span>
-            <span class="author-card-name">{{ object.author.get_full_name|default:object.author.username }}</span>
-            {% if object.author.bio %}
-            <p class="author-card-bio">{{ object.author.bio }}</p>
-            {% else %}
-            <p class="author-card-no-bio">No biography provided.</p>
+
+        <!-- Sidebar Actions (Large screens) -->
+        <div class="sidebar-actions">
+            {% if user.is_authenticated %}
+            <button id="bookmarkBtnSidebar" class="sidebar-action-btn" title="Save article" onclick="toggleBookmark({{ object.pk }}, this)">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                </svg>
+            </button>
             {% endif %}
         </div>
-    </div>
 
-    <span class="section-kicker">Correspondence</span>
-    <h4 class="section-heading">Comments</h4>
-    <hr class="section-rule">
+        <!-- Author Card -->
+        <div class="author-card">
+            {% if object.author.profile.avatar %}
+            <img src="{{ object.author.profile.avatar.url }}" alt="{{ object.author }}" class="author-card-image">
+            {% else %}
+            <div style="width:100px;height:100px;border-radius:50%;background:var(--cream);border:2px solid var(--rule-heavy);display:flex;align-items:center;justify-content:center;font-size:0.7rem;color:var(--ink-faint);">No Photo</div>
+            {% endif %}
+            <div class="author-card-text">
+                <span class="author-card-label">About the Author</span>
+                <span class="author-card-name">{{ object.author.get_full_name|default:object.author.username }}</span>
+                {% if object.author.bio %}
+                <p class="author-card-bio">{{ object.author.bio }}</p>
+                {% else %}
+                <p class="author-card-no-bio">No biography provided.</p>
+                {% endif %}
+            </div>
+        </div>
 
-    {% for comment in article.comment_set.all %}
-    <div class="comment-entry">
-        <span class="comment-author-tag">{{ comment.author }}</span>
-        <p class="comment-text">{{ comment }}</p>
-    </div>
-    {% empty %}
-    <p class="no-comments">No correspondence yet. Be the first to respond.</p>
-    {% endfor %}
-
-    <div class="comment-form-wrap">
-        <span class="section-kicker" style="margin-top:1.8rem; display:block;">Add a Response</span>
-        <h4 class="section-heading">Write a Comment</h4>
+        <span class="section-kicker">Correspondence</span>
+        <h4 class="section-heading">Comments</h4>
         <hr class="section-rule">
-        <form action="" method="post">
-            {% csrf_token %}
-            {{ form|crispy }}
-            <button class="btn-submit" type="submit">Submit &rarr;</button>
-        </form>
-    </div>
 
+        {% for comment in article.comment_set.all %}
+        <div class="comment-entry">
+            <span class="comment-author-tag">{{ comment.author }}</span>
+            <p class="comment-text">{{ comment }}</p>
+        </div>
+        {% empty %}
+        <p class="no-comments">No correspondence yet. Be the first to respond.</p>
+        {% endfor %}
+
+        <div class="comment-form-wrap">
+            <span class="section-kicker" style="margin-top:1.8rem; display:block;">Add a Response</span>
+            <h4 class="section-heading">Write a Comment</h4>
+            <hr class="section-rule">
+            <form action="" method="post">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <button class="btn-submit" type="submit">Submit &rarr;</button>
+            </form>
+        </div>
+
+    </div>
 </div>
 
 <!-- Fixed Audio Player Bar -->
@@ -766,6 +822,16 @@
 </div>
 
 <script>
+    // Toggle content visibility on load
+    window.addEventListener('load', function() {
+        const skeleton = document.getElementById('skeletonLoader');
+        const content = document.getElementById('detailContent');
+        if (skeleton && content) {
+            skeleton.style.display = 'none';
+            content.style.display = 'block';
+        }
+    });
+
     if (document.referrer.includes('/edit/')) {
         history.replaceState(null, '', "{% url 'article_list' %}");
     }
@@ -814,6 +880,29 @@
         });
     }
 
+    // Share functions
+    function shareOn(platform) {
+        const url = window.location.href;
+        const title = document.querySelector('.detail-heading').textContent;
+        let shareUrl;
+
+        if (platform === 'twitter') {
+            shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`;
+        } else if (platform === 'facebook') {
+            shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+        }
+        
+        if (shareUrl) {
+            window.open(shareUrl, '_blank', 'width=600,height=400');
+        }
+    }
+
+    function copyLink() {
+        navigator.clipboard.writeText(window.location.href).then(() => {
+            alert('Link copied to clipboard!');
+        });
+    }
+
     // ── TEXT TO SPEECH ENGINE WITH SMOOTH NATIVE TRACKING ──
     (function() {
         const synth = window.speechSynthesis;
@@ -832,7 +921,7 @@
 
         let utterance = null;
         let isSpeaking = false;
-        let charOffset = 0; // The absolute index in fullText where the current utterance started
+        let charOffset = 0;
 
         function updateScrubberBackground(value) {
             if (scrubber) {
@@ -847,12 +936,9 @@
             utterance = new SpeechSynthesisUtterance(textToSpeak);
             utterance.rate = parseFloat(speedSelect.value);
             
-            // SMOOTH NATIVE TRACKING FIX
             utterance.onboundary = (event) => {
                 if (event.name === 'word') {
-                    // Calculate absolute character position
                     const absoluteCharIndex = charOffset + event.charIndex;
-                    // Calculate exact percentage
                     const percent = (absoluteCharIndex / fullText.length) * 100;
                     
                     scrubber.value = percent;
@@ -861,8 +947,6 @@
             };
 
             utterance.onend = () => {
-                // Only stop if we reached the end of the text
-                // Speech API might fire end early on seek, so we check position
                 if (!isSpeaking) return; 
                 stopSpeech();
             };
@@ -908,7 +992,7 @@
         }
 
         listenBtn.addEventListener('click', () => {
-            stopSpeech(); // Reset if already playing
+            stopSpeech();
             startSpeech();
         });
         
@@ -932,7 +1016,6 @@
             const percent = parseFloat(scrubber.value);
             updateScrubberBackground(percent);
             
-            // Calculate new absolute char index based on slider percentage
             const newCharIndex = (percent / 100) * fullText.length;
             
             const wasSpeaking = isSpeaking;
@@ -945,7 +1028,6 @@
             synth.cancel();
         });
 
-        // Initialize background
         updateScrubberBackground(0);
     })();
 </script>
