@@ -1,4 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib import messages
+from django.shortcuts import redirect
 from django.views import View
 from django.views.generic import ListView, DetailView, FormView, TemplateView
 from django.views.generic.detail import SingleObjectMixin
@@ -118,15 +120,26 @@ class EditorDeskView(LoginRequiredMixin, TemplateView):
 # ── ADDED: Bookmark toggle (AJAX) ──
 class BookmarkToggleView(LoginRequiredMixin, View):
     def post(self, request, pk):
-        article = Article.objects.get(pk=pk)
-        user = request.user
-        if user in article.bookmarks.all():
-            article.bookmarks.remove(user)
-            bookmarked = False
-        else:
-            article.bookmarks.add(user)
-            bookmarked = True
-        return JsonResponse({"bookmarked": bookmarked})
+        try:
+            article = Article.objects.get(pk=pk)
+            user = request.user
+            if user in article.bookmarks.all():
+                article.bookmarks.remove(user)
+                bookmarked = False
+            else:
+                article.bookmarks.add(user)
+                bookmarked = True
+            return JsonResponse({"bookmarked": bookmarked, "status": "success"})
+        except Article.DoesNotExist:
+            return JsonResponse(
+                {"status": "error", "message": "Article not found"},
+                status=404
+            )
+        except Exception as e:
+            return JsonResponse(
+                {"status": "error", "message": "Failed to save bookmark"},
+                status=500
+            )
 
 
 # ── ADDED: Reading list page ──
@@ -163,11 +176,16 @@ class CommentPost(SingleObjectMixin, FormView):
         return super().post(request, *args, **kwargs)
 
     def form_valid(self, form):
-        comment = form.save(commit=False)
-        comment.article = self.object
-        comment.author = self.request.user
-        comment.save()
-        return super().form_valid(form)
+        try:
+            comment = form.save(commit=False)
+            comment.article = self.object
+            comment.author = self.request.user
+            comment.save()
+            messages.success(self.request, "Comment posted successfully!")
+            return super().form_valid(form)
+        except Exception as e:
+            messages.error(self.request, "Failed to post comment...")
+            return self.form_invalid(form)
 
     def get_success_url(self):
         article = self.object
@@ -193,6 +211,15 @@ class ArticleUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         obj = self.get_object()
         return obj.author == self.request.user
 
+    def form_valid(self, form):
+        try:
+            response = super().form_valid(form)
+            messages.success(self.request, "Article updated successfully!")
+            return response
+        except Exception as e:
+            messages.error(self.request, "Failed to update article...")
+            return self.form_invalid(form)
+
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
         if not self.request.user.is_staff:
@@ -209,6 +236,15 @@ class ArticleDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         obj = self.get_object()
         return obj.author == self.request.user
 
+    def delete(self, request, *args, **kwargs):
+        try:
+            response = super().delete(request, *args, **kwargs)
+            messages.success(request, "Article deleted successfully!")
+            return response
+        except Exception as e:
+            messages.error(request, "Failed to delete article...")
+            return redirect("article_list")
+
 
 class ArticleCreateView(LoginRequiredMixin, CreateView):
     model = Article
@@ -216,8 +252,14 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
     fields = ("title", "body", "image", "category", "is_featured")
 
     def form_valid(self, form):
-        form.instance.author = self.request.user
-        return super().form_valid(form)
+        try:
+            form.instance.author = self.request.user
+            response = super().form_valid(form)
+            messages.success(self.request, "Article published successfully!")
+            return response
+        except Exception as e:
+            messages.error(self.request, "Failed to publish article...")
+            return self.form_invalid(form)
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)

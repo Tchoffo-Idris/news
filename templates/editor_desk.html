@@ -363,7 +363,7 @@
             <p class="desk-subheading">Welcome back, {{ request.user.username }}</p>
         </div>
         <a href="{% url 'article_new' %}" class="desk-new-btn">
-            [+] New Article &rarr;
+            [+] New Article
         </a>
     </div>
 
@@ -485,8 +485,8 @@
                     <a href="{{ latest_article.get_absolute_url }}" class="desk-spotlight-title" style="font-size:0.95rem;">{{ latest_article.title }}</a>
                     <span class="desk-article-date" style="display:block; margin-top:0.3rem;">{{ latest_article.date|date:"l, N j, Y" }}</span>
                     <div style="margin-top:0.8rem; display:flex; gap:0.8rem;">
-                        <a href="{{ latest_article.get_absolute_url }}" class="desk-action">View &rarr;</a>
-                        <a href="{% url 'article_edit' latest_article.pk %}" class="desk-action">Edit &rarr;</a>
+                        <a href="{{ latest_article.get_absolute_url }}" class="desk-action">View</a>
+                        <a href="{% url 'article_edit' latest_article.pk %}" class="desk-action">Edit</a>
                     </div>
                 </div>
             </div>
@@ -498,3 +498,4 @@
 </div>
 
 {% endblock content %}
+ent %}

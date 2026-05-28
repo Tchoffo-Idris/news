@@ -191,12 +191,12 @@
         </p>
 
         <div class="notice-actions">
-            <a href="{% url 'article_list' %}" class="btn-ink-outline">&larr; Cancel</a>
+            <a href="{% url 'article_list' %}" class="btn-ink-outline">Cancel</a>
             <form action="" method="post" style="display:inline;">
                 {% csrf_token %}
                 <button class="btn-ink-danger" type="submit" id="deleteBtn">
                     <span class="btn-spinner"></span>
-                    <span class="btn-text">Delete →</span>
+                    <span class="btn-text">Delete</span>
                 </button>
             </form>
         </div>

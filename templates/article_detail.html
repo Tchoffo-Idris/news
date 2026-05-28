@@ -31,14 +31,21 @@
         font-size: 0.62rem;
         letter-spacing: 0.18em;
         text-transform: uppercase;
-        color: var(--ink-faint);
+        color: var(--cream);
+        background: var(--ink);
+        border: 1.5px solid var(--ink);
+        padding: 8px 18px;
         text-decoration: none;
         display: inline-block;
         margin-bottom: 1.6rem;
-        transition: color 0.15s;
+        transition: all 0.15s;
     }
 
-    .back-link:hover { color: var(--ink); }
+    .back-link:hover { 
+        background: var(--red-ink); 
+        border-color: var(--red-ink);
+        color: var(--cream); 
+    }
 
     .detail-kicker {
         font-family: var(--font-mono);
@@ -226,15 +233,30 @@
         font-size: 0.62rem;
         letter-spacing: 0.14em;
         text-transform: uppercase;
-        color: var(--ink-mid);
-        text-decoration: underline;
-        text-underline-offset: 3px;
-        text-decoration-color: var(--rule);
-        transition: color 0.15s;
+        color: var(--cream);
+        background: var(--ink);
+        border: 1px solid var(--ink);
+        padding: 6px 14px;
+        text-decoration: none;
+        transition: all 0.15s;
     }
 
-    .action-link:hover { color: var(--red-ink); text-decoration-color: var(--red-ink); }
-    .action-link-delete { color: var(--red-ink); text-decoration-color: rgba(139,26,26,0.3); }
+    .action-link:hover { 
+        background: var(--red-ink); 
+        border-color: var(--red-ink);
+        color: var(--cream); 
+    }
+
+    .action-link-delete { 
+        background: var(--red-ink); 
+        border-color: var(--red-ink);
+        color: var(--cream);
+    }
+
+    .action-link-delete:hover { 
+        background: #6B0000; 
+        border-color: #6B0000;
+    }
 
     /* ── Sidebar Actions ── */
     .sidebar-actions {
@@ -525,7 +547,7 @@
         background: var(--ink);
         color: var(--cream);
         padding: 1rem;
-        display: flex;
+        display: none;
         align-items: center;
         gap: 1rem;
         box-shadow: 0 -2px 8px rgba(30, 20, 10, 0.1);
@@ -610,6 +632,102 @@
         cursor: pointer;
     }
 
+    /* ── Error Alert Styles ── */
+    .alert-error {
+        display: none;
+        background-color: #fff5f5;
+        border: 1px solid #feb2b2;
+        color: #c53030;
+        padding: 1rem 1.2rem;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        position: relative;
+        font-family: var(--font-mono);
+        border-radius: 0;
+        animation: slideIn 0.3s ease-out;
+        z-index: 100;
+    }
+
+    @keyframes slideIn {
+        from { transform: translateY(-10px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+
+    .alert-error.show {
+        display: block;
+    }
+
+    .alert-error-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+    }
+
+    .alert-error-title {
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .alert-error-close {
+        background: none;
+        border: none;
+        color: inherit;
+        cursor: pointer;
+        padding: 0;
+        font-size: 1.2rem;
+        line-height: 1;
+    }
+
+    .alert-error-message {
+        font-size: 0.85rem;
+        line-height: 1.5;
+        font-family: var(--font-body);
+        margin: 0;
+    }
+
+    /* ── Loading States ── */
+    .btn-submit {
+        position: relative;
+        transition: all 0.2s;
+    }
+
+    .btn-submit.loading {
+        color: transparent !important;
+        pointer-events: none;
+        background: var(--ink-mid) !important;
+    }
+
+    .btn-submit.loading::after {
+        content: "";
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+        border: 2px solid var(--cream);
+        border-radius: 50%;
+        border-top-color: transparent;
+        animation: spin 0.6s linear infinite;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    .btn-submit:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+
     /* ── Skeleton Loader Styles ── */
     @keyframes shimmer {
         0% { transform: translateX(-100%); }
@@ -678,7 +796,7 @@
     <div id="readingProgress" class="reading-progress"></div>
 
     <div class="detail-wrapper">
-        <a href="{% url 'article_list' %}" class="back-link">&larr; Back to Articles</a>
+        <a href="{% url 'article_list' %}" class="back-link">Back to Articles</a>
 
         {% if object.category %}
         <span class="detail-kicker">{{ object.category.name|upper }}</span>
@@ -737,8 +855,8 @@
         <!-- Owner Actions -->
         {% if user == object.author %}
         <div class="detail-owner-actions">
-            <a href="{% url 'article_edit' object.pk %}" class="action-link">Edit &rarr;</a>
-            <a href="{% url 'article_delete' object.pk %}" class="action-link action-link-delete">Delete &rarr;</a>
+            <a href="{% url 'article_edit' object.pk %}" class="action-link">Edit</a>
+            <a href="{% url 'article_delete' object.pk %}" class="action-link action-link-delete">Delete</a>
         </div>
         {% endif %}
 
@@ -788,10 +906,21 @@
             <span class="section-kicker" style="margin-top:1.8rem; display:block;">Add a Response</span>
             <h4 class="section-heading">Write a Comment</h4>
             <hr class="section-rule">
-            <form action="" method="post">
+            <form id="commentForm" action="" method="post">
                 {% csrf_token %}
                 {{ form|crispy }}
-                <button class="btn-submit" type="submit">Submit &rarr;</button>
+                <!-- Error Alert -->
+                <div id="commentErrorAlert" class="alert-error">
+                    <div class="alert-error-header">
+                        <div class="alert-error-title">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                            Action Failed
+                        </div>
+                        <button type="button" class="alert-error-close" onclick="closeErrorAlert()">&times;</button>
+                    </div>
+                    <p id="errorMessage" class="alert-error-message">Unable to process your request. Please try again.</p>
+                </div>
+                <button id="commentSubmitBtn" class="btn-submit" type="submit">Submit</button>
             </form>
         </div>
 
@@ -819,9 +948,30 @@
         <option value="1.5">1.5x</option>
         <option value="2">2.0x</option>
     </select>
+    <button class="player-btn" id="cancelBtn" title="Close Player" style="margin-left: auto;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
 </div>
 
 <script>
+    // Error Alert Functions
+    function showErrorAlert(message) {
+        const alert = document.getElementById('commentErrorAlert');
+        const errorMsg = document.getElementById('errorMessage');
+        if (alert && errorMsg) {
+            errorMsg.textContent = message;
+            alert.classList.add('show');
+            alert.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    }
+
+    function closeErrorAlert() {
+        const alert = document.getElementById('commentErrorAlert');
+        if (alert) {
+            alert.classList.remove('show');
+        }
+    }
+
     // Toggle content visibility on load
     window.addEventListener('load', function() {
         const skeleton = document.getElementById('skeletonLoader');
@@ -844,15 +994,33 @@
         bar.style.width = (docHeight > 0 ? (scrollTop / docHeight) * 100 : 0) + '%';
     });
 
-    // Bookmark toggle
+    // Bookmark toggle with error handling and timeout
     function toggleBookmark(pk, btn) {
         const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        closeErrorAlert();
+
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => {
+            controller.abort();
+            showErrorAlert('Request timed out. Please check your connection and try again.');
+        }, 15000);
+
         fetch(`/articles/${pk}/bookmark/`, {
             method: 'POST',
             headers: { 'X-CSRFToken': csrfToken, 'Content-Type': 'application/json' },
+            signal: controller.signal
         })
-        .then(res => res.json())
+        .then(res => {
+            clearTimeout(timeoutId);
+            if (!res.ok) throw new Error('Server responded with an error');
+            return res.json();
+        })
         .then(data => {
+            if (data.status === 'error') {
+                showErrorAlert(data.message || 'Failed to save article.');
+                return;
+            }
+
             const btnTop = document.getElementById('bookmarkBtnTop');
             const btnSidebar = document.getElementById('bookmarkBtnSidebar');
 
@@ -864,7 +1032,7 @@
                     b.classList.add('saved');
                     icon.setAttribute('fill', 'currentColor');
                     if (label) {
-                        label.textContent = isTop ? 'Saved' : 'Saved \u2192 Reading List';
+                        label.textContent = isTop ? 'Saved' : 'Saved Reading List';
                     }
                 } else {
                     b.classList.remove('saved');
@@ -877,6 +1045,72 @@
 
             updateBtn(btnTop, true);
             updateBtn(btnSidebar, false);
+        })
+        .catch(error => {
+            clearTimeout(timeoutId);
+            if (error.name === 'AbortError') return; // Handled by timeout
+            showErrorAlert('Failed to save article. Please try again.');
+        });
+    }
+
+    // Comment Form Submission with AJAX, Loading State, and Error Handling
+    const commentForm = document.getElementById('commentForm');
+    const commentSubmitBtn = document.getElementById('commentSubmitBtn');
+
+    if (commentForm) {
+        commentForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            closeErrorAlert();
+
+            // Set loading state
+            commentSubmitBtn.disabled = true;
+            commentSubmitBtn.classList.add('loading');
+
+            const formData = new FormData(commentForm);
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => {
+                controller.abort();
+                showErrorAlert('Request timed out. Please check your connection and try again.');
+                commentSubmitBtn.disabled = false;
+                commentSubmitBtn.classList.remove('loading');
+            }, 15000);
+
+            fetch(window.location.href, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                signal: controller.signal
+            })
+            .then(response => {
+                clearTimeout(timeoutId);
+                // If it's a redirect (success), or 200 (form errors in Django)
+                if (response.redirected) {
+                    window.location.href = response.url;
+                    return;
+                }
+                
+                // If the server returns 200 OK, it might be the page with form errors
+                // For simplicity in this demo, we'll reload or handle success
+                if (response.ok) {
+                    window.location.reload();
+                    return;
+                }
+                
+                throw new Error('Submission failed');
+            })
+            .catch(error => {
+                clearTimeout(timeoutId);
+                commentSubmitBtn.disabled = false;
+                commentSubmitBtn.classList.remove('loading');
+                
+                if (error.name === 'AbortError') return;
+                showErrorAlert('Unable to submit your comment. Please try again.');
+            });
         });
     }
 
@@ -903,7 +1137,7 @@
         });
     }
 
-    // ── TEXT TO SPEECH ENGINE WITH SMOOTH NATIVE TRACKING ──
+    // ── TEXT TO SPEECH ENGINE ──
     (function() {
         const synth = window.speechSynthesis;
         const articleTitle = "{{ object.title|escapejs }}";
@@ -913,6 +1147,7 @@
         const playerBar = document.getElementById('audioPlayerBar');
         const playPauseBtn = document.getElementById('playPauseBtn');
         const stopBtn = document.getElementById('stopBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
         const speedSelect = document.getElementById('speedSelect');
         const scrubber = document.getElementById('audioScrubber');
         const playIcon = document.getElementById('playIcon');
@@ -991,38 +1226,47 @@
             }
         }
 
-        listenBtn.addEventListener('click', () => {
-            stopSpeech();
-            startSpeech();
-        });
+        if (listenBtn) {
+            listenBtn.addEventListener('click', () => {
+                stopSpeech();
+                startSpeech();
+            });
+        }
         
-        playPauseBtn.addEventListener('click', () => {
-            if (isSpeaking) pauseSpeech();
-            else startSpeech();
-        });
+        if (playPauseBtn) {
+            playPauseBtn.addEventListener('click', () => {
+                if (isSpeaking) pauseSpeech();
+                else startSpeech();
+            });
+        }
 
-        stopBtn.addEventListener('click', stopSpeech);
+        if (stopBtn) stopBtn.addEventListener('click', stopSpeech);
+        if (cancelBtn) cancelBtn.addEventListener('click', stopSpeech);
 
-        speedSelect.addEventListener('change', () => {
-            if (isSpeaking || synth.paused) {
+        if (speedSelect) {
+            speedSelect.addEventListener('change', () => {
+                if (isSpeaking || synth.paused) {
+                    const wasSpeaking = isSpeaking;
+                    synth.cancel();
+                    createUtterance(charOffset);
+                    if (wasSpeaking) synth.speak(utterance);
+                }
+            });
+        }
+
+        if (scrubber) {
+            scrubber.addEventListener('input', () => {
+                const percent = parseFloat(scrubber.value);
+                updateScrubberBackground(percent);
+                
+                const newCharIndex = (percent / 100) * fullText.length;
+                
                 const wasSpeaking = isSpeaking;
                 synth.cancel();
-                createUtterance(charOffset);
+                createUtterance(newCharIndex);
                 if (wasSpeaking) synth.speak(utterance);
-            }
-        });
-
-        scrubber.addEventListener('input', () => {
-            const percent = parseFloat(scrubber.value);
-            updateScrubberBackground(percent);
-            
-            const newCharIndex = (percent / 100) * fullText.length;
-            
-            const wasSpeaking = isSpeaking;
-            synth.cancel();
-            createUtterance(newCharIndex);
-            if (wasSpeaking) synth.speak(utterance);
-        });
+            });
+        }
 
         window.addEventListener('beforeunload', () => {
             synth.cancel();
@@ -1033,3 +1277,4 @@
 </script>
 
 {% endblock content %}
+ent %}

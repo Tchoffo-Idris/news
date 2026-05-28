@@ -201,8 +201,8 @@
             <hr class="home-divider">
 
             <div class="home-actions">
-                <a href="{% url 'article_list' %}" class="btn-ink-solid">View All Articles &rarr;</a>
-                <a href="{% url 'logout' %}" class="btn-ink-outline">Log Out &rarr;</a>
+                <a href="{% url 'article_list' %}" class="btn-ink-solid">View All Articles</a>
+                <a href="{% url 'logout' %}" class="btn-ink-outline">Log Out</a>
             </div>
 
             {% else %}
@@ -219,7 +219,7 @@
 
             <div class="guest-actions">
                 <a href="{% url 'login' %}" class="btn-ink-outline">Log In</a>
-                <a href="{% url 'signup' %}" class="btn-ink-solid">Sign Up &rarr;</a>
+                <a href="{% url 'signup' %}" class="btn-ink-solid">Sign Up</a>
             </div>
 
             {% endif %}

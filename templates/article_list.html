@@ -386,29 +386,51 @@
         font-size: 0.54rem;
         letter-spacing: 0.12em;
         text-transform: uppercase;
-        color: var(--ink-faint);
-        text-decoration: underline;
-        text-underline-offset: 2px;
-        transition: color 0.15s;
+        color: var(--cream);
+        background: var(--ink);
+        border: 1px solid var(--ink);
+        padding: 4px 10px;
+        text-decoration: none;
+        transition: all 0.15s;
     }
 
-    .nyt-action-link:hover { color: var(--ink); }
-    .nyt-action-delete { color: var(--red-ink); }
-    .nyt-action-delete:hover { color: #6B0000; }
+    .nyt-action-link:hover { 
+        background: var(--red-ink); 
+        border-color: var(--red-ink);
+        color: var(--cream); 
+    }
+
+    .nyt-action-delete { 
+        background: var(--red-ink); 
+        border-color: var(--red-ink);
+        color: var(--cream);
+    }
+
+    .nyt-action-delete:hover { 
+        background: #6B0000; 
+        border-color: #6B0000;
+    }
 
     .nyt-read-link {
         font-family: var(--font-mono);
         font-size: 0.54rem;
         letter-spacing: 0.12em;
         text-transform: uppercase;
-        color: var(--ink);
+        color: var(--cream);
+        background: var(--ink);
+        border: 1px solid var(--ink);
+        padding: 4px 12px;
         text-decoration: none;
         font-weight: 700;
         margin-left: auto;
-        transition: color 0.15s;
+        transition: all 0.15s;
     }
 
-    .nyt-read-link:hover { color: var(--red-ink); }
+    .nyt-read-link:hover { 
+        background: var(--red-ink); 
+        border-color: var(--red-ink);
+        color: var(--cream); 
+    }
 
     /* No photo label */
     .no-photo-label {
@@ -533,7 +555,7 @@
                     <a href="{% url 'article_edit' featured_article.pk %}" class="nyt-action-link">Edit</a>
                     <a href="{% url 'article_delete' featured_article.pk %}" class="nyt-action-link nyt-action-delete">Delete</a>
                     {% endif %}
-                    <a href="{{ featured_article.get_absolute_url }}" class="nyt-read-link">Read &rarr;</a>
+                    <a href="{{ featured_article.get_absolute_url }}" class="nyt-read-link">Read</a>
                 </div>
             </div>
             {% endif %}

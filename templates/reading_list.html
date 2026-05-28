@@ -189,7 +189,7 @@
             {% endif %}
             <a href="{{ article.get_absolute_url }}" class="rl-title">{{ article.title }}</a>
             <span class="rl-meta">By {{ article.author }} &middot; {{ article.date|date:"N j, Y" }} &middot; {{ article.reading_time }} min read</span>
-            <button type="button" class="rl-remove" data-pk="{{ article.pk }}" onclick="removeBookmark(this.dataset.pk, this)">Remove &rarr;</button>
+            <button type="button" class="rl-remove" data-pk="{{ article.pk }}" onclick="removeBookmark(this.dataset.pk, this)">Remove</button>
         </div>
     </div>
     {% endfor %}
@@ -201,7 +201,7 @@
     </div>
     {% endif %}
 
-    <a href="{% url 'article_list' %}" class="rl-back">&larr; Back to All Articles</a>
+    <a href="{% url 'article_list' %}" class="rl-back">Back to All Articles</a>
 </div>
 
 <script>
