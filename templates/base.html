@@ -9,7 +9,7 @@
      
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}Newspaper App{% endblock title %}</title>
+    <title>{% block title %}Vintage Editorial{% endblock title %}</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -49,37 +49,105 @@
         /* ─────────────────────────────────────────
            OFFLINE BANNER
         ───────────────────────────────────────── */
-        @keyframes alertFlash {
-            0% { opacity: 1; }
-            100% { opacity: 0; }
-        }
-
         #offlineBanner {
             display: none;
-            background-color: #FF3333;
-            color: #000;
+            background: var(--ink);
+            color: var(--cream);
             text-align: center;
-            padding: 8px 0;
+            padding: 9px 0;
             font-family: var(--font-mono);
             font-weight: 700;
-            font-size: 0.75rem;
-            letter-spacing: 0.15em;
+            font-size: 0.68rem;
+            letter-spacing: 0.16em;
             text-transform: uppercase;
-            border-bottom: 1.5px solid #000;
+            border-bottom: 2px solid var(--red-ink);
             position: relative;
             z-index: 2000;
             width: 100%;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            animation: bannerSlideDown 0.3s ease;
         }
 
-        .alert-dot {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            background-color: #000;
+        @keyframes bannerSlideDown {
+            from { transform: translateY(-100%); }
+            to   { transform: translateY(0); }
+        }
+
+        #offlineBanner .offline-icon {
+            display: inline-flex;
+            color: var(--red-ink);
+        }
+
+        #offlineBanner .offline-pulse {
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
-            margin-right: 10px;
-            vertical-align: middle;
-            animation: alertFlash 0.8s steps(2) infinite;
+            background: var(--red-ink);
+            animation: pulseDot 1.4s ease-in-out infinite;
+        }
+
+        @keyframes pulseDot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.7); }
+        }
+
+        /* Brief "back online" confirmation toast */
+        #onlineToast {
+            display: none;
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            background: var(--ink);
+            color: var(--cream);
+            font-family: var(--font-mono);
+            font-size: 0.66rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            padding: 10px 20px;
+            border-radius: 999px;
+            box-shadow: 0 8px 24px rgba(26, 26, 26, 0.3);
+            z-index: 2100;
+            align-items: center;
+            gap: 8px;
+            opacity: 0;
+            transition: opacity 0.25s ease, transform 0.25s ease;
+        }
+
+        #onlineToast.is-visible {
+            display: flex;
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        #onlineToast .online-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #4CAF50;
+            flex: 0 0 auto;
+        }
+
+        /* ─────────────────────────────────────────
+           TOP PAGE-LOAD PROGRESS BAR
+        ───────────────────────────────────────── */
+        #pageLoader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            width: 0%;
+            background: var(--red-ink);
+            z-index: 3000;
+            transition: width 0.25s ease, opacity 0.3s ease;
+            box-shadow: 0 0 8px rgba(139, 26, 26, 0.5);
+        }
+
+        #pageLoader.is-done {
+            width: 100% !important;
+            opacity: 0;
         }
 
         /* ─────────────────────────────────────────
@@ -159,43 +227,67 @@
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
         }
 
-        .navbar::before {
-            content: 'EST. MMXXV  ·  INDEPENDENT PRESS  ·  PRINTED DAILY';
-            display: block;
-            width: 100%;
-            text-align: center;
-            font-family: var(--font-mono);
-            font-size: 0.58rem;
-            letter-spacing: 0.25em;
-            color: var(--ink-faint);
-            padding: 6px 0 4px;
-            border-bottom: 1px solid var(--rule);
-        }
-
         .navbar .container-fluid {
-            padding: 12px 28px 10px;
-            align-items: flex-end;
+            padding: 14px 32px;
+            align-items: center;
             border-bottom: 1px solid var(--rule);
+            gap: 24px;
         }
 
         .navbar-brand {
-            font-family: var(--font-display);
-            font-size: 2.6rem;
-            font-weight: 900;
-            color: var(--ink) !important;
-            letter-spacing: -0.03em;
-            line-height: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
             text-decoration: none;
+            line-height: 1;
+            position: relative;
+            white-space: nowrap;
+        }
+
+        .brand-kicker {
+            font-family: var(--font-body);
+            font-style: italic;
+            font-weight: 500;
+            font-size: 0.82rem;
+            letter-spacing: 0.42em;
             text-transform: uppercase;
+            color: var(--red-ink) !important;
+            margin-bottom: 3px;
+            margin-left: 2px;
+        }
+
+        .brand-main {
+            font-family: var(--font-display);
+            font-size: 2.3rem;
+            font-weight: 900;
+            letter-spacing: -0.015em;
+            text-transform: uppercase;
+            color: var(--ink) !important;
+        }
+
+        .brand-rule {
+            display: block;
+            width: 100%;
+            height: 1px;
+            background: var(--ink);
+            margin-top: 5px;
             position: relative;
         }
 
-        .navbar-brand::after {
-            content: '';
-            display: block;
-            height: 2px;
-            background: var(--ink);
-            margin-top: 3px;
+        .brand-diamond {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 5px;
+            height: 5px;
+            background: var(--red-ink);
+            transform: translate(-50%, -50%) rotate(45deg);
+        }
+
+        @media (min-width: 992px) {
+            .navbar .navbar-collapse {
+                flex: 1 1 auto;
+            }
         }
 
         .navbar-nav .nav-link,
@@ -235,53 +327,136 @@
             color: var(--cream) !important;
         }
 
-        .dropdown-toggle {
+        .user-menu-toggle {
+            display: flex;
+            align-items: center;
+            gap: 9px;
             font-family: var(--font-mono);
-            font-size: 0.72rem;
-            letter-spacing: 0.14em;
+            font-size: 0.7rem;
+            letter-spacing: 0.12em;
             text-transform: uppercase;
-            color: var(--ink-mid) !important;
+            color: var(--ink) !important;
+            background: var(--cream-dark);
+            border: 1px solid var(--rule-heavy);
+            border-radius: 7px;
+            padding: 8px 14px;
+            cursor: pointer;
+            transition: background 0.18s, border-color 0.18s, box-shadow 0.18s;
+        }
+
+        .user-menu-toggle::after { display: none; }
+
+        .user-menu-toggle svg {
+            transition: transform 0.2s ease;
+            flex: 0 0 auto;
+        }
+
+        .user-menu-toggle:hover,
+        .user-menu-toggle[aria-expanded="true"] {
+            background: var(--ink);
+            color: var(--cream) !important;
+            border-color: var(--ink);
+            box-shadow: 0 3px 10px rgba(26, 26, 26, 0.18);
+        }
+
+        .user-menu-toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
+
+        /* ─── Dropdown menu — refined "menu" feel ─── */
+        @keyframes menuPop {
+            from { opacity: 0; transform: translateY(-6px) scale(0.98); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         .dropdown-menu {
             background: var(--cream);
-            border: 1px solid var(--rule-heavy);
-            border-radius: 0;
-            box-shadow: 3px 4px 0 rgba(30, 20, 10, 0.15);
-            min-width: 180px;
-            padding: 4px 0;
+            border: 1px solid var(--rule);
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(30, 20, 10, 0.14), 0 2px 8px rgba(30, 20, 10, 0.08);
+            min-width: 210px;
+            padding: 8px;
+            margin-top: 10px !important;
+        }
+
+        .dropdown-menu.show {
+            animation: menuPop 0.16s ease-out;
+            transform-origin: top right;
         }
 
         .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
             font-family: var(--font-mono);
-            font-size: 0.7rem;
-            letter-spacing: 0.12em;
+            font-size: 0.68rem;
+            letter-spacing: 0.1em;
             text-transform: uppercase;
             color: var(--ink-mid);
-            padding: 9px 18px;
-            transition: background 0.12s;
+            padding: 10px 12px;
+            border-radius: 6px;
+            transition: background 0.12s, color 0.12s;
+        }
+
+        .dropdown-item svg {
+            flex: 0 0 auto;
+            color: var(--ink-faint);
+            transition: color 0.12s;
         }
 
         .dropdown-item:hover { background: var(--cream-dark); color: var(--ink); }
+        .dropdown-item:hover svg { color: var(--ink); }
 
-        .dropdown-divider { border-color: var(--rule); margin: 2px 0; }
+        .dropdown-divider { border-color: var(--rule); margin: 6px 4px; }
 
-        .btn-logout {
-            font-family: var(--font-mono);
-            font-size: 0.7rem;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: var(--red-ink);
+        /* ─── Dark mode toggle as a menu row ─── */
+        .dropdown-item-toggle {
+            width: 100%;
             background: none;
             border: none;
-            padding: 9px 18px;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .dropdown-item-toggle .toggle-label { flex: 1; }
+
+        .toggle-switch {
+            position: relative;
+            flex: 0 0 auto;
+            width: 30px;
+            height: 17px;
+            border-radius: 999px;
+            background: var(--rule);
+            transition: background 0.2s;
+        }
+
+        .toggle-knob {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            background: var(--cream);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+            transition: transform 0.2s ease;
+        }
+
+        html[data-theme="dark"] .toggle-switch { background: var(--red-ink); }
+        html[data-theme="dark"] .toggle-knob { transform: translateX(13px); }
+
+        .dropdown-item-toggle .icon-sun { display: none; }
+        html[data-theme="dark"] .dropdown-item-toggle .icon-moon { display: none; }
+        html[data-theme="dark"] .dropdown-item-toggle .icon-sun { display: block; }
+
+        .btn-logout {
+            color: var(--red-ink) !important;
+            background: none;
+            border: none;
+            cursor: pointer;
             width: 100%;
             text-align: left;
-            cursor: pointer;
-            display: block;
-            transition: background 0.12s;
-            line-height: 1.5;
         }
+
+        .btn-logout svg { color: var(--red-ink) !important; }
 
         .btn-logout:hover { background: var(--cream-dark); }
 
@@ -335,9 +510,19 @@
         .navbar-search {
             display: flex;
             align-items: center;
-            border: 1px solid var(--rule-heavy);
+            background: var(--cream-dark);
+            border: 1px solid var(--rule);
+            border-radius: 999px;
             overflow: hidden;
             margin-left: 1rem;
+            padding: 3px 3px 3px 14px;
+            transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+        }
+
+        .navbar-search:focus-within {
+            border-color: var(--ink-mid);
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(30, 20, 10, 0.08);
         }
 
         .navbar-search-input {
@@ -345,32 +530,73 @@
             font-size: 0.65rem;
             letter-spacing: 0.08em;
             color: var(--ink);
-            background: var(--cream-dark);
+            background: transparent;
             border: none;
-            padding: 5px 10px;
-            width: 160px;
+            padding: 5px 6px 5px 0;
+            width: 150px;
             outline: none;
-            transition: width 0.2s, background 0.15s;
+            transition: width 0.25s ease;
         }
 
-        .navbar-search-input:focus {
-            background: #fff;
-            width: 200px;
-        }
+        .navbar-search-input:focus { width: 190px; }
+
+        .navbar-search-input::placeholder { color: var(--ink-faint); }
 
         .navbar-search-btn {
             background: var(--ink);
             border: none;
-            padding: 5px 10px;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            flex: 0 0 auto;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background 0.15s;
+            transition: background 0.18s, transform 0.15s;
             color: var(--cream);
         }
 
-        .navbar-search-btn:hover { background: var(--red-ink); }
+        .navbar-search-btn:hover {
+            background: var(--red-ink);
+            transform: scale(1.06);
+        }
+
+        .navbar-search-btn:active { transform: scale(0.95); }
+
+        /* ─── Dark mode toggle — modern icon pill ─── */
+        .dark-mode-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 1px solid var(--rule);
+            background: var(--cream-dark);
+            color: var(--ink-mid);
+            cursor: pointer;
+            padding: 0;
+            flex: 0 0 auto;
+            transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.15s;
+        }
+
+        .dark-mode-toggle:hover {
+            background: var(--ink);
+            border-color: var(--ink);
+            color: var(--cream);
+            transform: rotate(12deg);
+        }
+
+        .dark-mode-toggle:active { transform: scale(0.92); }
+
+        .dark-mode-toggle svg { transition: opacity 0.15s; }
+
+        html[data-theme="dark"] .dark-mode-toggle {
+            background: var(--ink);
+            border-color: var(--rule-heavy);
+            color: var(--cream);
+        }
 
         /* ─────────────────────────────────────────
            MAIN CONTENT
@@ -407,7 +633,8 @@
         }
 
         @media (max-width: 768px) {
-            .navbar-brand { font-size: 1.9rem; }
+            .brand-main { font-size: 1.5rem; }
+            .brand-kicker { font-size: 0.62rem; letter-spacing: 0.3em; }
             main .container-fluid { padding: 1.5rem 15px 4rem; }
             .navbar-search-input { width: 120px; }
             .navbar-search-input:focus { width: 140px; }
@@ -416,42 +643,81 @@
         .btn-new-article-3d {
             font-family: var(--font-mono);
             font-size: 0.68rem;
-            letter-spacing: 0.14em;
+            letter-spacing: 0.13em;
             text-transform: uppercase;
             color: var(--cream);
-            background: var(--ink);
+            background: var(--red-ink);
             text-decoration: none;
-            padding: 6px 14px;
-            border: 1px solid var(--ink);
-            border-radius: 0;
+            padding: 7px 16px;
+            border: 1px solid var(--red-ink);
+            border-radius: 999px;
             display: inline-flex;
             align-items: center;
-            transition: background 0.15s, color 0.15s;
-            box-shadow: none !important;
-            transform: none !important;
+            gap: 6px;
+            margin-right: -6px;
+            box-shadow: 0 2px 6px rgba(139, 26, 26, 0.25);
+            transition: background 0.18s, color 0.18s, box-shadow 0.18s, transform 0.15s;
+        }
+
+        .btn-new-article-3d svg {
+            transition: transform 0.25s ease;
         }
 
         .btn-new-article-3d:hover {
-            color: var(--ink);
-            background: var(--cream);
-            box-shadow: none !important;
-            transform: none !important;
+            color: var(--cream);
+            background: var(--ink);
+            border-color: var(--ink);
+            box-shadow: 0 4px 12px rgba(26, 26, 26, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .btn-new-article-3d:hover svg {
+            transform: rotate(-8deg) scale(1.08);
+        }
+
+        .btn-new-article-3d:active {
+            transform: translateY(0);
+            box-shadow: 0 1px 4px rgba(26, 26, 26, 0.25);
         }
     </style>
 </head>
 
 <body>
+    <!-- Top page-load progress bar -->
+    <div id="pageLoader"></div>
+
     <!-- Offline Alert Strip -->
     <div id="offlineBanner">
-        <span class="alert-dot"></span>
-        No Internet Connection — Tracking Offline Mode
+        <span class="offline-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="1" y1="1" x2="23" y2="23"/>
+                <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/>
+                <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/>
+                <path d="M10.71 5.05A16 16 0 0 1 22.58 9"/>
+                <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"/>
+                <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
+                <line x1="12" y1="20" x2="12.01" y2="20"/>
+            </svg>
+        </span>
+        You're Offline — Some Features May Be Unavailable
+        <span class="offline-pulse"></span>
+    </div>
+
+    <!-- "Back online" confirmation toast -->
+    <div id="onlineToast">
+        <span class="online-dot"></span>
+        Back Online
     </div>
 
     <div class="page-sheet">
 
         <nav class="navbar navbar-expand-lg">
             <div class="container-fluid">
-                <a class="navbar-brand" href="{% url 'home' %}">Newspaper</a>
+                <a class="navbar-brand" href="{% url 'home' %}">
+                    <span class="brand-kicker">Vintage</span>
+                    <span class="brand-main">Editorial</span>
+                    <span class="brand-rule"><span class="brand-diamond"></span></span>
+                </a>
 
                 <button class="navbar-toggler" type="button"
                     data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -461,51 +727,18 @@
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-lg-center">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{% url 'article_list' %}" title="Home">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/>
-                                    <polyline points="9 21 9 12 15 12 15 21"/>
-                                </svg>
-                            </a>
-                        </li>
+                    <div class="ms-auto d-flex align-items-center gap-3">
+
                         {% if user.is_authenticated %}
-                        <li class="nav-item d-flex align-items-center">
-                            <a href="{% url 'article_new' %}" class="btn-new-article-3d ms-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px; vertical-align:middle; margin-bottom:2px;">
+                            <!-- New Article -->
+                            <a href="{% url 'article_new' %}" class="btn-new-article-3d">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
                                     <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
                             </svg>
                                 New Article
                             </a>
-                        </li>
-                        {% endif %}
-                    </ul>
 
-                    <div class="ms-auto d-flex align-items-center gap-3">
-
-                        <!-- Dark mode toggle -->
-                        <button class="dark-mode-toggle" id="darkToggle" aria-label="Toggle dark mode" title="Toggle Night Edition">
-                            <!-- Moon: shown in light mode -->
-                            <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-                            </svg>
-                            <!-- Sun: shown in dark mode -->
-                            <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="5"/>
-                                <line x1="12" y1="1" x2="12" y2="3"/>
-                                <line x1="12" y1="21" x2="12" y2="23"/>
-                                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-                                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-                                <line x1="1" y1="12" x2="3" y2="12"/>
-                                <line x1="21" y1="12" x2="23" y2="12"/>
-                                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-                                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-                            </svg>
-                        </button>
-
-                        {% if user.is_authenticated %}
                             <!-- Search bar -->
                             <form method="get" action="{% url 'article_search' %}" class="navbar-search">
                                 <input
@@ -523,43 +756,99 @@
                                 </button>
                             </form>
 
-                            <ul class="navbar-nav">
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" role="button"
-                                        data-bs-toggle="dropdown" aria-expanded="false">
-                                        &#9656;&nbsp;{{ user.username }}
-                                    </a>
-                                    <ul class="dropdown-menu dropdown-menu-end">
-                                        <li>
-                                            <a class="dropdown-item" href="{% url 'editor_desk' %}">
-                                                Editor's Desk
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" href="{% url 'reading_list' %}">
-                                                Reading List
-                                            </a>
-                                        </li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li>
-                                            <a class="dropdown-item" href="{% url 'password_change' %}">
-                                                Change Password
-                                            </a>
-                                        </li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li>
-                                            <a class="dropdown-item btn-logout" href="{% url 'logout' %}">
-                                                Log Out
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>
+                            <div class="dropdown">
+                                <button class="user-menu-toggle" type="button"
+                                    data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                                    <span>{{ user.username }}</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9"/>
+                                    </svg>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li>
+                                        <a class="dropdown-item" href="{% url 'editor_desk' %}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M12 20h9"/>
+                                                <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+                                            </svg>
+                                            Editor's Desk
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="{% url 'reading_list' %}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+                                            </svg>
+                                            Reading List
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <button type="button" id="darkToggle" class="dropdown-item dropdown-item-toggle" aria-label="Toggle dark mode">
+                                            <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                                            </svg>
+                                            <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <circle cx="12" cy="12" r="5"/>
+                                                <line x1="12" y1="1" x2="12" y2="3"/>
+                                                <line x1="12" y1="21" x2="12" y2="23"/>
+                                                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                                                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                                                <line x1="1" y1="12" x2="3" y2="12"/>
+                                                <line x1="21" y1="12" x2="23" y2="12"/>
+                                                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                                                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                                            </svg>
+                                            <span class="toggle-label">Night Edition</span>
+                                            <span class="toggle-switch"><span class="toggle-knob"></span></span>
+                                        </button>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <a class="dropdown-item" href="{% url 'password_change' %}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <rect x="3" y="11" width="18" height="11" rx="2"/>
+                                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                            </svg>
+                                            Change Password
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <a class="dropdown-item btn-logout" href="{% url 'logout' %}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                                                <polyline points="16 17 21 12 16 7"/>
+                                                <line x1="21" y1="12" x2="9" y2="12"/>
+                                            </svg>
+                                            Log Out
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
                         {% else %}
                             <div class="auth-actions">
                                 <a href="{% url 'login' %}" class="btn-ink-outline">Log In</a>
                                 <a href="{% url 'signup' %}" class="btn-ink-solid">Sign Up</a>
                             </div>
+
+                            <!-- Dark mode toggle (guests only — no menu to house it in) -->
+                            <button class="dark-mode-toggle" id="darkToggle" aria-label="Toggle dark mode" title="Toggle Night Edition">
+                                <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                                </svg>
+                                <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="5"/>
+                                    <line x1="12" y1="1" x2="12" y2="3"/>
+                                    <line x1="12" y1="21" x2="12" y2="23"/>
+                                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                                    <line x1="1" y1="12" x2="3" y2="12"/>
+                                    <line x1="21" y1="12" x2="23" y2="12"/>
+                                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                                </svg>
+                            </button>
                         {% endif %}
                     </div>
                 </div>
@@ -591,7 +880,130 @@
             </div>
         </main>
 
+        <footer class="site-footer">
+            <div class="footer-inner">
+                <div class="footer-brand">
+                    <span class="footer-brand-name">Vintage Editorial</span>
+                    <span class="footer-tagline">Independent Press</span>
+                </div>
+                <nav class="footer-links">
+                    <a href="{% url 'about' %}">About</a>
+                    <a href="{% url 'privacy_policy' %}">Privacy Policy</a>
+                    <a href="{% url 'article_list' %}">Articles</a>
+                </nav>
+                <span class="footer-copy">&copy; {% now "Y" %} Vintage Editorial. All rights reserved.</span>
+            </div>
+        </footer>
+
     </div>
+
+    <style>
+        .site-footer {
+            border-top: 1px solid var(--rule);
+            background: var(--cream-dark);
+            padding: 2rem 28px;
+            margin-top: 2rem;
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .footer-brand {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .footer-brand-name {
+            font-family: var(--font-display);
+            font-weight: 900;
+            font-size: 1rem;
+            letter-spacing: -0.01em;
+            color: var(--ink);
+            text-transform: uppercase;
+        }
+
+        .footer-tagline {
+            font-family: var(--font-body);
+            font-style: italic;
+            font-size: 0.72rem;
+            color: var(--ink-faint);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.6rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            position: relative;
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: 0.66rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--ink-mid);
+            text-decoration: none;
+            cursor: pointer;
+            padding: 4px 2px;
+            transition: color 0.15s ease, transform 0.15s ease;
+        }
+
+        /* Animated underline reveal on hover */
+        .footer-links a::after {
+            content: '';
+            position: absolute;
+            left: 2px;
+            right: 2px;
+            bottom: 0;
+            height: 1px;
+            background: var(--red-ink);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--red-ink);
+            transform: translateY(-1px);
+        }
+
+        .footer-links a:hover::after {
+            transform: scaleX(1);
+        }
+
+        .footer-links a:active {
+            transform: translateY(0);
+        }
+
+        .footer-links a:focus-visible {
+            outline: 2px solid var(--red-ink);
+            outline-offset: 3px;
+            border-radius: 2px;
+        }
+
+        .footer-copy {
+            font-family: var(--font-mono);
+            font-size: 0.62rem;
+            letter-spacing: 0.06em;
+            color: var(--ink-faint);
+        }
+
+        @media (max-width: 768px) {
+            .footer-inner {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
@@ -647,14 +1059,67 @@
         lastScrollY = window.scrollY;
     }, { passive: true });
 
-    // Connectivity Engine
+    // ── Top page-load progress bar ──
+    (function () {
+        const loader = document.getElementById('pageLoader');
+        if (!loader) return;
+
+        // Show progress as the current page finishes loading
+        function finish() {
+            loader.style.width = '100%';
+            setTimeout(function () {
+                loader.classList.add('is-done');
+            }, 150);
+        }
+
+        if (document.readyState === 'complete') {
+            finish();
+        } else {
+            requestAnimationFrame(function () { loader.style.width = '35%'; });
+            window.addEventListener('load', finish);
+        }
+
+        // Kick the bar off again whenever we navigate to a new page
+        document.addEventListener('click', function (e) {
+            const link = e.target.closest('a[href]');
+            if (!link) return;
+            const href = link.getAttribute('href');
+            if (!href || href.startsWith('#') || href.startsWith('javascript:')) return;
+            if (link.target === '_blank' || e.metaKey || e.ctrlKey || e.shiftKey) return;
+            loader.classList.remove('is-done');
+            loader.style.width = '0%';
+            requestAnimationFrame(function () {
+                requestAnimationFrame(function () { loader.style.width = '75%'; });
+            });
+        });
+
+        document.addEventListener('submit', function () {
+            loader.classList.remove('is-done');
+            loader.style.width = '0%';
+            requestAnimationFrame(function () {
+                requestAnimationFrame(function () { loader.style.width = '75%'; });
+            });
+        });
+    })();
+
+    // ── Connectivity Engine ──
     const banner = document.getElementById('offlineBanner');
+    const onlineToast = document.getElementById('onlineToast');
+    let wasOffline = false;
 
     function updateConnectionStatus() {
         if (navigator.onLine) {
             banner.style.display = 'none';
+            if (wasOffline) {
+                onlineToast.classList.add('is-visible');
+                setTimeout(function () {
+                    onlineToast.classList.remove('is-visible');
+                }, 2600);
+            }
+            wasOffline = false;
         } else {
-            banner.style.display = 'block';
+            banner.style.display = 'flex';
+            wasOffline = true;
         }
     }
 

@@ -9,61 +9,80 @@
 
 <style>
     /* ─────────────────────────────────────────
-       LOGIN PAGE — NEWSPAPER AESTHETIC
+       LOGIN PAGE — VINTAGE EDITORIAL AESTHETIC
     ───────────────────────────────────────── */
 
     .login-wrapper {
+        min-height: calc(100vh - 3rem);
         display: flex;
         justify-content: center;
-        align-items: flex-start;
-        padding: 3rem 1rem 5rem;
+        align-items: center;
+        padding: 3rem 1rem;
+        position: relative;
+    }
+
+    .login-wrapper::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image:
+            radial-gradient(circle at 20% 15%, rgba(139, 26, 26, 0.05) 0%, transparent 45%),
+            radial-gradient(circle at 82% 85%, rgba(43, 29, 14, 0.06) 0%, transparent 45%);
+        pointer-events: none;
     }
 
     .login-card {
         width: 100%;
         max-width: 440px;
         background: var(--cream);
-        border: 1px solid var(--rule-heavy);
-        box-shadow:
-            4px 6px 0 rgba(30, 20, 10, 0.12),
-            1px 2px 0 rgba(30, 20, 10, 0.06);
-        padding: 2.8rem 2.6rem 2.4rem;
+        border: 1px solid var(--rule);
+        border-radius: 14px;
+        box-shadow: 0 24px 60px rgba(30, 20, 10, 0.14), 0 4px 14px rgba(30, 20, 10, 0.08);
+        padding: 3rem 2.6rem 2.6rem;
         position: relative;
+        z-index: 1;
     }
 
     /* Corner bracket decoration — top left */
     .login-card::before {
         content: '';
         position: absolute;
-        top: -3px;
-        left: -3px;
-        width: 22px;
-        height: 22px;
-        border-top: 3px solid var(--ink);
-        border-left: 3px solid var(--ink);
+        top: -1px;
+        left: -1px;
+        width: 26px;
+        height: 26px;
+        border-top: 2px solid var(--ink);
+        border-left: 2px solid var(--ink);
+        border-top-left-radius: 14px;
+        opacity: 0.85;
     }
 
     /* Corner bracket decoration — bottom right */
     .login-card::after {
         content: '';
         position: absolute;
-        bottom: -3px;
-        right: -3px;
-        width: 22px;
-        height: 22px;
-        border-bottom: 3px solid var(--ink);
-        border-right: 3px solid var(--ink);
+        bottom: -1px;
+        right: -1px;
+        width: 26px;
+        height: 26px;
+        border-bottom: 2px solid var(--ink);
+        border-right: 2px solid var(--ink);
+        border-bottom-right-radius: 14px;
+        opacity: 0.85;
     }
 
     /* Edition label above heading */
     .login-kicker {
-        font-family: var(--font-mono);
-        font-size: 0.62rem;
-        letter-spacing: 0.28em;
+        font-family: var(--font-body);
+        font-style: italic;
+        font-weight: 500;
+        font-size: 0.72rem;
+        letter-spacing: 0.32em;
         text-transform: uppercase;
-        color: var(--ink-faint);
+        color: var(--red-ink);
         display: block;
-        margin-bottom: 0.55rem;
+        margin-bottom: 0.7rem;
+        text-align: center;
     }
 
     .login-heading {
@@ -74,13 +93,29 @@
         letter-spacing: -0.03em;
         line-height: 1.1;
         margin-bottom: 0;
+        text-transform: uppercase;
+        text-align: center;
     }
 
-    /* Double hairline rule below heading */
+    /* Rule below heading, with centered diamond */
     .login-rule {
         border: none;
-        border-top: 3px double var(--ink);
-        margin: 1.1rem 0 1.8rem;
+        height: 1px;
+        background: var(--ink);
+        margin: 1.1rem auto 1.8rem;
+        max-width: 110px;
+        position: relative;
+    }
+
+    .login-rule::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 6px;
+        height: 6px;
+        background: var(--red-ink);
+        transform: translate(-50%, -50%) rotate(45deg);
     }
 
     /* ── Crispy form field overrides ── */
@@ -97,11 +132,11 @@
     .login-card .form-control {
         background: var(--cream-dark);
         border: 1px solid var(--rule-heavy);
-        border-radius: 0;
+        border-radius: 8px;
         color: var(--ink);
         font-family: var(--font-body);
         font-size: 1rem;
-        padding: 9px 12px;
+        padding: 10px 14px;
         box-shadow: none;
         transition: border-color 0.15s, background 0.15s;
     }
@@ -110,7 +145,7 @@
         background: #fff;
         border-color: var(--ink);
         outline: none;
-        box-shadow: none;
+        box-shadow: 0 0 0 3px rgba(43, 29, 14, 0.08);
     }
 
     .login-card .form-control::placeholder {
@@ -138,33 +173,104 @@
         padding: 0;
     }
 
-    /* ── Submit button — ink stamp ── */
+    /* ── Submit button — pill, matching site-wide CTA style ── */
     .btn-login {
         font-family: var(--font-mono);
         font-size: 0.72rem;
-        letter-spacing: 0.2em;
+        letter-spacing: 0.18em;
         text-transform: uppercase;
         color: var(--cream);
-        background: var(--ink);
-        border: 1.5px solid var(--ink);
-        border-radius: 0;
-        padding: 10px 28px;
+        background: var(--red-ink);
+        border: 1.5px solid var(--red-ink);
+        border-radius: 999px;
+        padding: 12px 28px;
         cursor: pointer;
-        display: inline-block;
-        transition: background 0.15s, color 0.15s, border-color 0.15s;
-        margin-top: 0.4rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        box-shadow: 0 4px 14px rgba(139, 26, 26, 0.25);
+        transition: background 0.18s, border-color 0.18s, box-shadow 0.18s, transform 0.15s;
+        margin-top: 0.6rem;
     }
 
     .btn-login:hover {
-        background: var(--red-ink);
-        border-color: var(--red-ink);
+        background: var(--ink);
+        border-color: var(--ink);
         color: var(--cream);
+        box-shadow: 0 6px 18px rgba(26, 26, 26, 0.3);
+        transform: translateY(-2px);
     }
 
-    /* ── Footer links ── */
+    /* ── Live validation feedback ── */
+    .login-card .form-control.field-valid {
+        border-color: var(--ink);
+        background: #fff;
+    }
+
+    .login-card .form-control.field-invalid {
+        border-color: var(--red-ink);
+        background: #fff;
+    }
+
+    .live-feedback {
+        font-family: var(--font-mono);
+        font-size: 0.62rem;
+        letter-spacing: 0.05em;
+        margin-top: 5px;
+        min-height: 14px;
+        transition: opacity 0.15s;
+    }
+
+    .live-feedback.feedback-valid {
+        color: var(--ink-mid);
+    }
+
+    .live-feedback.feedback-invalid {
+        color: var(--red-ink);
+    }
+
+    /* ── Password visibility toggle ── */
+    .pw-wrap {
+        position: relative;
+    }
+
+    .pw-wrap .form-control {
+        padding-right: 42px;
+    }
+
+    .pw-toggle {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        padding: 4px;
+        cursor: pointer;
+        color: var(--ink-faint);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: color 0.15s;
+    }
+
+    .pw-toggle:hover { color: var(--ink); }
+    .pw-toggle .icon-eye-off { display: none; }
+    .pw-toggle.is-visible .icon-eye { display: none; }
+    .pw-toggle.is-visible .icon-eye-off { display: block; }
+
+    /* Some browsers (Edge/IE) add their own built-in reveal icon —
+       hide it so it doesn't stack with our custom toggle. */
+    input[type="password"]::-ms-reveal,
+    input[type="password"]::-ms-clear {
+        display: none;
+    }
+
+
     .login-footer {
-        margin-top: 1.6rem;
-        padding-top: 1rem;
+        margin-top: 1.8rem;
+        padding-top: 1.2rem;
         border-top: 1px solid var(--rule);
         font-family: var(--font-mono);
         font-size: 0.65rem;
@@ -193,7 +299,7 @@
     /* Mobile */
     @media (max-width: 768px) {
         .login-card {
-            padding: 2rem 1.4rem;
+            padding: 2.4rem 1.6rem 2.2rem;
         }
 
         .login-heading {
@@ -222,5 +328,95 @@
 
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        function debounce(fn, delay) {
+            let timer;
+            return function (...args) {
+                clearTimeout(timer);
+                timer = setTimeout(() => fn.apply(this, args), delay);
+            };
+        }
+
+        function attachLiveValidation(input, validate) {
+            if (!input) return;
+
+            const wrapper = input.closest('.mb-3') || input.closest('.form-group') || input.parentElement;
+            const feedback = document.createElement('div');
+            feedback.className = 'live-feedback';
+            wrapper.appendChild(feedback);
+
+            function render() {
+                const result = validate(input.value);
+
+                if (result === null) {
+                    feedback.textContent = '';
+                    feedback.className = 'live-feedback';
+                    input.classList.remove('field-valid', 'field-invalid');
+                } else if (result.valid) {
+                    feedback.textContent = '';
+                    feedback.className = 'live-feedback';
+                    input.classList.add('field-valid');
+                    input.classList.remove('field-invalid');
+                } else {
+                    feedback.textContent = result.message;
+                    feedback.className = 'live-feedback feedback-invalid';
+                    input.classList.add('field-invalid');
+                    input.classList.remove('field-valid');
+                }
+            }
+
+            const runCheck = debounce(render, 600);
+
+            // Pause mid-typing: clear the error state so we don't flash
+            // a message while the user is still actively typing.
+            input.addEventListener('input', function () {
+                input.classList.remove('field-invalid');
+                feedback.textContent = '';
+                feedback.className = 'live-feedback';
+                runCheck();
+            });
+
+            input.addEventListener('blur', render);
+        }
+
+        const usernameInput = document.querySelector('#id_username, input[name="username"]');
+        const passwordInput = document.querySelector('#id_password, input[name="password"]');
+
+        attachLiveValidation(usernameInput, function (val) {
+            if (val.length === 0) return null;
+            if (val.trim().length === 0) {
+                return { valid: false, message: 'This field is required.' };
+            }
+            return { valid: true };
+        });
+
+        // Password show/hide toggle
+        if (passwordInput) {
+            const wrap = document.createElement('div');
+            wrap.className = 'pw-wrap';
+            passwordInput.parentNode.insertBefore(wrap, passwordInput);
+            wrap.appendChild(passwordInput);
+
+            const toggle = document.createElement('button');
+            toggle.type = 'button';
+            toggle.className = 'pw-toggle';
+            toggle.setAttribute('aria-label', 'Show password');
+            toggle.innerHTML =
+                '<svg class="icon-eye" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>' +
+                '<svg class="icon-eye-off" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a21.8 21.8 0 0 1 5.06-6.06M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8a21.8 21.8 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+            wrap.appendChild(toggle);
+
+            toggle.addEventListener('click', function () {
+                const showing = passwordInput.type === 'text';
+                passwordInput.type = showing ? 'password' : 'text';
+                toggle.classList.toggle('is-visible', !showing);
+                toggle.setAttribute('aria-label', showing ? 'Show password' : 'Hide password');
+            });
+        }
+    });
+</script>
 
 {% endblock content %}

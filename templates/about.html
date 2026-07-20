@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+
+{% block title %}About{% endblock title %}
+
+{% block content %}
+
+<style>
+    .doc-wrapper {
+        display: flex;
+        justify-content: center;
+        padding: 3.5rem 1rem 5rem;
+    }
+
+    .doc-card {
+        width: 100%;
+        max-width: 700px;
+        background: var(--cream);
+        border: 1px solid var(--rule);
+        border-radius: 14px;
+        box-shadow: 0 24px 60px rgba(30, 20, 10, 0.12), 0 4px 14px rgba(30, 20, 10, 0.07);
+        padding: 3.4rem 3.2rem 3rem;
+        position: relative;
+    }
+
+    .doc-card::before {
+        content: '';
+        position: absolute;
+        top: -1px; left: -1px;
+        width: 26px; height: 26px;
+        border-top: 2px solid var(--ink);
+        border-left: 2px solid var(--ink);
+        border-top-left-radius: 14px;
+        opacity: 0.85;
+    }
+
+    .doc-card::after {
+        content: '';
+        position: absolute;
+        bottom: -1px; right: -1px;
+        width: 26px; height: 26px;
+        border-bottom: 2px solid var(--ink);
+        border-right: 2px solid var(--ink);
+        border-bottom-right-radius: 14px;
+        opacity: 0.85;
+    }
+
+    .doc-kicker {
+        font-family: var(--font-body);
+        font-style: italic;
+        font-weight: 500;
+        font-size: 0.72rem;
+        letter-spacing: 0.32em;
+        text-transform: uppercase;
+        color: var(--red-ink);
+        display: block;
+        margin-bottom: 0.7rem;
+        text-align: center;
+    }
+
+    .doc-heading {
+        font-family: var(--font-display);
+        font-size: 2.4rem;
+        font-weight: 900;
+        color: var(--ink);
+        letter-spacing: -0.03em;
+        line-height: 1.1;
+        text-align: center;
+        text-transform: uppercase;
+        margin-bottom: 0;
+    }
+
+    .doc-rule {
+        border: none;
+        height: 1px;
+        background: var(--ink);
+        margin: 1.1rem auto 2rem;
+        max-width: 110px;
+        position: relative;
+    }
+
+    .doc-rule::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 6px;
+        height: 6px;
+        background: var(--red-ink);
+        transform: translate(-50%, -50%) rotate(45deg);
+    }
+
+    .doc-body p {
+        font-family: var(--font-body);
+        font-size: 1.02rem;
+        color: var(--ink-mid);
+        line-height: 1.85;
+        margin-bottom: 1.3rem;
+    }
+
+    .doc-body p:first-of-type::first-letter {
+        font-family: var(--font-display);
+        font-weight: 900;
+        font-size: 3.2rem;
+        float: left;
+        line-height: 0.8;
+        padding: 6px 8px 0 0;
+        color: var(--ink);
+    }
+
+    .doc-body h2 {
+        font-family: var(--font-display);
+        font-size: 1.3rem;
+        font-weight: 900;
+        color: var(--ink);
+        letter-spacing: -0.02em;
+        margin: 2.2rem 0 0.9rem;
+    }
+
+    .doc-body ul {
+        margin: 0 0 1.3rem;
+        padding-left: 1.4rem;
+    }
+
+    .doc-body li {
+        font-family: var(--font-body);
+        font-size: 1rem;
+        color: var(--ink-mid);
+        line-height: 1.8;
+        margin-bottom: 0.5rem;
+    }
+
+    .doc-signoff {
+        margin-top: 2.2rem;
+        padding-top: 1.4rem;
+        border-top: 1px solid var(--rule);
+        font-family: var(--font-body);
+        font-style: italic;
+        font-size: 0.95rem;
+        color: var(--ink-faint);
+        text-align: center;
+    }
+
+    @media (max-width: 768px) {
+        .doc-card { padding: 2.4rem 1.6rem 2.2rem; }
+        .doc-heading { font-size: 1.8rem; }
+    }
+</style>
+
+<div class="doc-wrapper">
+    <div class="doc-card">
+        <span class="doc-kicker">Our Masthead</span>
+        <h1 class="doc-heading">About Us</h1>
+        <hr class="doc-rule">
+
+        <div class="doc-body">
+            <p>
+                Vintage Editorial began as a small experiment in independent publishing — a place
+                for writers to share dispatches, essays, and stories without the noise of a
+                crowded newsfeed. What started as a handful of contributors has grown into a
+                community of readers and correspondents who believe good writing still deserves
+                a considered home.
+            </p>
+
+            <h2>What We Publish</h2>
+            <p>
+                Our pages carry reporting, opinion, and long-form storytelling from independent
+                voices. We favor clarity over spectacle, and we'd rather run one well-considered
+                piece than ten rushed ones.
+            </p>
+
+            <h2>Our Principles</h2>
+            <ul>
+                <li>Every contributor writes under their own name and stands behind their work.</li>
+                <li>We correct mistakes publicly and promptly.</li>
+                <li>Reader trust is earned one issue at a time, not assumed.</li>
+            </ul>
+
+            <h2>Get Involved</h2>
+            <p>
+                If you'd like to write for us, sign up for an account and submit a piece through
+                your Editor's Desk. We read everything that comes through, and we're always glad
+                to hear from new correspondents.
+            </p>
+        </div>
+
+        <p class="doc-signoff">— The Vintage Editorial Team</p>
+    </div>
+</div>
+
+{% endblock content %}

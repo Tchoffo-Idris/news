@@ -114,6 +114,7 @@
         margin-bottom: 1.2rem;
         border-bottom: 1px solid var(--rule);
         min-width: 0;
+        position: relative;
     }
 
     .nyt-hero-image {
@@ -149,6 +150,9 @@
         display: block;
         margin-bottom: 0.4rem;
         font-weight: 700;
+        position: relative;
+        z-index: 2;
+        width: fit-content;
     }
 
     .nyt-hero-title {
@@ -166,7 +170,7 @@
         word-wrap: break-word;
     }
 
-    .nyt-hero-title:hover { color: var(--ink-mid); }
+    .nyt-hero-title:hover { color: var(--red-ink); }
 
     .nyt-hero-excerpt {
         font-family: var(--font-body);
@@ -205,6 +209,7 @@
         border-right: 1px solid var(--rule);
         padding-bottom: 0.5rem;
         min-width: 0;
+        position: relative;
     }
 
     .nyt-secondary-item:last-child {
@@ -247,6 +252,9 @@
         display: block;
         margin-bottom: 0.3rem;
         font-weight: 700;
+        position: relative;
+        z-index: 2;
+        width: fit-content;
     }
 
     .nyt-secondary-title {
@@ -263,7 +271,7 @@
         overflow-wrap: break-word;
     }
 
-    .nyt-secondary-title:hover { color: var(--ink-mid); }
+    .nyt-secondary-title:hover { color: var(--red-ink); }
 
     .nyt-secondary-excerpt {
         font-family: var(--font-body);
@@ -310,6 +318,7 @@
         border-bottom: 1px solid var(--rule);
         align-items: flex-start;
         min-width: 0;
+        position: relative;
     }
 
     .nyt-sidebar-item:last-child { border-bottom: none; }
@@ -345,6 +354,9 @@
         display: block;
         margin-bottom: 0.2rem;
         font-weight: 700;
+        position: relative;
+        z-index: 2;
+        width: fit-content;
     }
 
     .nyt-sidebar-title {
@@ -361,7 +373,7 @@
         overflow-wrap: break-word;
     }
 
-    .nyt-sidebar-title:hover { color: var(--ink-mid); }
+    .nyt-sidebar-title:hover { color: var(--red-ink); }
 
     .nyt-sidebar-meta {
         font-family: var(--font-mono);
@@ -379,57 +391,73 @@
         gap: 0.8rem;
         margin-top: 0.4rem;
         align-items: center;
+        position: relative;
+        z-index: 2;
     }
 
     .nyt-action-link {
         font-family: var(--font-mono);
         font-size: 0.54rem;
-        letter-spacing: 0.12em;
+        letter-spacing: 0.1em;
         text-transform: uppercase;
-        color: var(--cream);
-        background: var(--ink);
-        border: 1px solid var(--ink);
-        padding: 4px 10px;
+        color: #8A5A1E;
+        background: rgba(166, 116, 28, 0.08);
+        border: 1px solid #A6741C;
+        border-radius: 999px;
+        padding: 4px 12px;
         text-decoration: none;
-        transition: all 0.15s;
+        display: inline-flex;
+        align-items: center;
+        transition: background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s, transform 0.15s;
     }
 
-    .nyt-action-link:hover { 
-        background: var(--red-ink); 
-        border-color: var(--red-ink);
-        color: var(--cream); 
-    }
-
-    .nyt-action-delete { 
-        background: var(--red-ink); 
-        border-color: var(--red-ink);
+    .nyt-action-link:hover {
+        background: #A6741C;
+        border-color: #A6741C;
         color: var(--cream);
+        box-shadow: 0 2px 8px rgba(166, 116, 28, 0.3);
+        transform: translateY(-1px);
     }
 
-    .nyt-action-delete:hover { 
-        background: #6B0000; 
+    .nyt-action-delete {
+        color: var(--cream);
+        background: var(--red-ink);
+        border-color: var(--red-ink);
+    }
+
+    .nyt-action-delete:hover {
+        background: #6B0000;
         border-color: #6B0000;
+        color: var(--cream);
+        box-shadow: 0 2px 8px rgba(139, 26, 26, 0.25);
+        transform: translateY(-1px);
     }
 
     .nyt-read-link {
         font-family: var(--font-mono);
-        font-size: 0.54rem;
+        font-size: 0.56rem;
         letter-spacing: 0.12em;
         text-transform: uppercase;
         color: var(--cream);
         background: var(--ink);
         border: 1px solid var(--ink);
-        padding: 4px 12px;
+        border-radius: 999px;
+        padding: 5px 14px;
         text-decoration: none;
         font-weight: 700;
         margin-left: auto;
-        transition: all 0.15s;
+        display: inline-flex;
+        align-items: center;
+        box-shadow: 0 2px 6px rgba(26, 26, 26, 0.18);
+        transition: background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s, transform 0.15s;
     }
 
-    .nyt-read-link:hover { 
-        background: var(--red-ink); 
+    .nyt-read-link:hover {
+        background: var(--red-ink);
         border-color: var(--red-ink);
-        color: var(--cream); 
+        color: var(--cream);
+        box-shadow: 0 3px 10px rgba(139, 26, 26, 0.3);
+        transform: translateY(-1px);
     }
 
     /* No photo label */
@@ -510,7 +538,6 @@
         <span class="nyt-masthead-title">
             {% if active_category %}{{ active_category.name }}{% else %}Today's Articles{% endif %}
         </span>
-        <span class="nyt-masthead-date">Latest Dispatches &nbsp;&middot;&nbsp; Independent Press</span>
     </div>
 
     <!-- Category section nav -->
@@ -547,7 +574,7 @@
                 <span class="nyt-hero-category" style="color:var(--ink-faint);">Feature</span>
                 {% endif %}
 
-                <a href="{{ featured_article.get_absolute_url }}" class="nyt-hero-title">{{ featured_article.title }}</a>
+                <a href="{{ featured_article.get_absolute_url }}" class="nyt-hero-title stretched-link">{{ featured_article.title }}</a>
                 <p class="nyt-hero-excerpt">{{ featured_article.body|safe|striptags }}</p>
                 <div class="nyt-actions">
                     <span class="nyt-hero-meta">By {{ featured_article.author }} &nbsp;&middot;&nbsp; {{ featured_article.date|date:"N j, Y" }}</span>
@@ -578,7 +605,7 @@
                     <span class="nyt-secondary-category" style="color:var(--ink-faint);">Report</span>
                     {% endif %}
 
-                    <a href="{{ article.get_absolute_url }}" class="nyt-secondary-title">{{ article.title }}</a>
+                    <a href="{{ article.get_absolute_url }}" class="nyt-secondary-title stretched-link">{{ article.title }}</a>
                     <p class="nyt-secondary-excerpt">{{ article.body|safe|striptags }}</p>
                     <div class="nyt-actions">
                         <span class="nyt-secondary-meta">{{ article.author }} &middot; {{ article.date|date:"N j, Y" }}</span>
@@ -622,7 +649,7 @@
                     {% else %}
                     <span class="nyt-sidebar-category" style="color:var(--ink-faint);">Dispatch</span>
                     {% endif %}
-                    <a href="{{ article.get_absolute_url }}" class="nyt-sidebar-title">{{ article.title }}</a>
+                    <a href="{{ article.get_absolute_url }}" class="nyt-sidebar-title stretched-link">{{ article.title }}</a>
                     <div class="nyt-actions" style="margin-top:0.2rem;">
                         <span class="nyt-sidebar-meta">{{ article.author }} &middot; {{ article.date|date:"N j, Y" }}</span>
                         {% if article.author.pk == request.user.pk %}

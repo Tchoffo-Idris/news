@@ -1,0 +1,252 @@
+{% extends "base.html" %}
+
+{% block title %}Privacy Policy{% endblock title %}
+
+{% block content %}
+
+<style>
+    .doc-wrapper {
+        display: flex;
+        justify-content: center;
+        padding: 3.5rem 1rem 5rem;
+    }
+
+    .doc-card {
+        width: 100%;
+        max-width: 700px;
+        background: var(--cream);
+        border: 1px solid var(--rule);
+        border-radius: 14px;
+        box-shadow: 0 24px 60px rgba(30, 20, 10, 0.12), 0 4px 14px rgba(30, 20, 10, 0.07);
+        padding: 3.4rem 3.2rem 3rem;
+        position: relative;
+    }
+
+    .doc-card::before {
+        content: '';
+        position: absolute;
+        top: -1px; left: -1px;
+        width: 26px; height: 26px;
+        border-top: 2px solid var(--ink);
+        border-left: 2px solid var(--ink);
+        border-top-left-radius: 14px;
+        opacity: 0.85;
+    }
+
+    .doc-card::after {
+        content: '';
+        position: absolute;
+        bottom: -1px; right: -1px;
+        width: 26px; height: 26px;
+        border-bottom: 2px solid var(--ink);
+        border-right: 2px solid var(--ink);
+        border-bottom-right-radius: 14px;
+        opacity: 0.85;
+    }
+
+    .doc-kicker {
+        font-family: var(--font-body);
+        font-style: italic;
+        font-weight: 500;
+        font-size: 0.72rem;
+        letter-spacing: 0.32em;
+        text-transform: uppercase;
+        color: var(--red-ink);
+        display: block;
+        margin-bottom: 0.7rem;
+        text-align: center;
+    }
+
+    .doc-heading {
+        font-family: var(--font-display);
+        font-size: 2.4rem;
+        font-weight: 900;
+        color: var(--ink);
+        letter-spacing: -0.03em;
+        line-height: 1.1;
+        text-align: center;
+        text-transform: uppercase;
+        margin-bottom: 0;
+    }
+
+    .doc-rule {
+        border: none;
+        height: 1px;
+        background: var(--ink);
+        margin: 1.1rem auto 0.6rem;
+        max-width: 110px;
+        position: relative;
+    }
+
+    .doc-rule::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 6px;
+        height: 6px;
+        background: var(--red-ink);
+        transform: translate(-50%, -50%) rotate(45deg);
+    }
+
+    .doc-updated {
+        text-align: center;
+        font-family: var(--font-mono);
+        font-size: 0.62rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+        margin-bottom: 2rem;
+        display: block;
+    }
+
+    .doc-body p {
+        font-family: var(--font-body);
+        font-size: 1rem;
+        color: var(--ink-mid);
+        line-height: 1.85;
+        margin-bottom: 1.2rem;
+    }
+
+    .doc-body h2 {
+        font-family: var(--font-display);
+        font-size: 1.25rem;
+        font-weight: 900;
+        color: var(--ink);
+        letter-spacing: -0.02em;
+        margin: 2rem 0 0.8rem;
+    }
+
+    .doc-body ul {
+        margin: 0 0 1.2rem;
+        padding-left: 1.4rem;
+    }
+
+    .doc-body li {
+        font-family: var(--font-body);
+        font-size: 0.98rem;
+        color: var(--ink-mid);
+        line-height: 1.8;
+        margin-bottom: 0.5rem;
+    }
+
+    .doc-body a {
+        color: var(--red-ink);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+    }
+
+    .doc-toc {
+        background: var(--cream-dark);
+        border: 1px solid var(--rule);
+        border-radius: 8px;
+        padding: 1.2rem 1.4rem;
+        margin-bottom: 2rem;
+    }
+
+    .doc-toc-title {
+        font-family: var(--font-mono);
+        font-size: 0.62rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+        display: block;
+        margin-bottom: 0.6rem;
+    }
+
+    .doc-toc ol {
+        margin: 0;
+        padding-left: 1.2rem;
+    }
+
+    .doc-toc li {
+        font-family: var(--font-mono);
+        font-size: 0.74rem;
+        color: var(--ink-mid);
+        line-height: 1.9;
+    }
+
+    .doc-toc a {
+        color: var(--ink-mid);
+        text-decoration: none;
+    }
+
+    .doc-toc a:hover { color: var(--red-ink); }
+
+    @media (max-width: 768px) {
+        .doc-card { padding: 2.4rem 1.6rem 2.2rem; }
+        .doc-heading { font-size: 1.8rem; }
+    }
+</style>
+
+<div class="doc-wrapper">
+    <div class="doc-card">
+        <span class="doc-kicker">Legal</span>
+        <h1 class="doc-heading">Privacy Policy</h1>
+        <hr class="doc-rule">
+        <span class="doc-updated">Last updated: {% now "F j, Y" %}</span>
+
+        <div class="doc-toc">
+            <span class="doc-toc-title">On This Page</span>
+            <ol>
+                <li><a href="#info-we-collect">Information We Collect</a></li>
+                <li><a href="#how-we-use">How We Use It</a></li>
+                <li><a href="#cookies">Cookies</a></li>
+                <li><a href="#sharing">Sharing Your Information</a></li>
+                <li><a href="#your-rights">Your Rights</a></li>
+                <li><a href="#contact">Contact Us</a></li>
+            </ol>
+        </div>
+
+        <div class="doc-body">
+            <p>
+                This Privacy Policy explains what information Vintage Editorial collects when
+                you use our site, how we use it, and the choices you have. By creating an
+                account or browsing our articles, you agree to the practices described below.
+            </p>
+
+            <h2 id="info-we-collect">Information We Collect</h2>
+            <ul>
+                <li><strong>Account information</strong> — your username, email address, and password when you sign up.</li>
+                <li><strong>Content you submit</strong> — articles, comments, and edits you publish through your Editor's Desk.</li>
+                <li><strong>Usage data</strong> — pages viewed, search queries, and general interaction with the site.</li>
+            </ul>
+
+            <h2 id="how-we-use">How We Use It</h2>
+            <p>
+                We use your information to operate your account, display your published work,
+                personalize your reading experience, and keep the site secure. We do not sell
+                your personal information to third parties.
+            </p>
+
+            <h2 id="cookies">Cookies</h2>
+            <p>
+                We use essential cookies to keep you logged in and remember preferences such as
+                dark mode. These are required for the site to function and cannot be disabled
+                without affecting your experience.
+            </p>
+
+            <h2 id="sharing">Sharing Your Information</h2>
+            <p>
+                We share information only when required by law, to protect the rights and safety
+                of our readership, or with service providers who help us operate the site under
+                strict confidentiality obligations.
+            </p>
+
+            <h2 id="your-rights">Your Rights</h2>
+            <p>
+                You can review, update, or delete your account information at any time from your
+                account settings. You may also request a copy of the data we hold about you by
+                contacting us directly.
+            </p>
+
+            <h2 id="contact">Contact Us</h2>
+            <p>
+                If you have questions about this policy or how your data is handled, reach out to
+                us through your account's support channel and we'll respond as soon as we can.
+            </p>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

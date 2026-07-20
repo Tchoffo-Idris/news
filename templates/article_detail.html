@@ -394,6 +394,118 @@
 
     .listen-btn svg { width: 14px; height: 14px; }
 
+    .print-btn-top {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-family: var(--font-mono);
+        font-size: 0.62rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--ink-mid);
+        background: transparent;
+        border: 1px solid var(--ink);
+        padding: 7px 12px;
+        cursor: pointer;
+        border-radius: 0;
+        transition: all 0.15s;
+    }
+
+    .print-btn-top:hover {
+        background: var(--ink);
+        color: var(--cream);
+    }
+
+    @media print {
+        @page { margin: 2.5cm 2cm; }
+        
+        body {
+            background: #ffffff !important;
+            color: #000000 !important;
+            background-image: none !important;
+        }
+
+        /* Hide all digital and metadata elements */
+        .navbar,
+        #audioPlayerBar,
+        .detail-top-actions,
+        .sidebar-actions,
+        .back-link,
+        .detail-owner-actions,
+        .detail-share,
+        .reading-progress,
+        .author-card,
+        .comment-form-wrap,
+        .section-kicker,
+        .section-heading,
+        .section-rule,
+        .comment-entry,
+        .no-comments,
+        #skeletonLoader,
+        .dark-mode-toggle,
+        .detail-meta,
+        .detail-kicker,
+        .detail-category,
+        .detail-rule {
+            display: none !important;
+        }
+
+        .detail-wrapper {
+            max-width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        /* Centered, commanding headline */
+        .detail-heading {
+            font-size: 3.2rem !important;
+            color: #000 !important;
+            text-align: center !important;
+            letter-spacing: 0.12em !important;
+            margin-bottom: 4rem !important;
+            line-height: 1.1 !important;
+            text-transform: uppercase;
+        }
+
+        /* Literary body text formatting */
+        .detail-body {
+            font-size: 12pt !important;
+            color: #000 !important;
+            line-height: 1.7 !important;
+        }
+
+        .detail-body p {
+            text-align: justify !important;
+            margin-bottom: 0 !important;
+            orphans: 3;
+            widows: 3;
+        }
+
+        /* Elegant indentation for subsequent paragraphs */
+        .detail-body p + p {
+            text-indent: 1.5rem !important;
+        }
+
+        .detail-body > p:first-of-type {
+            text-indent: 0 !important;
+        }
+
+        h1, h2, h3, h4 {
+            page-break-after: avoid;
+            color: #000 !important;
+        }
+
+        img {
+            max-width: 100% !important;
+            filter: grayscale(100%) !important;
+            margin: 2rem 0 !important;
+        }
+
+        .detail-body > p:first-child::first-letter {
+            color: #000 !important;
+        }
+    }
+
     /* ── Author Card ── */
     .author-card {
         display: flex;
@@ -832,6 +944,9 @@
                     <path d="M15.54 5.54a9 9 0 0 1 0 12.92M19.07 4.93a16 16 0 0 1 0 14.14"></path>
                 </svg>
                 <span>Listen</span>
+            </button>
+            <button class="print-btn-top" onclick="window.print();">
+                PRINT DISPATCH
             </button>
         </div>
 
@@ -1277,4 +1392,3 @@
 </script>
 
 {% endblock content %}
-ent %}
